@@ -30,16 +30,16 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
 });
 
-Route::group(['prefix' => 'order'], function () {
-    Route::get('show/{id}', 'OrderController@show');
-//    Route::get('show-temp/{id}', 'OrderController@show_temp');
-    Route::get('create/{transaction_id}', 'OrderController@create')->name('order.create');
-    Route::get('update/{order}', 'OrderController@update')->name('order.update');
-    Route::get('delete/{order}', 'OrderController@delete')->name('order.destroy');
+// Route::group(['prefix' => 'order'], function () {
+//     Route::get('show/{id}', 'OrderController@show');
+// //    Route::get('show-temp/{id}', 'OrderController@show_temp');
+//     Route::get('create/{transaction_id}', 'OrderController@create')->name('order.create');
+//     Route::get('update/{order}', 'OrderController@update')->name('order.update');
+//     Route::get('delete/{order}', 'OrderController@delete')->name('order.destroy');
 
-    Route::post('store/{transaction_id}', 'OrderController@store')->name('order.store');
-    Route::post('upsave/{order}', 'OrderController@upsave')->name('order.upsave');
-});
+//     Route::post('store/{transaction_id}', 'OrderController@store')->name('order.store');
+//     Route::post('upsave/{order}', 'OrderController@upsave')->name('order.upsave');
+// });
 
 //Route::group(['prefix' => 'expiration'], function () {
 //    Route::get('list', 'ProductController@index')->name('product.list');
@@ -53,15 +53,9 @@ Route::group(['prefix' => 'product'], function () {
     Route::get('update/{id}', 'ProductController@update')->name('product.update');
     Route::get('create', 'ProductController@create')->name('product.create');
     Route::get('delete/{product}', 'ProductController@destroy')->name('product.destroy');
-    Route::group(['prefix' => 'quantity'], function () {
-        Route::get('add/{product}', 'ProductQuantityController@add')->name('product.quantity.add');
-        Route::post('store/{product}', 'ProductQuantityController@store')->name('product.quantity.store');
-        Route::get('update/{productQuantity}', 'ProductQuantityController@update')->name('product.quantity.update');
-        Route::post('upsave/{productQuantity}', 'ProductQuantityController@upsave')->name('product.quantity.upsave');
-        Route::get('delete/{productQuantity}', 'ProductQuantityController@delete')->name('product.quantity.destroy');
-    });
+    
     Route::post('store', 'ProductController@store')->name('product.store');
-    Route::post('upsave/{id}', 'ProductControllerOld@upsave')->name('product.upsave');
+    Route::post('upsave/{id}', 'ProductController@upsave')->name('product.upsave');
 });
 
 Route::get('customers', 'CustomerController@index');
@@ -99,15 +93,17 @@ Route::group(['prefix' => 'reference'], function () {
         Route::post('update/{unit}', 'UnitController@update')->name('unit.update');
     });
 
-    Route::group(['prefix' => 'payment-type'], function () {
-        Route::get('list', 'PaymentTypeController@index')->name('paymentType.list');
-        Route::get('create', 'PaymentTypeController@create')->name('paymentType.create');
-        Route::get('update/{paymentType}', 'PaymentTypeController@update')->name('paymentType.update');
-        Route::get('delete/{paymentType}', 'PaymentTypeController@destroy')->name('paymentType.destroy');
+    Route::group(['prefix' => 'paymentmethod'], function () {
+        Route::get('list', 'PaymentMethodController@index')->name('paymentMethod.list');
+        Route::get('create', 'PaymentMethodController@create')->name('paymentMethod.create');
+        Route::get('edit/{paymentMethod}', 'PaymentMethodController@edit')->name('paymentMethod.edit');
+        Route::get('delete/{paymentMethod}', 'PaymentMethodController@destroy')->name('paymentMethod.destroy');
 
-        Route::post('store', 'PaymentTypeController@store')->name('paymentType.store');
-        Route::post('upsave/{paymentType}', 'PaymentTypeController@upsave')->name('paymentType.upsave');
+        Route::post('store', 'PaymentMethodController@store')->name('paymentType.store');
+        Route::post('update/{paymentMethod}', 'PaymentMethodController@update')->name('paymentType.update');
     });
+
+
 
 });
 Route::get('/', function () {

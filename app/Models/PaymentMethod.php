@@ -5,11 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaymentType extends Model
+class PaymentMethod extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public $table = 'payment_method';
     protected $fillable = [
-      'type_name',
+      'name',
     ];
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucwords($value);
+    }
 }

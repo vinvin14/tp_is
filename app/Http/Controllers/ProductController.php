@@ -7,25 +7,17 @@ use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\UnitRepository;
 use App\Http\Requests\ProductPostRequest;
 use App\Http\Services\ProductServices;
-use App\Models\ProductQuantity;
-use App\Models\ProductOld;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     private $request;
 
-    public function __construct(Request $request)
-    {
-        $this->request = $request->except('_token');
-    }
-
     public function index(ProductRepository $productRepository)
     {
         $products = $productRepository->all();
-
-        return view('admin.shop.product.index')
+        
+        return view('shop.product.index')
             ->with('page', 'shop')
             ->with(compact('products'));
     }
@@ -34,7 +26,7 @@ class ProductController extends Controller
     {
         $product = $productRepository->find($id);
         $productQuantity = $productRepository->productQuantity($id);
-        return view('admin.shop.product.show')
+        return view('shop.product.show')
             ->with(compact('product'))
             ->with(compact('productQuantity'))
             ->with('page', 'shop');
