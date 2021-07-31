@@ -41,6 +41,7 @@ class ProductServices
                 $request['original_img_file_name'] = $original_file_name;
                 unset($request['image']);
             }
+
             $received_date = $request['received_date'];
             $expiry = $request['expiration_date'];
             unset($request['expiration_date'], $request['received_date']);
@@ -194,7 +195,7 @@ class ProductServices
         $productRepository = new ProductRepository();
         $product = $productRepository->getProduct($productQuantity->product_id);
         $quantityBeforeAdd = $product->current_quantity - $productQuantity->quantity;
-        if($productRepository->isProdQuantityReferenced($productQuantity->id)) {
+        if ($productRepository->isProdQuantityReferenced($productQuantity->id)) {
             return ['error' => 'Record cannot be updated since it has been referenced by existing orders!'];
         }
 
@@ -236,7 +237,7 @@ class ProductServices
         $quantityToBeDeducted = $productQuantity->quantity;
         $product = $productRepository->getProduct($productQuantity->product_id);
 
-        if($productRepository->isProdQuantityReferenced($productQuantity->id)) {
+        if ($productRepository->isProdQuantityReferenced($productQuantity->id)) {
             return ['error' => 'Record cannot be deleted since it has been referenced by existing orders!'];
         }
         DB::beginTransaction();

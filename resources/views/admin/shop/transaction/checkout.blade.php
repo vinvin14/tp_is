@@ -26,7 +26,8 @@
             Current Customer: <span
                 class="font-weight-bold">{{ $transaction->firstname }} {{ $transaction->middlename }} {{ $transaction->lastname }}</span>
         </div>
-        <form action="">
+        {{--<form action="{{ route('transaction.checkout') }}" method="post">--}}
+            @csrf
         <div class="row">
             <div class="col-6 text-left">
                 <h4 class="font-weight-bold">List of Orders</h4>
@@ -92,7 +93,7 @@
         <div class="float-right mb-2">
             <h4 class="font-weight-bold pr-3">Amount to be Paid: ₱{{$orderTotalAmount}}</h4>
         </div>
-        <button class="btn btn-outline-danger font-weight-bold float-right form-control">Checkout and Finalize
+        <button class="btn btn-outline-danger font-weight-bold float-right form-control mb-3">Checkout and Finalize
             Transaction
         </button>
         </form>

@@ -13,7 +13,7 @@
             <div class="container-fluid">
                 <div class="row">
                     @foreach( $products as $product)
-                        <div class="col-md-3">
+                        <div class="col-xs-12 col-s-12 col-md-3 col-lg-4">
                             <div class="card my-3 box-shadow shadow">
                                 <img class="card-img-top" src="{{asset( $product->uploaded_img )}}" width="200px"
                                      height="200px" alt="">

@@ -123,15 +123,17 @@ Route::group(['prefix' => 'reference'], function () {
 
 });
 Route::get('/', function () {
-    return view('login');
+   return redirect(route('login'));
 });
-Route::post('login', 'AccessController@login')->name('login');
+Route::view('login', 'login')->name('login');
+Route::get ('logout', 'MainController@logout')->name('logout');
+Route::post('login', 'MainController@login')->name('login_attempt');
 
-Route::get('dashboard', 'AccessController@dashboard')->name('dashboard');
+Route::get('dashboard', 'MainController@dashboard')->name('dashboard');
 
 //Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('test', function () {
     $expiry_date = strtotime('2021-06-22');

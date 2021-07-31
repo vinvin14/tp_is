@@ -17,15 +17,8 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">TATAK<b class="text-danger">PINAS!</b></h1>
                                     </div>
-                                    @if(Session::has('error'))
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>Woops!</strong>  {{ Session::get('error')}}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
-                                    <form class="user" action="{{route('login')}}" method="POST">
+                                    @include('interface.system-messages')
+                                    <form class="user" action="{{route('login_attempt')}}" method="POST">
                                         @csrf
                                         <div class="form-group">
                                             <input type="text" name="username" value="{{ (old('username'))  }}" class="form-control form-control-user"
