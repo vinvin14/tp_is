@@ -15,9 +15,7 @@ class UnitLibraryTable extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('unit_name', 50);
-            $table->string('second_level_unit', 50)->nullable();
-            $table->timestamps();
+            $table->string('name', 50);
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PaymentTypeLibraryTable extends Migration
+class PaymentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class PaymentTypeLibraryTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_types', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('type_name', 100);
+            $table->unsignedBigInteger('transaction_id');
+            $table->unsignedBigInteger('payment_method_id');
+            $table->string('payment_details')->nullable();
+            $table->longText('remarks')->nullable();
+
         });
     }
 
@@ -26,6 +30,6 @@ class PaymentTypeLibraryTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('payments');
     }
 }

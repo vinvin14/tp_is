@@ -20,13 +20,13 @@ class UnitController
     public function index()
     {
         $units = Unit::query()
-            ->orderBy('unit_name', 'ASC')
+            ->orderBy('name', 'ASC')
             ->get();
+
         return view('admin.reference.unit.index')
             ->with('page', 'reference')
             ->with(compact('units'));
     }
-
 
     public function create()
     {
@@ -45,17 +45,17 @@ class UnitController
        }
 
         return redirect(route('unit.list'))
-            ->with('response', "$result->unit_name has been added to our record!");
+            ->with('response', "$result->name has been added to our record!");
     }
 
-    public function update(Unit $unit)
+    public function edit(Unit $unit)
     {
         return view('admin.reference.unit.update')
             ->with('page', 'reference')
             ->with(compact('unit'));
     }
 
-    public function upsave(Unit $unit, Request $request, UnitServices $unitServices)
+    public function update(Unit $unit, Request $request, UnitServices $unitServices)
     {
         $result = $unitServices->update($unit, $request->except('_token'));
         if(@$result['error']) {
@@ -64,7 +64,7 @@ class UnitController
                 ->with('error', $result['error']);
         }
         return redirect(route('unit.list'))
-            ->with('response', "$result->unit_name has been updated!");
+            ->with('response', "$result->name has been updated!");
     }
 
     public function destroy(Unit $unit, UnitServices $unitServices)

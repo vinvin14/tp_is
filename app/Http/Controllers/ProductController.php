@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repositories\ProductCategoryRepository;
+use App\Http\Repositories\CategoryRepository;
 use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\UnitRepository;
 use App\Http\Requests\ProductPostRequest;
@@ -40,7 +40,7 @@ class ProductController extends Controller
             ->with('page', 'shop');
     }
 
-    public function create(ProductCategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
+    public function create(CategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
     {
         $product_categories = $productCategoryRepository->all();
         $units = $unitRepository->all();
@@ -57,7 +57,7 @@ class ProductController extends Controller
             ->with('response', 'New Product has been successfully added!');
     }
 
-    public function update(Product $product, ProductCategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
+    public function update(Product $product, CategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
     {
         $product_categories = $productCategoryRepository->all();
         $units = $unitRepository->all();

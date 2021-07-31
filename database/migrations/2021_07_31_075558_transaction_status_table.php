@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ProductTrackerTable extends Migration
+class TransactionStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class ProductTrackerTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_tracker', function (Blueprint $table) {
+        Schema::create('transaction_status', function (Blueprint $table) {
             $table->id();
-            $table->string('reference', 50);
+            $table->string('name');
         });
     }
 
@@ -26,6 +26,6 @@ class ProductTrackerTable extends Migration
      */
     public function down()
     {
-        Schema::dropDatabaseIfExists('product_tracker');
+        Schema::dropIfExists('transaction_status');
     }
 }

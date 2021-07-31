@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\ProductCategory;
+use App\Models\Category;
+use App\Models\Unit;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -23,5 +24,37 @@ class DatabaseSeeder extends Seeder
                 'role' => 'admin',
                 'account_owner' => 'Kelvin Valdez',
             ]);
+
+        $units = [
+            [
+                'name' => 'piece'
+            ],
+            [
+                'name' => 'box'
+            ],
+            [
+                'name' => 'bottle'
+            ],
+        ];
+        foreach ($units as $unit) {
+            Unit::query()
+                ->create($unit);
+        }
+
+        $categories = [
+            [
+                'name' => 'Beverage'
+            ],
+            [
+                'name' => 'Delicacy'
+            ],
+            [
+                'name' => 'Meat'
+            ],
+        ];
+        foreach ($categories as $category) {
+            Category::query()
+                ->create($category);
+        }
     }
 }

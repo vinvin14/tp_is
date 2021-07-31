@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Traits;
-use App\Models\ProductCategory;
+use App\Models\Category;
 use App\Models\Product;
 
 trait ReferenceTrait
@@ -28,7 +28,7 @@ trait ReferenceTrait
     }
     function category_exist($category)
     {
-        if(ProductCategory::query()->where('category_name', $category)->first()) {
+        if(Category::query()->where('category_name', $category)->first()) {
             return true;
         }
         return false;

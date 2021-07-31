@@ -9,29 +9,29 @@
 namespace App\Http\Services;
 
 
-use App\Http\Repositories\ProductCategoryRepository;
+use App\Http\Repositories\CategoryRepository;
 use Illuminate\Support\Facades\Validator;
 
-class ProductCategoryServices
+class CategoryServices
 {
-    private $pcr, $error;
+    private $categoryRepository, $error;
 
     public function __construct()
     {
-        $this->pcr = new ProductCategoryRepository();
+        $this->categoryRepository = new CategoryRepository();
         $this->error = new ErrorRecordServices();
     }
 
     public function create($request)
     {
         $validator = Validator::make($request, [
-            'category_name' => 'unique:product_category|string'
+            'name' => 'unique:categories|string'
         ]);
         if ($validator->fails()) {
-            return ['error' => 'Request denied, ProductOld Category has been added previously!'];
+            return ['error' => 'Request denied, Category has been added previously!'];
         }
         try {
-            return $this->pcr->create($request);
+            return $this->categoryRepository->create($request);
         } catch (\Exception $exception) {
             $this->error->log('PRODUCT_CATEGORY_ADD', session('user'), $exception->getMessage());
             return ['error' => 'Something went wrong, Please contact your Administrator!'];
@@ -41,19 +41,18 @@ class ProductCategoryServices
     public function update($category, $request)
     {
         try {
-            $category->category_name = $request['category_name'];
-            $category->description = $request['description'];
+            $category->name = $request['name'];
 
             if (!$category->isDirty()) {
                 return ['error', 'No changes were made!'];
             }
 
             $validator = Validator::make($request, [
-                'category_name' => 'unique:product_category|string'
+                'name' => 'unique:categories|string'
             ]);
 
             if ($validator->fails()) {
-                return ['error' => 'Request denied, ProductOld Category has been added previously!'];
+                return ['error' => 'Request denied, Category has been added previously!'];
             }
 
             $category->save();
@@ -66,7 +65,7 @@ class ProductCategoryServices
 
     public function delete($category)
     {
-        if ($this->pcr->referenced($category->id)) {
+        if ($this->categoryRepository->referenced($category->id)) {
             return ['error' => 'This category cannot be deleted since it has been referenced by other records!'];
         }
         try {

@@ -16,16 +16,20 @@ class TransactionTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer');
-            $table->foreign('customer')->references('id')->on('customers');
-            $table->string('order_ticket')->unique();
+            $table->string('ticket_number')->unique();
             $table->date('transaction_date');
             $table->double('total_amount')->nullable();
             $table->string('total_points')->nullable();
             $table->enum('trans_status', ['pending', 'completed', 'denied'])->default('pending');
-            $table->enum('claim_type', ['pick-up', 'deliver'])->nullable();
-            $table->unsignedBigInteger('payment_type')->nullable();
-            $table->foreign('payment_type')->references('id')->on('payment_types');
+            $table->unsignedBigInteger('claim_type')->nullable();
+            $table->unsignedBigInteger('payment_method_id')->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
+
+
+            $table->foreign('customer')->references('id')->on('customers');
+            $table->foreign('payment_method_id')->references('id')->on('payment_method');
+            $table->foreign('claim_type')->references('id')->on('claim_type');
         });
     }
 

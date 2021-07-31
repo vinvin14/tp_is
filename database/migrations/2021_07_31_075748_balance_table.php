@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ProductTrackerTable extends Migration
+class BalanceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class ProductTrackerTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_tracker', function (Blueprint $table) {
+        Schema::create('balances', function (Blueprint $table) {
             $table->id();
-            $table->string('reference', 50);
+            $table->unsignedBigInteger('customer');
+            $table->double('balance');
         });
     }
 
@@ -26,6 +27,6 @@ class ProductTrackerTable extends Migration
      */
     public function down()
     {
-        Schema::dropDatabaseIfExists('product_tracker');
+        Schema::dropIfExists('balances');
     }
 }

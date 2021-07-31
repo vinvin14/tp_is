@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repositories\ProductCategoryRepository;
-use App\Http\Services\ProductCategoryServices;
+use App\Http\Repositories\CategoryRepository;
+use App\Http\Services\CategoryServices;
 use Illuminate\Http\Request;
-use App\Models\ProductCategory;
+use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 
-class ProductCategoryController extends Controller
+class CategoryController extends Controller
 {
     private $request;
 
@@ -17,7 +17,7 @@ class ProductCategoryController extends Controller
         $this->request = $request->except('_token');
     }
 
-    public function index(ProductCategoryRepository $repository)
+    public function index(CategoryRepository $repository)
     {
         $categories = $repository->all();
         return view('admin.reference.category.index')
@@ -25,7 +25,7 @@ class ProductCategoryController extends Controller
             ->with(compact('categories'));
     }
 
-    public function show(ProductCategory $category)
+    public function show(Category $category)
     {
         return view('admin.reference.category.show')
             ->with(compact('category'));
@@ -37,7 +37,7 @@ class ProductCategoryController extends Controller
             ->with('page', 'reference');
     }
 
-    public function store(ProductCategoryServices $productCategoryServices)
+    public function store(CategoryServices $productCategoryServices)
     {
         $result = $productCategoryServices->create($this->request);
         if($result['error']) {
@@ -46,17 +46,17 @@ class ProductCategoryController extends Controller
                 ->with('error', $result['error']);
         }
         return redirect(route('category.list'))
-            ->with('response', "$result->category_name successfully added!");
+            ->with('response', "$result->name successfully added!");
     }
 
-    public function update(ProductCategory $category)
+    public function edit(Category $category)
     {
         return view('admin.reference.category.update')
             ->with('page', 'reference')
             ->with(compact('category'));
     }
 
-    public function upsave(ProductCategory $category, ProductCategoryServices $productCategoryServices)
+    public function update(Category $category, CategoryServices $productCategoryServices)
     {
         $result = $productCategoryServices->update($category, $this->request);
 
@@ -67,10 +67,10 @@ class ProductCategoryController extends Controller
         }
 
         return redirect(route('category.list'))
-            ->with('response', 'ProductOld Category successfully created!');
+            ->with('response', "$result->name successfully updated!");
     }
 
-    public function destroy(ProductCategory $category, ProductCategoryServices $productCategoryServices)
+    public function destroy(Category $category, CategoryServices $productCategoryServices)
     {
         $result = $productCategoryServices->delete($category);
         if(@$result['error']) {
@@ -80,7 +80,7 @@ class ProductCategoryController extends Controller
         }
 
         return redirect(route('category.list'))
-            ->with('response', 'ProductOld Category Record has been deleted!');
+            ->with('response', 'Category record has been deleted!');
     }
 }
 

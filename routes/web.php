@@ -78,37 +78,25 @@ Route::group(['prefix' => 'customer'], function () {
 });
 
 Route::group(['prefix' => 'reference'], function () {
-    //product
-//    Route::group(['prefix' => 'product-specification'], function () {
-//        Route::get('list', 'ProductController@index')->name('specification.list');
-//        Route::get('create', 'ProductController@create')->name('specification.create');
-//        Route::get('{id}', 'ProductController@show')->name('specification.show');
-//        Route::get('update/{specification}', 'ProductController@update')->name('specification.update');
-//        Route::get('delete/{id}', 'ProductController@destroy')->name('specification.destroy');
-//
-//        Route::post('store', 'ProductController@store')->name('specification.store');
-//        Route::post('upsave/{specification}', 'ProductController@upsave')->name('specification.upsave');
-//    });
-
     //product-categories
-    Route::group(['prefix' => 'product-category'], function () {
-        Route::get('list', 'ProductCategoryController@index')->name('category.list');
-        Route::get('create', 'ProductCategoryController@create')->name('category.create');
-        Route::get('update/{category}', 'ProductCategoryController@update')->name('category.update');
-        Route::get('delete/{category}', 'ProductCategoryController@destroy')->name('category.destroy');
+    Route::group(['prefix' => 'category'], function () {
+        Route::get('list', 'CategoryController@index')->name('category.list');
+        Route::get('create', 'CategoryController@create')->name('category.create');
+        Route::get('edit/{category}', 'CategoryController@edit')->name('category.edit');
+        Route::get('delete/{category}', 'CategoryController@destroy')->name('category.destroy');
 
-        Route::post('store', 'ProductCategoryController@store')->name('category.store');
-        Route::post('upsave/{category}', 'ProductCategoryController@upsave')->name('category.upsave');
+        Route::post('store', 'CategoryController@store')->name('category.store');
+        Route::post('update/{category}', 'CategoryController@update')->name('category.update');
     });
 
     Route::group(['prefix' => 'unit'], function () {
         Route::get('list', 'UnitController@index')->name('unit.list');
         Route::get('create', 'UnitController@create')->name('unit.create');
-        Route::get('update/{unit}', 'UnitController@update')->name('unit.update');
+        Route::get('edit/{unit}', 'UnitController@edit')->name('unit.edit');
         Route::get('delete/{unit}', 'UnitController@destroy')->name('unit.destroy');
 
         Route::post('store', 'UnitController@store')->name('unit.store');
-        Route::post('upsave/{unit}', 'UnitController@upsave')->name('unit.upsave');
+        Route::post('update/{unit}', 'UnitController@update')->name('unit.update');
     });
 
     Route::group(['prefix' => 'payment-type'], function () {

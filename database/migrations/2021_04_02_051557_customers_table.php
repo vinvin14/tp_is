@@ -18,11 +18,12 @@ class CustomersTable extends Migration
             $table->string('firstname', 50);
             $table->string('middlename', 50);
             $table->string('lastname', 50);
-            $table->date('date_of_birth');
+            $table->date('date_of_birth')->nullable();
             $table->string('address', 100)->nullable();
             $table->double('total_points')->nullable();
+            $table->double('total_purchase_amount')->nullable();
+            $table->unsignedBigInteger('last_purchase')->nullable();
             $table->enum('customer_type', ['guest', 'member', 'regular']);
-            $table->bigInteger('current_points')->nullable();
             $table->timestamps();
         });
     }

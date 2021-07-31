@@ -26,14 +26,13 @@ class UnitServices
     public function create($request)
     {
         $validator = Validator::make($request, [
-            'unit_name' => 'required|unique:units'
+            'name' => 'required|unique:units'
         ]);
         if ($validator->fails()) {
             return ['error' => 'Unit has been added previously!'];
         }
 
         try {
-            $request = $this->format($request);
             return Unit::query()
                 ->create($request);
         } catch (\Exception $exception) {
@@ -45,17 +44,14 @@ class UnitServices
     public function update($unit, $request)
     {
         try {
-            $request = $this->format($request);
+            $unit->name = $request['name'];
 
-            $unit->unit_name = $request['unit_name'];
-            $unit->second_level_unit = $request['second_level_unit'];
-
-            if(! $unit->isDirty()) {
+            if (!$unit->isDirty()) {
                 return ['error' => 'No changes were made!'];
             }
-            if ($request['unit_name'] != $unit->unit_name) {
+            if ($request['name'] != $unit->name) {
                 $validator = Validator::make($request, [
-                    'unit_name' => 'required|unique:units'
+                    'name' => 'required|unique:units'
                 ]);
                 if ($validator->fails()) {
                     return ['error' => 'Unit has been added previously!'];
@@ -64,6 +60,7 @@ class UnitServices
             $unit->save();
             return $unit->fresh();
         } catch (\Exception $exception) {
+            dd($exception->getMessage());
             $this->error->log('UNIT_UPDATE', session('user'), $exception->getMessage());
             return ['error' => 'We are having technical issue, Please contact your Administrator!'];
         }
@@ -72,7 +69,7 @@ class UnitServices
     public function delete($unit)
     {
         try {
-            if (! empty(Product::query()->where('unit', $unit->id)->first())) {
+            if (!empty(Product::query()->where('unit', $unit->id)->first())) {
                 return ['error', 'Unit record cannot be deleted since it has been referenced!'];
             }
             $unit->delete();
@@ -81,14 +78,4 @@ class UnitServices
             return ['error' => 'We are having technical issue, Please contact your Administrator!'];
         }
     }
-
-    public function format($data)
-    {
-        if($data['unit_name']) {
-            $data['unit_name'] = strtolower($data['unit_name']);
-        }
-
-        return $data;
-    }
-
 }
