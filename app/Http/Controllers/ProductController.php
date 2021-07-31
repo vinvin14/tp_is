@@ -49,7 +49,7 @@ class ProductController extends Controller
             ->with('response', 'New Product has been successfully added!');
     }
 
-    public function update(Product $product, CategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
+    public function edit(Product $product, CategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
     {
         $product_categories = $productCategoryRepository->all();
         $units = $unitRepository->all();
@@ -60,7 +60,7 @@ class ProductController extends Controller
             ->with('page', 'shop');
     }
 
-    public function upsave(Product $product, Request $request, ProductServices $productServices)
+    public function update(Product $product, Request $request, ProductServices $productServices)
     {
         $productServices->update($product, $request->all());
         return redirect(route('specification.show', $product->id))

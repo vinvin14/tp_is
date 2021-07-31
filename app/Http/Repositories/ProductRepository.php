@@ -21,58 +21,32 @@ class ProductRepository
     public function all()
     {
         return DB::table('products')
-            ->leftJoin('product_category', 'products.product_category', '=', 'product_category.id')
+            ->leftJoin('categories', 'products.category', '=', 'categories.id')
             ->leftJoin('units', 'products.unit', '=', 'units.id')
             ->select(
                 'products.*',
-                'product_category.category_name as category_name',
-                'units.unit_name as unit'
+                'categories.name as category_name',
+                'units.name as unit'
             )
             ->get();
     }
 
     public function getProductsWQuantity()
     {
-        return DB::table('products')
-            ->leftJoin('product_category', 'products.product_category', '=', 'product_category.id')
-            ->leftJoin('units', 'products.unit', '=', 'units.id')
-            ->leftJoin('product_quantity', 'products.id', '=', 'product_quantity.id')
-            ->selectRaw('SUM(product_quantity.quantity as total_quantity')
-            ->select(
-                'products.*',
-                'product_category.category_name as category_name',
-                'units.unit_name as unit',
-                'product_quantity.expiration_date'
-            )
-            ->where('current_quantity', '!=', 0)
-            ->whereDate('product_quantity.expiration_date','>=', date('Y-m-d') )
-            ->get();
-    }
-
-    public function find($id)
-    {
-        $product = DB::table('products')
-            ->leftJoin('product_category', 'products.product_category', '=', 'product_category.id')
-            ->leftJoin('units', 'products.unit', '=', 'units.id')
-            ->select(
-                'products.*',
-                'product_category.id as product_category_id',
-                'product_category.category_name as category_name',
-                'units.id as unit_id',
-                'units.unit_name as unit'
-            )
-            ->where('products.id', $id)
-            ->first();
-        if (empty($product)) {
-            return ['error' => 'Product Record does not exist!'];
-        }
-        return $product;
-    }
-
-    public function getProduct($id)
-    {
-        return Product::query()
-            ->find($id);
+        // return DB::table('products')
+        //     ->leftJoin('categories', 'products.category', '=', 'categories.id')
+        //     ->leftJoin('units', 'products.unit', '=', 'units.id')
+        //     ->leftJoin('product_quantity', 'products.id', '=', 'product_quantity.id')
+        //     ->selectRaw('SUM(product_quantity.quantity as total_quantity')
+        //     ->select(
+        //         'products.*',
+        //         'product_category.category_name as category_name',
+        //         'units.unit_name as unit',
+        //         'product_quantity.expiration_date'
+        //     )
+        //     ->where('current_quantity', '!=', 0)
+        //     ->whereDate('product_quantity.expiration_date','>=', date('Y-m-d') )
+        //     ->get();
     }
 
     public function getProductWithQuantityById($id)
@@ -89,16 +63,26 @@ class ProductRepository
             ->first();
     }
 
-    public function create($request)
+    public function find($id)
     {
-        return Product::query()
-            ->create($this->format($request));
+        return DB::table('products')
+            ->leftJoin('product_category', 'products.product_category', '=', 'product_category.id')
+            ->leftJoin('units', 'products.unit', '=', 'units.id')
+            ->select(
+                'products.*',
+                'product_category.id as product_category_id',
+                'product_category.category_name as category_name',
+                'units.id as unit_id',
+                'units.unit_name as unit'
+            )
+            ->where('products.id', $id)
+            ->first();
     }
 
-    public function update($product, $request)
+    public function getProduct($id)
     {
-        $product->update($this->format($request));
-        return $product->fresh();
+        return Product::query()
+            ->find($id);
     }
 
     public function isReferenced($id)
@@ -117,30 +101,11 @@ class ProductRepository
         return false;
     }
 
-    public function productQuantity($productID)
+    public function getProductQuantity($productID)
     {
         return ProductQuantity::query()
             ->where('product_id', $productID)
-            ->get();
-    }
-
-    public function getProdTrackerByProdQuantity($prodQuantityID)
-    {
-        return ProductTracker::query()
-            ->where('product_quantity_id', $prodQuantityID)
-            ->first();
-    }
-
-    public function isProdQuantityReferenced($id)
-    {
-        $isReferenced = Order::query()
-            ->where('product_quantity_id', $id)
-            ->get()
-            ->toArray();
-        if ($isReferenced) {
-            return true;
-        }
-        return false;
+            ->sum('qty');
     }
 
     public function getPriorityProductQuantity($productID)
@@ -161,16 +126,5 @@ class ProductRepository
             return true;
         }
         return false;
-    }
-
-    public function format($data)
-    {
-        if ($data->item_title) {
-            $data->item_title = ucfirst($data->item_title);
-        }
-        if ($data->description) {
-            $data->description = ucfirst($data->description);
-        }
-        return $data;
     }
 }
