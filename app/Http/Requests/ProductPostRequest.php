@@ -28,11 +28,11 @@ class ProductPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'item_title' => 'required|string|unique:products',
-            'product_category' => 'required',
+            'title' => 'required|string|unique:products',
+            'category_id' => 'required',
             'price' => 'required',
             'unit' => 'required',
-            'points' => 'required'
+            'points' => 'required',
         ];
     }
 }

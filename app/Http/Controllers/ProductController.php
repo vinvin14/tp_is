@@ -7,6 +7,7 @@ use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\UnitRepository;
 use App\Http\Requests\ProductPostRequest;
 use App\Http\Services\ProductServices;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -16,7 +17,7 @@ class ProductController extends Controller
     public function index(ProductRepository $productRepository)
     {
         $products = $productRepository->all();
-        
+        return $products;
         return view('shop.product.index')
             ->with('page', 'shop')
             ->with(compact('products'));

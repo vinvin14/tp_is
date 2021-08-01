@@ -37,6 +37,6 @@ class ProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropDatabaseIfExists('product_specifications');
+        Schema::dropDatabaseIfExists('products');
     }
 }
