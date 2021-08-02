@@ -20,20 +20,20 @@ class CategoryController extends Controller
     public function index(CategoryRepository $repository)
     {
         $categories = $repository->all();
-        return view('admin.reference.category.index')
+        return view('reference.category.index')
             ->with('page', 'reference')
             ->with(compact('categories'));
     }
 
     public function show(Category $category)
     {
-        return view('admin.reference.category.show')
+        return view('reference.category.show')
             ->with(compact('category'));
     }
 
     public function create()
     {
-        return view('admin.reference.category.create')
+        return view('reference.category.create')
             ->with('page', 'reference');
     }
 
@@ -51,7 +51,7 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        return view('admin.reference.category.update')
+        return view('reference.category.update')
             ->with('page', 'reference')
             ->with(compact('category'));
     }

@@ -31,22 +31,25 @@ class ProductRepository
             ->get();
     }
 
-    public function getProductsWQuantity()
+    public function getProductWithStocks($product_id)
     {
-        // return DB::table('products')
-        //     ->leftJoin('categories', 'products.category', '=', 'categories.id')
-        //     ->leftJoin('units', 'products.unit', '=', 'units.id')
-        //     ->leftJoin('product_quantity', 'products.id', '=', 'product_quantity.id')
-        //     ->selectRaw('SUM(product_quantity.quantity as total_quantity')
-        //     ->select(
-        //         'products.*',
-        //         'product_category.category_name as category_name',
-        //         'units.unit_name as unit',
-        //         'product_quantity.expiration_date'
-        //     )
-        //     ->where('current_quantity', '!=', 0)
-        //     ->whereDate('product_quantity.expiration_date','>=', date('Y-m-d') )
-        //     ->get();
+        return DB::table('products')
+        ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+        ->leftJoin('units', 'products.unit', '=', 'units.id')
+        ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+        ->where('products.id', $product_id)
+        ->selectRaw('
+            sum(qty) as qty,
+            products.title,
+            products.description,
+            products.uploaded_img,
+            products.points,
+            products.price,
+            units.name as unit,
+            categories.name as category,
+        ')
+        ->groupBy('product_id')
+        ->get();
     }
 
     public function getProductWithQuantityById($id)

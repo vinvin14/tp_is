@@ -34,12 +34,12 @@ class MainController extends Controller
     {
         switch (session('account_role')) {
             case 'admin' :
-                return view('admin.dashboard')
+                return view('dashboard')
                     ->with('page', 'dashboard');
                 break;
 
             case 'client' :
-                return view('client.dashboard')
+                return view('dashboard')
                     ->with('page', 'dashboard');;
                 break;
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\CategoryRepository;
 use App\Http\Repositories\ProductRepository;
+use App\Http\Repositories\StockRepository;
 use App\Http\Repositories\UnitRepository;
 use App\Http\Requests\ProductPostRequest;
 use App\Http\Services\ProductServices;
@@ -25,8 +26,7 @@ class ProductController extends Controller
 
     public function show($id, ProductRepository $productRepository)
     {
-        $product = $productRepository->find($id);
-        $productQuantity = $productRepository->productQuantity($id);
+        $product = $productRepository->getProductWithStocks($id);
         return view('shop.product.show')
             ->with(compact('product'))
             ->with(compact('productQuantity'))

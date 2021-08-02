@@ -75,7 +75,7 @@
 {{--                <a class="collapse-item font-weight-bold" href="{{ route('specification.list') }}"><i class="fas fa-fw fa-photo-video"></i>  Specifications</a>--}}
                 <a class="collapse-item font-weight-bold" href="{{ route('category.list') }}"><i class="fas fa-fw fa-chart-pie"></i> Category</a>
                 <a class="collapse-item font-weight-bold" href="{{ route('unit.list') }}"><i class="fas fa-fw fa-ruler"></i> Units</a>
-                <a class="collapse-item font-weight-bold" href="{{ route('paymentType.list') }}"><i class="fas fa-fw fa-money-bill"></i> Payment Types</a>
+                <a class="collapse-item font-weight-bold" href="{{ route('paymentMethod.list') }}"><i class="fas fa-fw fa-money-bill"></i> Payment Methods</a>
             </div>
         </div>
     </li>
