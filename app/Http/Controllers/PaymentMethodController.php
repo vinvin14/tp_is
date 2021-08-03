@@ -12,8 +12,8 @@ class PaymentMethodController extends Controller
     public function index(PaymentMethodRepository $paymentMethodRepository)
     {
         $paymentMethods = $paymentMethodRepository->all();
-        return $paymentMethods;
         return view('reference.paymentMethod.index')
+        ->with(compact('paymentMethods'))
         ->with('page', 'reference');
     }
 
@@ -39,21 +39,22 @@ class PaymentMethodController extends Controller
 
     public function edit(PaymentMethod $paymentMethod)
     {
-        return view('reference.paymentmethod.edit')
-        ->with(compact('paymentMethod'));
+        return view('reference.paymentmethod.update')
+        ->with(compact('paymentMethod'))
+        ->with('page', 'reference');
     }
 
     public function update(PaymentMethod $paymentMethod, Request $request, PaymentMethodServices $paymentMethodServices)
     {
         $init = $paymentMethodServices->update($paymentMethod, $request->only('name'));
-
+    
         if(@$init['error']) {
             return back()
             ->with('error', $init['error']);
         }
 
         return redirect(route('paymentMethod.list'))
-        ->with('sucess', "$init->name has been successfully updated!");
+        ->with('success', "$init->name has been successfully updated!");
     }
 
     public function destroy(PaymentMethod $paymentMethod, PaymentMethodServices $paymentMethodServices)

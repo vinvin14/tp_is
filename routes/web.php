@@ -99,8 +99,8 @@ Route::group(['prefix' => 'reference'], function () {
         Route::get('edit/{paymentMethod}', 'PaymentMethodController@edit')->name('paymentMethod.edit');
         Route::get('delete/{paymentMethod}', 'PaymentMethodController@destroy')->name('paymentMethod.destroy');
 
-        Route::post('store', 'PaymentMethodController@store')->name('paymentType.store');
-        Route::post('update/{paymentMethod}', 'PaymentMethodController@update')->name('paymentType.update');
+        Route::post('store', 'PaymentMethodController@store')->name('paymentMethod.store');
+        Route::post('update/{paymentMethod}', 'PaymentMethodController@update')->name('paymentMethod.update');
     });
 
 

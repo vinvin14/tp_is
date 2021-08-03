@@ -18,9 +18,8 @@
                     @csrf
                     <div class="form-group">
                         <label class="font-weight-bold">Category Name </label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Category Name here" required>
+                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Category here" required>
                     </div>
-                    
                     <button type="submit" class="btn btn-success mt-3 float-right"><i class="fas fa-fw fa-plus"></i>Add New Category</button>
                 </form>
             </div>

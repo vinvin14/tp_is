@@ -10,15 +10,13 @@ namespace App\Http\Services;
 
 
 use App\Http\Repositories\CategoryRepository;
+use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryServices
 {
-    private $categoryRepository, $error;
-
     public function __construct()
     {
-        $this->categoryRepository = new CategoryRepository();
         $this->error = new ErrorRecordServices();
     }
 
@@ -31,7 +29,8 @@ class CategoryServices
             return ['error' => 'Request denied, Category has been added previously!'];
         }
         try {
-            return $this->categoryRepository->create($request);
+            return Category::query()
+            ->create($request);
         } catch (\Exception $exception) {
             $this->error->log('PRODUCT_CATEGORY_ADD', session('user'), $exception->getMessage());
             return ['error' => 'Something went wrong, Please contact your Administrator!'];
@@ -44,7 +43,7 @@ class CategoryServices
             $category->name = $request['name'];
 
             if (!$category->isDirty()) {
-                return ['error', 'No changes were made!'];
+                return ['error' => 'No changes were made!'];
             }
 
             $validator = Validator::make($request, [

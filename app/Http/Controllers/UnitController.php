@@ -23,14 +23,14 @@ class UnitController
             ->orderBy('name', 'ASC')
             ->get();
 
-        return view('admin.reference.unit.index')
+        return view('reference.unit.index')
             ->with('page', 'reference')
             ->with(compact('units'));
     }
 
     public function create()
     {
-        return view('admin.reference.unit.create')
+        return view('reference.unit.create')
             ->with('page', 'reference');
     }
 
@@ -45,12 +45,12 @@ class UnitController
        }
 
         return redirect(route('unit.list'))
-            ->with('response', "$result->name has been added to our record!");
+            ->with('success', "$result->name has been added to our record!");
     }
 
     public function edit(Unit $unit)
     {
-        return view('admin.reference.unit.update')
+        return view('reference.unit.update')
             ->with('page', 'reference')
             ->with(compact('unit'));
     }
@@ -64,7 +64,7 @@ class UnitController
                 ->with('error', $result['error']);
         }
         return redirect(route('unit.list'))
-            ->with('response', "$result->name has been updated!");
+            ->with('success', "$result->name has been updated!");
     }
 
     public function destroy(Unit $unit, UnitServices $unitServices)
@@ -78,6 +78,6 @@ class UnitController
         }
 
         return redirect(route('unit.list'))
-            ->with('response', 'Unit record has been successfully deleted!');
+            ->with('success', 'Unit record has been successfully deleted!');
     }
 }

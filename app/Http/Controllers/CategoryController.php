@@ -59,7 +59,6 @@ class CategoryController extends Controller
     public function update(Category $category, CategoryServices $productCategoryServices)
     {
         $result = $productCategoryServices->update($category, $this->request);
-
         if(@$result['error']) {
             return back()
                 ->withInput()
