@@ -33,4 +33,13 @@ class StockServices
             return ['error' => 'We are having technical problem, Please contact your Administrator!'];
         }
     }
+
+    public function delete($stock)
+    {
+        try {
+
+        } catch (Exception $exception) {
+            
+        }
+    }
 }
