@@ -1,47 +1,78 @@
 @extends('interface.main')
-@section('title','Products')
+@section('title','Product List')
 @section('styles')
-    <style>
-    </style>
+    <!-- Custom styles for this page -->
+    <link href="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('main')
-    <div class="container-fluid">
-
-        <h4 class="text-center font-weight-bold">Existing Products <br><a href="{{ route('product.create') }}" class="btn btn-primary m-2"><i class="fas fa-fw fa-shopping-bag"></i> Add Product</a></h4>
-        <hr>
-        <div class="album">
-            <div class="container-fluid">
-                <div class="row">
-                    @foreach( $products as $product)
-                        <div class="col-xs-12 col-s-12 col-md-3 col-lg-4">
-                            <div class="card my-3 box-shadow shadow">
-                                <img class="card-img-top" src="{{asset( $product->uploaded_img )}}" width="200px"
-                                     height="200px" alt="">
-                                <div class="card-body text-center">
-                                    <div class="card-text text-truncate font-weight-bold">{{ $product->item_title }}</div>
-                                    <div class="font-italic font-weight-bold">₱ {{ number_format($product->price) }}</div>
-                                    <div class="font-italic text-truncate @if($product->current_quantity < $product->minimum_quantity) text-danger @endif">Quantity: {{ $product->current_quantity.' '.$product->unit }}</div>
-                                    <a href="{{ route('product.show', $product->id) }}" class="btn btn-primary form-control m-1"><i class="fas fa-fw fa-eye"></i> View Product</a>
-                                    <a href="{{ route('product.show', $product->id) }}" class="btn btn-danger form-control m-1"><i class="fas fa-fw fa-cart-arrow-down"></i> Add to Order</a>
+    <div class="mt-4">
+        <h5 class="border-bottom">Existing Products</h5>
+        <p class="font-italic">Here are all existing Products that can be added to transaction!</p>
+    </div>
+    <a href="{{ route('product.create') }}" class="btn btn-primary my-3 px-4 shadow-sm"><i class="fas fa-fw fa-plus"></i> New Product</a>
+    <div class="card shadow-sm">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-shopping-bag"></i> Products Table</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Thumbnail</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Points</th>
+                        <th>Alert Level</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($products as $product)
+                        <tr>
+                            <td>
+                                @if ($product->uploaded_img == null)
+                                    <small>No Image Available</small>
+                                @else
+                                    <div class="text-center">
+                                        <img src="{{ asset($product->uploaded_img) }}" width="80px" height="80px" alt="">
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="py-4">{{ $product->title }}</td>
+                            <td class="py-4">{{ $product->category }}</td>
+                            <td class="py-4">
+                                @if ($product->qty == null)
+                                    <small>No stocks yet</small>
+                                @else
+                                {{ $product->qty }} {{ $product->unit }}
+                                @endif
+                            </td>
+                            <td class="py-4">₱{{ $product->price }}</td>
+                            <td class="py-4">{{ $product->points }}</td>
+                            <td class="py-4">{{ $product->alert_level }}</td>
+                            <td class="py-4">
+                                <div class="text-center">
+                                    <a href="{{route('product.show', $product->id)}}" class="pr-2"><i class="fas fa-fw fa-eye" title="View"></i></a>
+                                    <a href="{{route('product.destroy', $product->id)}}" class="pl-2" onclick="return confirm('Are you sure you want to delete this product?')"><i class="fas fa-fw fa-trash text-danger" title="Delete"></i></a>
                                 </div>
-                            </div>
-                        </div>
-                        {{--<div class="col-xs-6 col-md-4 col-lg-3 overflow-hidden">--}}
-                        {{--<div class="col-xs-6 col-md-4 col-lg-3  overflow-hidden py-3 ">--}}
-                        {{--<div class="container">--}}
-                        {{--<img class="border p-1 shadow-sm" src="{{asset( $product->uploaded_img )}}" width="200px"--}}
-                        {{--height="200px" alt="">--}}
-                        {{--<div class="text-center">--}}
-                        {{--<div class="text-truncate">{{ $product->item_title }}</div>--}}
-                        {{--<div class="font-italic font-weight-bold">₱ {{ $product->price }}</div>--}}
-                        {{--<small class="font-italic">Quantity: {{ $product->total_quantity.' '.$product->unit }}</small>--}}
-                        {{--<a href="{{ route('product.show.collection', $product->specifications_id) }}" class="btn btn-primary">View ProductOld</a>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
+                            </td>
+                        </tr>
                     @endforeach
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <!-- Page level plugins -->
+    <script src="{{ asset('includes/sbadmin/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('includes/sbadmin/js/demo/datatables-demo.js') }}"></script>
+
 @endsection

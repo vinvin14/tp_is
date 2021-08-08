@@ -5,13 +5,11 @@
     <link href="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('main')
-    <a href="{{route('unit.create')}}" class="btn btn-primary"><i class="fas fa-fw fa-ruler"></i> Add
-        New Unit</a>
 
-    <div class="mt-4">
-        <h5 class="border-bottom">Product Units</h5>
-        <p class="font-italic">Here are all Product units that are ready to be used!</p>
-    </div>
+    <h5 class="border-bottom">Product Units</h5>
+    <p class="font-italic">Here are all Product units that are ready to be used!</p>
+    <a href="{{route('unit.create')}}" class="btn btn-primary my-3 shadow-sm"><i class="fas fa-fw fa-plus"></i> Add
+        New Unit</a>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-ruler"></i> Product Units Table</h6>

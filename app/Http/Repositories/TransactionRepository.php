@@ -45,10 +45,10 @@ class TransactionRepository
     public function getTransByCus($customer)
     {
         return DB::table('transactions')
-            ->leftJoin('payment_types', 'transactions.payment_type', '=', 'payment_types.id')
+            ->leftJoin('payment_method', 'transactions.payment_method_id', '=', 'payment_method.id')
             ->select(
                 'transactions.*',
-                'payment_types.type_name as payment_type'
+                'payment_method.name as paymentMethod'
             )
             ->where('customer', $customer)
             ->get();

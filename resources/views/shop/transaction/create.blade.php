@@ -6,61 +6,62 @@
 @section('main')
     <a href="{{route('transaction.list')}}" class="font-weight-bold"><i
             class="fas fa-fw fa-arrow-alt-circle-left"></i> Back to Transaction List</a>
-    <div class="card w-75 shadow-sm mt-2">
-        <div class="card-header font-weight-bold text-primary">Add New Transaction</div>
-        <div class="card-body">
-            @if(Session::has('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Woops!</strong> {{ Session::get('error')}}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
-            <form action="{{ route('transaction.store') }}" method="post">
-                <div class="row">
-                    <div class="col-6">
-                        <label for="">Customer</label>
-                        <input type="hidden" name="customer" id="customer">
-                        <input type="text" id="customer_select" class="form-control" readonly>
+    <div class="col-xs-12 col-md-8 col-lg-8">
+        <div class="card w-75 shadow-sm mt-2">
+            <div class="card-header font-weight-bold text-primary">Add New Transaction</div>
+            <div class="card-body">
+                @if(Session::has('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Woops!</strong> {{ Session::get('error')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="col-6">
-                        <label for="">Transaction Date</label>
-                        <input type="date" name="transaction_date" class="form-control">
+                @endif
+                <form action="{{ route('transaction.store') }}" method="post">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="">Customer</label>
+                            <input type="hidden" name="customer" id="customer">
+                            <input type="text" id="customer_select" class="form-control" readonly>
+                        </div>
+                        <div class="col-6">
+                            <label for="">Transaction Date</label>
+                            <input type="date" name="transaction_date" class="form-control">
+                        </div>
                     </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-4">
-                        <label for="">Claim Status</label>
-                        <select name="claim_type" class="form-control" id="">
-                            <option value="">-</option>
-                            <option value="pick-up">Pick up</option>
-                            <option value="deliver">Deliver</option>
-                        </select>
+                    <hr>
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="">Claim Status</label>
+                            <select name="claim_type" class="form-control" id="">
+                                <option value="">-</option>
+                                <option value="pick-up">Pick up</option>
+                                <option value="deliver">Deliver</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label for="">Transaction Status</label>
+                            <select name="trans_status" id="" class="form-control">
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="unclaimed">Unclaimed</option>
+                                <option value="unpaid">Unpaid</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label for="">Payment Method</label>
+                            <select name="payment_type" id="" class="form-control">
+                                <option value="">-</option>
+                                @foreach( $paymentMethods as $paymentMethod)
+                                    <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <label for="">Transaction Status</label>
-                        <select name="trans_status" id="" class="form-control">
-                            <option value="">-</option>
-                            <option value="pending">Pending</option>
-                            <option value="completed">Completed</option>
-                            <option value="unclaimed">Unclaimed</option>
-                            <option value="unpaid">Unpaid</option>
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <label for="">Payment Type</label>
-                        <select name="payment_type" id="" class="form-control">
-                            <option value="">-</option>
-                            @foreach( $paymentTypes as $paymentType)
-                                <option value="{{ $paymentType->id }}">{{ $paymentType->type_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary form-control mt-3">Add Transaction</button>
-            </form>
+                    <button type="submit" class="btn btn-primary form-control mt-3">Add Transaction</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -98,7 +99,7 @@
                                     </div>
                                     <div class="col-6">
                                         <small class="font-weight-bold">Address</small>
-                                        <textarea name="" id="" cols="30" rows="3" class="form-control"
+                                        <textarea name="" id="" cols="30" rows="1" class="form-control"
                                                   readonly>{{ $customer->address }}</textarea>
                                     </div>
                                 </div>

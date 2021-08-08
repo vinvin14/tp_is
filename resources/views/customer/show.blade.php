@@ -11,22 +11,7 @@
             <i class="fas fa-fw fa-user-tie"></i>Customer Details
         </div>
         <div class="card-body">
-            @if(Session::has('response'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Success!</strong>  {{ Session::get('response')}}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
-            @if(Session::has('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Woops!</strong>  {{ Session::get('error')}}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
+            @include('interface.system-messages')
             <div class="row">
                 <div class="col-4">
                     <label for="" class="">First Name</label>
@@ -61,7 +46,7 @@
                 <label for="">Address</label>
                 <div class="font-weight-bold">{{ $customer->address }}</div>
             </div>
-            <a href="{{route('customer.update', $customer->id)}}" class="btn btn-secondary my-3 float-right"><i class="fas fa-fw fa-pencil-alt"></i> Update Information</a>
+            <a href="{{route('customer.update', $customer->id)}}" class="btn btn-primary my-3"><i class="fas fa-fw fa-pencil-alt"></i> Update Information</a>
         </div>
     </div>
     <hr>

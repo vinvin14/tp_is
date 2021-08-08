@@ -31,7 +31,7 @@ class ProductPostRequest extends FormRequest
             'title' => 'required|string|unique:products',
             'category_id' => 'required',
             'price' => 'required',
-            'unit' => 'required',
+            'unit_id' => 'required',
             'points' => 'required',
         ];
     }

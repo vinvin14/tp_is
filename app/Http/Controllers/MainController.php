@@ -26,7 +26,6 @@ class MainController extends Controller
         session(['user' => $response->username]);
         session(['token' => $response->remember_token]);
         session(['account_role' => $response->role]);
-
         return redirect(route('dashboard'));
     }
 

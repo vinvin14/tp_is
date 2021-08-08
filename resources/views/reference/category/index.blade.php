@@ -5,13 +5,10 @@
     <link href="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('main')
-    <a href="{{route('category.create')}}" class="btn btn-primary"><i class="fas fa-fw fa-chart-pie"></i> Add
+    <h5 class="border-bottom">Product Categories</h5>
+    <p class="font-italic">Here are all Product units that are ready to be used!</p>
+    <a href="{{route('category.create')}}" class="btn btn-primary my-3 shadow-sm"><i class="fas fa-fw fa-plus"></i> Add
         New Category</a>
-
-    <div class="mt-4">
-        <h5 class="border-bottom">Product Categories</h5>
-        <p class="font-italic">Here are all Product units that are ready to be used!</p>
-    </div>
     @if(Session::has('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Woops!</strong>  {{ Session::get('error')}}

@@ -20,13 +20,15 @@ class ProductsTable extends Migration
             $table->string('uploaded_img', 100)->nullable();
             $table->string('original_img_file_name', 100)->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
             $table->double('price');
-            $table->integer('unit');
+            $table->unsignedBigInteger('unit_id');
 //            $table->integer('current_quantity');
             $table->integer('alert_level');
             $table->double('points')->default(0);
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 

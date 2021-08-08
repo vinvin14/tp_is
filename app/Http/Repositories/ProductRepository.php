@@ -14,6 +14,8 @@ use App\Models\Order;
 use App\Models\ProductOld;
 use App\Models\Product;
 use App\Models\ProductTracker;
+use App\Models\Stock;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ProductRepository
@@ -21,13 +23,32 @@ class ProductRepository
     public function all()
     {
         return DB::table('products')
-            ->leftJoin('categories', 'products.category', '=', 'categories.id')
-            ->leftJoin('units', 'products.unit', '=', 'units.id')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+            ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
             ->select(
-                'products.*',
-                'categories.name as category_name',
-                'units.name as unit'
+                'products.id',
+                'products.title',
+                'products.uploaded_img',
+                'products.alert_level',
+                'products.points',
+                'products.price',
+                'categories.name as category',
+                'units.name as unit',
+                DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty')
             )
+            // ->whereDate('stocks.expiration_date', '>', Carbon::now())
+            ->groupBy(
+                'products.id',
+                'products.title',
+                'products.uploaded_img',
+                'products.alert_level',
+                'products.points',
+                'products.price',
+                'stocks.product_id',
+                'categories.name',
+                'units.name'
+                )
             ->get();
     }
 
@@ -35,21 +56,23 @@ class ProductRepository
     {
         return DB::table('products')
         ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-        ->leftJoin('units', 'products.unit', '=', 'units.id')
+        ->leftJoin('units', 'products.unit_id', '=', 'units.id')
         ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+        ->select(
+            'products.id',
+            'products.title',
+            'products.description',
+            'products.uploaded_img',
+            'products.points',
+            'products.price',
+            'products.alert_level',
+            'units.name as unit',
+            'categories.name as category',
+            DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty'),
+        )
         ->where('products.id', $product_id)
-        ->selectRaw('
-            sum(qty) as qty,
-            products.title,
-            products.description,
-            products.uploaded_img,
-            products.points,
-            products.price,
-            units.name as unit,
-            categories.name as category,
-        ')
-        ->groupBy('product_id')
-        ->get();
+        ->groupBy('products.id', 'products.title', 'products.description', 'products.uploaded_img', 'products.points', 'products.price', 'products.alert_level', 'units.name', 'categories.name')
+        ->first();
     }
 
     public function getProductWithQuantityById($id)
@@ -90,15 +113,12 @@ class ProductRepository
 
     public function isReferenced($id)
     {
-        $isReferenced = Order::query()
+        $isReferenced = Stock::query()
             ->where('product_id', $id)
             ->get()
             ->toArray();
-        $hasQuantity = ProductQuantity::query()
-            ->where('product_id', $id)
-            ->get()
-            ->toArray();
-        if ($isReferenced || $hasQuantity) {
+            
+        if ($isReferenced) {
             return true;
         }
         return false;

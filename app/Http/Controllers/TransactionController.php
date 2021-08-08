@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\CustomerRepository;
 use App\Http\Repositories\OrderRepository;
+use App\Http\Repositories\PaymentMethodRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Http\Requests\TransactionPostRequest;
 use App\Http\Services\OrderServicesOld;
 use App\Http\Services\TransactionServices;
 use App\Models\Order;
+use App\Models\PaymentMethod;
 use App\Models\PaymentType;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class TransactionController extends Controller
     public function index(TransactionRepository $repository)
     {
         $transactions = $repository->all();
-        return view('admin.shop.transaction.index')
+        return view('shop.transaction.index')
             ->with('page', 'shop')
             ->with(compact('transactions'));
     }
@@ -28,20 +30,20 @@ class TransactionController extends Controller
         $currentTransaction = $repository->getTransWithCus($transaction->id);
         $orders = $orderRepository->getOrdersByTrans($transaction->id);
         $totalOrderAmount = $orderRepository->getTotalOrderAmountByTransaction($transaction->id);
-        return view('admin.shop.transaction.show')
+        return view('shop.transaction.show')
             ->with('page', 'shop')
             ->with(compact('orders'))
             ->with(compact('totalOrderAmount'))
             ->with('transaction', $currentTransaction);
     }
 
-    public function create(CustomerRepository $customerRepository)
+    public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository)
     {
         $customers = $customerRepository->all();
-        $paymentTypes = PaymentType::query()->orderBy('type_name', 'ASC')->get();
-        return view('admin.shop.transaction.create')
+        $paymentMethods = $paymentMethodRepository->all();
+        return view('shop.transaction.create')
             ->with(compact('customers'))
-            ->with(compact('paymentTypes'))
+            ->with(compact('paymentMethods'))
             ->with('page', 'shop');
     }
 
@@ -56,7 +58,7 @@ class TransactionController extends Controller
 
     public function update(Transaction $transaction)
     {
-        return view('admin.shop.transaction.update')
+        return view('shop.transaction.update')
             ->with(compact('transaction'));
     }
 
@@ -80,7 +82,7 @@ class TransactionController extends Controller
         $orders = $orderRepository->getOrdersByTrans($transaction_id);
         $orderTotalAmount = $orderRepository->getTotalOrderAmountByTransaction($transaction_id);
         $paymentTypes = PaymentType::query()->orderBy('type_name', 'ASC')->get()->toArray();
-        return view('admin.shop.transaction.checkout')
+        return view('shop.transaction.checkout')
             ->with(compact('transaction'))
             ->with(compact('orders'))
             ->with(compact('orderTotalAmount'))

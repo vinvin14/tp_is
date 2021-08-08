@@ -13,21 +13,21 @@ class CustomerController extends Controller
     public function index(CustomerRepository $customerRepository)
     {
         $customers = $customerRepository->all();
-        return view('admin.customer.list')
+        return view('customer.index')
                     ->with(compact('customers'))
                     ->with('page', 'customer');
     }
     public function show(Customer $customer, TransactionRepository $transactionRepository)
     {
         $transactions = $transactionRepository->getTransByCus($customer->id);
-        return view('admin.customer.show')
+        return view('customer.show')
                     ->with(compact('customer'))
                     ->with(compact('transactions'))
                     ->with('page', 'customer');
     }
     public function create()
     {
-        return view('admin.customer.create')
+        return view('customer.create')
             ->with('page', 'customer');
     }
     public function store(CustomerPostRequest $request, CustomerServices $customerServices)
@@ -39,7 +39,7 @@ class CustomerController extends Controller
     public function update($id, CustomerRepository $customerRepository)
     {
         $customer = $customerRepository->find($id);
-        return view('admin.customer.update')
+        return view('customer.update')
                     ->with(compact('customer'))
                     ->with('page', 'customer');
     }

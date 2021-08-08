@@ -9,17 +9,21 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'item_title',
+        'title',
         'description',
         'uploaded_img',
         'original_img_file_name',
         'category_id',
         'price',
-        'unit',
-        'minimum_quantity',
-        'priority_level',
+        'unit_id',
+        'alert_level',
         'points',
         'created_at',
         'updated_at',
     ];
+
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = ucfirst($value);
+    }
 }

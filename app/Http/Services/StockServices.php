@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\SoldProduct;
 use App\Models\Stock;
 use Exception;
 
@@ -19,6 +20,7 @@ class StockServices
             return Stock::query()
             ->create($request);
         } catch (Exception $exception) {
+            dd($exception->getMessage());
             $this->error->log('STOCK_ADD', session('user'), $exception->getMessage());
             return ['error' => 'We are having technical problem, Please contact your Administrator!'];
         }
@@ -36,10 +38,15 @@ class StockServices
 
     public function delete($stock)
     {
-        try {
+        if (SoldProduct::query()->find($stock->id)) {
+            return ['error' => 'Cannot delete this record since it has been referenced by existing transaction'];
+        }
 
+        try {
+            $stock->delete();
         } catch (Exception $exception) {
-            
+             $this->error->log('STOCK_DELETE', session('user'), $exception->getMessage());
+            return ['error' => 'We are having technical problem, Please contact your Administrator!'];
         }
     }
 }

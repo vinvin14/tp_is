@@ -16,7 +16,7 @@ class UnitRepository
     public function all()
     {
         return Unit::query()
-            ->orderBy('unit_name', 'ASC')
+            ->orderBy('name', 'ASC')
             ->get();
     }
 }

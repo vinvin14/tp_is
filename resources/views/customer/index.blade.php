@@ -5,14 +5,14 @@
     <link href="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('main')
-    <a href="{{route('customer.create')}}" class="btn btn-primary"><i class="fas fa-fw fa-user-plus"></i> Add
-        Customer</a>
+   
 
     <div class="mt-4">
         <h5 class="border-bottom">Customers</h5>
         <p class="font-italic">Here are all customers that have or had transaction(s) with us!</p>
     </div>
-
+    <a href="{{route('customer.create')}}" class="btn btn-primary my-3"><i class="fas fa-fw fa-user-plus"></i> Add
+        Customer</a>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-users"></i> Customer Table</h6>

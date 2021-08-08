@@ -18,26 +18,26 @@ class ProductController extends Controller
     public function index(ProductRepository $productRepository)
     {
         $products = $productRepository->all();
-        return $products;
         return view('shop.product.index')
             ->with('page', 'shop')
             ->with(compact('products'));
     }
 
-    public function show($id, ProductRepository $productRepository)
+    public function show($id, ProductRepository $productRepository, StockRepository $stockRepository)
     {
         $product = $productRepository->getProductWithStocks($id);
+        $stocks = $stockRepository->getStocksByProduct($id);
         return view('shop.product.show')
             ->with(compact('product'))
-            ->with(compact('productQuantity'))
+            ->with(compact('stocks'))
             ->with('page', 'shop');
     }
 
-    public function create(CategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
+    public function create(CategoryRepository $categoryRepository, UnitRepository $unitRepository)
     {
-        $product_categories = $productCategoryRepository->all();
+        $product_categories = $categoryRepository->all();
         $units = $unitRepository->all();
-        return view('admin.shop.product.create')
+        return view('shop.product.create')
             ->with(compact('product_categories'))
             ->with(compact('units'))
             ->with('page', 'shop');
@@ -52,11 +52,11 @@ class ProductController extends Controller
 
     public function edit(Product $product, CategoryRepository $productCategoryRepository, UnitRepository $unitRepository)
     {
-        $product_categories = $productCategoryRepository->all();
+        $categories = $productCategoryRepository->all();
         $units = $unitRepository->all();
-        return view('admin.reference.specification.update')
+        return view('shop.product.edit')
             ->with(compact('product'))
-            ->with(compact('product_categories'))
+            ->with(compact('categories'))
             ->with(compact('units'))
             ->with('page', 'shop');
     }
@@ -64,7 +64,7 @@ class ProductController extends Controller
     public function update(Product $product, Request $request, ProductServices $productServices)
     {
         $productServices->update($product, $request->all());
-        return redirect(route('specification.show', $product->id))
+        return redirect(route('product.show', $product->id))
             ->with('response', "$product->item_title record has been updated!");
     }
 
