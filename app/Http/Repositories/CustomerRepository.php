@@ -22,6 +22,14 @@ class CustomerRepository
             ->get();
     }
 
+    public function allBy100()
+    {
+        return Customer::query()
+            ->orderBy('firstname', 'ASC')
+            ->limit(500)
+            ->get();
+    }
+
     public function find($id)
     {
         return Customer::query()

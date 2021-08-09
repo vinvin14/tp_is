@@ -11,13 +11,14 @@ class Transaction extends Model
 //    public $table = 'item_library';
     protected $fillable = [
         'customer',
-        'order_ticket',
+        'ticket_number',
         'transaction_date',
         'total_amount',
         'total_points',
         'trans_status',
         'claim_type',
-        'payment_type',
+        'payment_method_id',
+        'remarks',
         'created_at',
         'updated_at',
     ];

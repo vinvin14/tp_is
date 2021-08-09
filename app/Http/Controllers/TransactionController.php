@@ -39,7 +39,7 @@ class TransactionController extends Controller
 
     public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository)
     {
-        $customers = $customerRepository->all();
+        $customers = $customerRepository->allBy100();
         $paymentMethods = $paymentMethodRepository->all();
         return view('shop.transaction.create')
             ->with(compact('customers'))
@@ -47,10 +47,10 @@ class TransactionController extends Controller
             ->with('page', 'shop');
     }
 
-    public function store(TransactionPostRequest $request, OrderServicesOld $orderServices, TransactionServices $transactionServices)
+    public function store(TransactionPostRequest $request, TransactionServices $transactionServices)
     {
-        $request = $request->except('_token');
-        $request['order_ticket'] = $orderServices->createOrderTicket();
+        $request = $request->only('customer', 'transaction_date', 'claim_type', 'trans_status', 'payment_method_id', 'remarks');
+        $request['ticket_number'] = $transactionServices->createTicket();
         $new_transaction = $transactionServices->create($request);
         return redirect(route('transaction.show', $new_transaction->id))
             ->with('response', 'Transaction successfully created!');

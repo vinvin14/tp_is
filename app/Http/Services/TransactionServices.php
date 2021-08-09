@@ -12,6 +12,7 @@ namespace App\Http\Services;
 use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Models\Transaction;
+use Illuminate\Support\Carbon;
 
 class TransactionServices
 {
@@ -138,4 +139,21 @@ class TransactionServices
         return $remainder;
     }
 
+    public function createTicket()
+    {
+        $string1 = str_shuffle('E!3R');
+        $string2 = str_shuffle('KU@J');
+        $ticket = $string1.'-'.$string2.'-'.Carbon::now()->toDateString();
+        
+        $hasMatch = Transaction::query()
+        ->where('ticket_number', $ticket)
+        ->count();
+
+        while($hasMatch != 0)
+        {
+            $ticket = str_shuffle($string1).'-'.str_shuffle($string2).'-'.Carbon::now()->toStringDate();
+        }
+
+        return $ticket;
+    }
 }

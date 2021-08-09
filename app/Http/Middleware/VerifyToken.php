@@ -18,8 +18,8 @@ class VerifyToken
     public function handle(Request $request, Closure $next)
     {
         if (empty(session('token'))) {
-            return redirect(route('login'))
-            ->with('error', 'You are not logged in!');
+            return redirect(route('login'));
+            // ->with('error', 'You are not logged in!');
         }
 
         $authUser = User::query()
@@ -28,6 +28,7 @@ class VerifyToken
                 'remember_token' => session('token')
             ])
             ->first();
+            
         
         if (! $authUser) {
             return redirect(route('login'))

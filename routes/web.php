@@ -95,6 +95,17 @@ Route::middleware('verifyToken')->group(function () {
             Route::post('store', 'PaymentMethodController@store')->name('paymentMethod.store');
             Route::post('update/{paymentMethod}', 'PaymentMethodController@update')->name('paymentMethod.update');
         });
+
+        Route::prefix('claimtype')->group(function () {
+            Route::get('list', 'ClaimTypeController@index')->name('claimType.list');
+            Route::get('create', 'ClaimTypeController@create')->name('claimType.create');
+            Route::get('edit/{claimType}', 'ClaimTypeController@edit')->name('claimType.edit');
+            Route::get('delete/{claimType}', 'ClaimTypeController@destroy')->name('claimType.destroy');
+    
+            Route::post('store', 'ClaimTypeController@store')->name('claimType.store');
+            Route::post('update/{claimType}', 'ClaimTypeController@update')->name('claimType.update');
+        });
+       
     });
 });
 
