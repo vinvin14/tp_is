@@ -85,7 +85,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="search-customer" class="form-control col-4 mb-3"
+                    <label class="font-weight-bold" for="">Keyword Search</label>
+                    <input type="text" id="search-customer" class="form-control mb-3"
                            placeholder="Search Customer here">
                     <div class="list-group" style="max-height: 500px;overflow-y: auto">
                         @foreach ($customers as $customer)

@@ -76,6 +76,7 @@
                 <a class="collapse-item font-weight-bold" href="{{ route('category.list') }}"><i class="fas fa-fw fa-chart-pie"></i> Category</a>
                 <a class="collapse-item font-weight-bold" href="{{ route('unit.list') }}"><i class="fas fa-fw fa-ruler"></i> Units</a>
                 <a class="collapse-item font-weight-bold" href="{{ route('paymentMethod.list') }}"><i class="fas fa-fw fa-money-bill"></i> Payment Methods</a>
+                <a class="collapse-item font-weight-bold" href="{{ route('claimType.list') }}"><i class="fas fa-fw fa-chart-pie"></i> Claim Type</a>
             </div>
         </div>
     </li>
