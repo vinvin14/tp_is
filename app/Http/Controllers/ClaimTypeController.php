@@ -40,7 +40,7 @@ class ClaimTypeController extends Controller
 
     public function edit(ClaimType $claimType)
     {  
-        return view('reference.claimype.edit')
+        return view('reference.claimtype.edit')
         ->with(compact('claimType'))
         ->with('page', 'reference');
     }

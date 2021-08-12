@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\ClaimTypeRepository;
 use App\Http\Repositories\CustomerRepository;
 use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\PaymentMethodRepository;
@@ -28,21 +29,19 @@ class TransactionController extends Controller
     public function show(Transaction $transaction, TransactionRepository $repository, OrderRepository $orderRepository)
     {
         $currentTransaction = $repository->getTransWithCus($transaction->id);
-        $orders = $orderRepository->getOrdersByTrans($transaction->id);
-        $totalOrderAmount = $orderRepository->getTotalOrderAmountByTransaction($transaction->id);
         return view('shop.transaction.show')
             ->with('page', 'shop')
-            ->with(compact('orders'))
-            ->with(compact('totalOrderAmount'))
             ->with('transaction', $currentTransaction);
     }
 
-    public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository)
+    public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository, ClaimTypeRepository $claimTypeRepository)
     {
-        $customers = $customerRepository->allBy100();
+        $customers = $customerRepository->allSortByCreated();
+        $claimTypes = $claimTypeRepository->all();
         $paymentMethods = $paymentMethodRepository->all();
         return view('shop.transaction.create')
             ->with(compact('customers'))
+            ->with(compact('claimTypes'))
             ->with(compact('paymentMethods'))
             ->with('page', 'shop');
     }

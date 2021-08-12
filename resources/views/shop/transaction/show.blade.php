@@ -12,6 +12,9 @@
         <div class="card-body">
             <h5 class="font-weight-bold">Current Transaction</h5>
             <hr>
+            <a href="{{ route('transaction.update', $transaction->transaction_id) }}"
+                class="btn btn-secondary">
+                 <i class="fas fa-fw fa-pencil-alt"></i> Update this Transaction</a>
             <div class="row">
                 <div class="col-3">
                     <small class="font-weight-bold">Customer</small>
@@ -19,16 +22,16 @@
                         ,{{ $transaction->firstname }} {{ $transaction->middlename }}</div>
                 </div>
                 <div class="col-3">
-                    <small class="font-weight-bold">Order Ticket</small>
-                    <div>{{ $transaction->order_ticket }}</div>
+                    <small class="font-weight-bold">Ticket Number</small>
+                    <div>{{ $transaction->ticket_number }}</div>
                 </div>
                 <div class="col-3">
                     <small class="font-weight-bold">Claim Type</small>
                     <div>{{ $transaction->claim_type }}</div>
                 </div>
                 <div class="col-3">
-                    <small class="font-weight-bold">Payment Type</small>
-                    <div>{{ $transaction->payment_type }}</div>
+                    <small class="font-weight-bold">Payment Method</small>
+                    <div>{{ $transaction->payment_method }}</div>
                 </div>
             </div>
             <div class="row mt-3">
@@ -49,13 +52,6 @@
                     <div>{{ $transaction->transaction_date }}</div>
                 </div>
             </div>
-            @if($transaction->trans_status == 'pending')
-                <a href="{{ route('transaction.checkout', $transaction->transaction_id) }}" class="btn btn-danger mt-3">
-                    <i class="fas fa-fw fa-money-bill"></i> Proceed to Checkout</a>
-                <a href="{{ route('transaction.update', $transaction->transaction_id) }}"
-                   class="btn btn-secondary float-right mt-3">
-                    <i class="fas fa-fw fa-pencil-alt"></i> Update this Transaction</a>
-            @endif
         </div>
     </div>
     <hr>
@@ -64,11 +60,11 @@
             <h5>List of Existing Orders within this Transaction</h5>
             @if($transaction->trans_status == 'pending')
                 <a href="{{ route('order.create', $transaction->transaction_id) }}" class="btn btn-primary">
-                    <i class="fas fa-fw fa-plus"></i> Add new Order</a>
+                    <i class="fas fa-fw fa-plus"></i> Add Product</a>
             @endif
 
             <hr>
-            <div class="table-responsive">
+            {{-- <div class="table-responsive">
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
@@ -113,13 +109,17 @@
                             <th class="border-right-0"></th>
                             <th class="border-right-0"></th>
                             <th>Total Order Amount</th>
-                            <th>₱{{ $totalOrderAmount }}</th>
+                            <th>₱</th>
                         </tr>
                     </tfooter>
                 </table>
-            </div>
+            </div> --}}
         </div>
     </div>
+    @if($transaction->trans_status == 'pending')
+                <a href="{{ route('transaction.checkout', $transaction->transaction_id) }}" class="btn btn-danger btn-block shadow-sm mt-3">
+                    <i class="fas fa-fw fa-money-bill"></i> Proceed to Checkout</a>
+            @endif
 
 @endsection
 @section('scripts')

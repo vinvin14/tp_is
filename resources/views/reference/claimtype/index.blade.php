@@ -8,22 +8,7 @@
     <h5 class="border-bottom">Claim Type</h5>
     <p class="font-italic">Here are all Claim Types that can be referenced!</p>
     <a href="{{route('claimType.create')}}" class="btn btn-primary my-3 shadow-sm"><i class="fas fa-fw fa-plus"></i>New Claim Type</a>
-    @if(Session::has('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Woops!</strong>  {{ Session::get('error')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if(Session::has('response'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Success!</strong>  {{ Session::get('response')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    @include('interface.system-messages')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-ruler"></i> Claim Type Table</h6>

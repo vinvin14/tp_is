@@ -36,11 +36,12 @@
                     <hr>
                     <div class="row">
                         <div class="col-4">
-                            <label for="">Claim Status</label>
+                            <label for="">Claim Type</label>
                             <select name="claim_type" class="form-control" id="">
                                 <option value="">-</option>
-                                <option value="pick-up" {{(old('claim_type') == 'pick-up') ? 'selected' : ''}}>Pick up</option>
-                                <option value="deliver" {{(old('claim_type') == 'deliver') ? 'selected' : ''}}>Deliver</option>
+                                @foreach ($claimTypes as $claimType)
+                                    <option value="{{ $claimType->id }}">{{ $claimType->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-4">

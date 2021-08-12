@@ -22,11 +22,10 @@ class CustomerRepository
             ->get();
     }
 
-    public function allBy100()
+    public function allSortByCreated()
     {
         return Customer::query()
-            ->orderBy('firstname', 'ASC')
-            ->limit(500)
+            ->orderBy('created_at', 'ASC')            
             ->get();
     }
 

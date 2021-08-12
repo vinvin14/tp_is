@@ -57,19 +57,17 @@ class TransactionRepository
     public function getTransWithCus($id)
     {
         return DB::table('transactions')
-            ->leftJoin('orders', 'transactions.id', '=', 'orders.transaction_id')
             ->leftJoin('customers', 'transactions.customer', '=', 'customers.id')
-            ->leftJoin('payment_types', 'transactions.payment_type', '=', 'payment_types.id')
+            ->leftJoin('claim_type', 'transactions.claim_type', '=', 'claim_type.id')
+            ->leftJoin('payment_method', 'transactions.payment_method_id', '=', 'payment_method.id')
             ->select(
                 'transactions.*',
-                'orders.*',
                 'transactions.id as transaction_id',
-                'orders.id as order_id',
                 'customers.firstname',
                 'customers.middlename',
                 'customers.lastname',
-                'payment_types.type_name as payment_type',
-                'payment_types.id as payment_type_id'
+                'payment_method.name as payment_method',
+                'claim_type.name as claim_type'
             )
             ->where('transactions.id', $id)
             ->first();
