@@ -18,6 +18,9 @@ class OrdersTable extends Migration
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('stock_id');
             $table->integer('qty');
+            $table->double('discount_amount')->nullable();
+            $table->double('total_amount')->nullable();
+            $table->integer('total_points')->nullable();
         });
     }
 

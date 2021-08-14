@@ -6,7 +6,13 @@ use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 
 class StockRepository
-{   
+{
+    public function getStockById($id)
+    {
+        return Stock::query()
+        ->find($id);
+    }
+
     public function getCurrentQty($product_id)
     {
         return DB::table('stocks')
@@ -24,4 +30,14 @@ class StockRepository
         ->orderBy('expiration_date', 'ASC')
         ->get();
     }
+
+    public function getAvailableStock($product_id)
+    {
+        return DB::table('stocks')
+        ->where('product_id', $product_id)
+        ->orderBy('expiration_date', 'ASC')
+        ->first();
+    }
+
+
 }

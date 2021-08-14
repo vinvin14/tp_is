@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\ClaimType;
+use App\Models\PaymentMethod;
 use App\Models\Unit;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -56,5 +58,37 @@ class DatabaseSeeder extends Seeder
             Category::query()
                 ->create($category);
         }
+
+        $paymentMethods = [
+            [
+                'name' => 'cash'
+            ],
+            [
+                'name' => 'bank transfer'
+            ],
+            [
+                'name' => 'Gcash'
+            ]
+            ];
+        foreach ($paymentMethods as $paymentMethod)
+        {
+            PaymentMethod::query()
+            ->create($paymentMethod);
+        }
+
+        $claimTypes = [
+            [
+                'name' => 'pick up'
+            ],
+            [
+                'name' => 'deliver'
+            ]
+            ];
+
+         foreach ($claimTypes as $claimType)
+         {
+             ClaimType::query()
+             ->create($claimType);
+         }   
     }
 }

@@ -75,6 +75,13 @@ class ProductRepository
         ->first();
     }
 
+    public function getPrice($product_id)
+    {
+        return DB::table('products')
+        ->find($product_id)
+        ->price;
+    }
+
     public function getProductWithQuantityById($id)
     {
         return DB::table('products')
@@ -117,7 +124,7 @@ class ProductRepository
             ->where('product_id', $id)
             ->get()
             ->toArray();
-            
+
         if ($isReferenced) {
             return true;
         }
