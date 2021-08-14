@@ -34,7 +34,9 @@
                         <tr>
                             <td>
                                 @if ($product->uploaded_img == null)
-                                    <small>No Image Available</small>
+                                    <div class="text-center">
+                                        <small>No Image to Preview</small>
+                                    </div>
                                 @else
                                     <div class="text-center">
                                         <img src="{{ asset($product->uploaded_img) }}" width="80px" height="80px" alt="">

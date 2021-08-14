@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 Route::middleware('verifyToken')->group(function () {
-    Route::group(['prefix' => 'transaction'], function () {
+    Route::prefix('transaction')->group(function () {
         Route::get('list', 'TransactionController@index')->name('transaction.list');
         Route::get('show/{transaction}', 'TransactionController@show')->name('transaction.show');
         Route::get('create', 'TransactionController@create')->name('transaction.create');
@@ -30,7 +30,15 @@ Route::middleware('verifyToken')->group(function () {
         Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
     });
     
+    Route::prefix('order')->group(function () {
+        Route::get('show/{order}', 'OrderController@show')->name('order.show');
+        Route::get('create/{transaction_id}', 'OrderController@create')->name('order.create');
+        // Route::get('update/{transaction}', 'TransactionController@update')->name('transaction.update');
     
+        Route::post('store', 'OrderController@store')->name('order.store');
+        // Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
+    });
+
     Route::prefix('product')->group(function () {
         Route::get('list', 'ProductController@index')->name('product.list');
         Route::get('show/{id}', 'ProductController@show')->name('product.show');

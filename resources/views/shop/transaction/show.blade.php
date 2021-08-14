@@ -19,7 +19,7 @@
                 <div class="col-3">
                     <small class="font-weight-bold">Customer</small>
                     <div>{{ $transaction->lastname   }}
-                        ,{{ $transaction->firstname }} {{ $transaction->middlename }}</div>
+                        {{ $transaction->firstname }} {{ $transaction->middlename }}</div>
                 </div>
                 <div class="col-3">
                     <small class="font-weight-bold">Ticket Number</small>

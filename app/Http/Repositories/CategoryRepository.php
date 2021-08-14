@@ -20,6 +20,7 @@ class CategoryRepository
             ->orderBy('name', 'ASC')
             ->get();
     }
+
     public function find($id)
     {
         return Category::query()

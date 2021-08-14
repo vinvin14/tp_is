@@ -42,10 +42,8 @@ class OrderServices
             {
                 $stock = $stockRepository->getAvailableStock($request['product_id']);
 
-
+                $orderQty = $this->distributeOrder($stock, $order->id, $orderQty);
             }
-
-
         }
         catch (Exception $exception)
         {
@@ -66,7 +64,6 @@ class OrderServices
                 $previos_qty = $stock->qty;
                 $unaccommodated = 0;
                 $sold_qty = $order_qty;
-                $request_qty = $order_qty;
 
                 break;
 
@@ -75,7 +72,6 @@ class OrderServices
                 $previos_qty = $stock->qty;
                 $unaccommodated = abs($stock_qty);
                 $sold_qty = $stock->qty;
-                $request_qty = $order_qty;
 
                 break;
 
@@ -84,7 +80,6 @@ class OrderServices
                 $previos_qty = $stock->qty;
                 $unaccommodated = 0;
                 $sold_qty = $order_qty;
-                $request_qty = $order_qty;
 
                 break;
         }
@@ -102,12 +97,17 @@ class OrderServices
             $currentStock = $stockRepository->getStockById($stock->id);
             $currentStock->update(
                 [
-                    'qty'
+                    'qty' => $after_qty,
+                    'sold_qty' => $currentStock->sold_qty + $sold_qty
                 ]);
+            
+            return $unaccommodated;
         }
         catch (Exception $exception)
         {
-
+            dd($exception->getMessage());
+            $this->error->log('CREATE_ORDER', session('user'), $exception->getMessage());
+            return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
         }
 
 
