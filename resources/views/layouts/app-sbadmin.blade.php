@@ -33,8 +33,10 @@
 </div>
 
 <!-- Core plugin JavaScript-->
-<script src="{{ asset('includes/sbadmin/vendor/jquery/jquery.slim.min.js') }}"></script>
-<script src="{{asset('includes/sbadmin/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+{{-- <script src="{{ asset('includes/sbadmin/vendor/jquery/jquery.slim.min.js') }}"></script> --}}
+<script src="{{ asset('includes/js/jquery.3.6.js') }}"></script>
+
+{{-- <script src="{{asset('includes/sbadmin/vendor/jquery-easing/jquery.easing.min.js')}}"></script> --}}
 
 <!-- Bootstrap core JavaScript-->
 <script src="{{asset('includes/sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>

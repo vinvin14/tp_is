@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('verifyToken')->group(function () {
     Route::prefix('transaction')->group(function () {
         Route::get('list', 'TransactionController@index')->name('transaction.list');
-        Route::get('show/{transaction}', 'TransactionController@show')->name('transaction.show');
+        Route::get('show/{id}', 'TransactionController@show')->name('transaction.show');
         Route::get('create', 'TransactionController@create')->name('transaction.create');
         Route::get('update/{transaction}', 'TransactionController@update')->name('transaction.update');
         Route::get('delete/{transaction}', 'TransactionController@destroy')->name('transaction.destroy');
@@ -32,10 +32,10 @@ Route::middleware('verifyToken')->group(function () {
     
     Route::prefix('order')->group(function () {
         Route::get('show/{order}', 'OrderController@show')->name('order.show');
-        Route::get('create/{transaction_id}', 'OrderController@create')->name('order.create');
+        Route::get('add-order/{transaction_id}', 'OrderController@addOrder')->name('order.add');
         // Route::get('update/{transaction}', 'TransactionController@update')->name('transaction.update');
     
-        Route::post('store', 'OrderController@store')->name('order.store');
+        Route::get('store-order/{transactiond_id}', 'OrderController@store')->name('order.store');
         // Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
     });
 
@@ -114,6 +114,10 @@ Route::middleware('verifyToken')->group(function () {
             Route::post('update/{claimType}', 'ClaimTypeController@update')->name('claimType.update');
         });
        
+    });
+
+    Route::prefix('ajax')->group(function () {
+        Route::get('get/products/{category}', 'AjaxController@getProductByCategory');
     });
 });
 

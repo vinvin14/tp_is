@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\CategoryRepository;
 use App\Http\Repositories\ClaimTypeRepository;
 use App\Http\Repositories\CustomerRepository;
 use App\Http\Repositories\OrderRepository;
@@ -26,12 +27,12 @@ class TransactionController extends Controller
             ->with(compact('transactions'));
     }
 
-    public function show(Transaction $transaction, TransactionRepository $repository, OrderRepository $orderRepository)
+    public function show($id, TransactionRepository $repository, OrderRepository $orderRepository, CategoryRepository $categoryRepository)
     {
-        $currentTransaction = $repository->getTransWithCus($transaction->id);
         return view('shop.transaction.show')
             ->with('page', 'shop')
-            ->with('transaction', $currentTransaction);
+            ->with('categories', $categoryRepository->all())
+            ->with('transaction', $repository->getTransWithCus($id));
     }
 
     public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository, ClaimTypeRepository $claimTypeRepository)

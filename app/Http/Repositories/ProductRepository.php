@@ -87,34 +87,52 @@ class ProductRepository
     public function allByCategoryWithPaginate($category, $page)
     {
         return DB::table('products')
-            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('units', 'products.unit_id', '=', 'units.id')
             ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
             ->select(
                 'products.id',
                 'products.title',
                 'products.uploaded_img',
-                'products.alert_level',
-                'products.points',
                 'products.price',
-                'categories.name as category',
                 'units.name as unit',
                 DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty')
             )
             ->where('products.category_id', $category)
-            // ->whereDate('stocks.expiration_date', '>', Carbon::now())
             ->groupBy(
                 'products.id',
                 'products.title',
                 'products.uploaded_img',
-                'products.alert_level',
-                'products.points',
                 'products.price',
                 'stocks.product_id',
-                'categories.name',
                 'units.name'
                 )
             ->paginate($page);
+    }
+
+    public function allByCategory($category)
+    {
+        return DB::table('products')
+            ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+            ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+            ->select(
+                'products.id',
+                'products.title',
+                'products.uploaded_img',
+                'products.price',
+                'units.name as unit',
+                DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty')
+            )
+            ->where('products.category_id', $category)
+            ->where('stocks.qty', '!=', 0)
+            ->groupBy(
+                'products.id',
+                'products.title',
+                'products.uploaded_img',
+                'products.price',
+                'stocks.product_id',
+                'units.name'
+                )
+            ->get();
     }
 
     public function getProductWithStocks($product_id)

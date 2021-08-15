@@ -17,11 +17,11 @@ class OrderController extends Controller
         ->with('page', 'shop');
     }
 
-    public function create($transaction_id, Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository)
+    public function addOrder($transaction_id, Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository)
     {
-        $products = $productRepository->allWithPaginate(50);
+        $products = $productRepository->allWithPaginate(10);
         if ($request->get('category')) {
-            $products = $productRepository->allByCategoryWithPaginate($request->get('category'), 50);
+            $products = $productRepository->allByCategoryWithPaginate($request->get('category'), 10);
         }
 
         return view('shop.order.create')
@@ -31,10 +31,10 @@ class OrderController extends Controller
         ->with('page', 'shop');
     }
 
-    public function store(Request $request, OrderServices  $orderServices)
+    public function store($transaction_id, Request $request, OrderServices  $orderServices)
     {
-        $request = $request->only('transaction_id', 'product_id', 'qty', 'discount', 'total_amount', 'total_points');
-
-
+        $request = $request->only('product_id', 'qty', 'discount', 'total_amount', 'total_points');
+        $request['transaction_id'] = $transaction_id;
+        dd($request);
     }
 }
