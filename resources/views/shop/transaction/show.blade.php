@@ -29,14 +29,14 @@
     <a href="{{route('transaction.list')}}" class="font-weight-bold"><i
             class="fas fa-fw fa-arrow-alt-circle-left"></i> Back to Transaction List</a>
     @include('system-message')
-    <div class="card mt-2">
+    <div class="card">
         <div class="card-body">
             <h5 class="font-weight-bold">Current Transaction</h5>
             <hr>
             <a href="{{ route('transaction.update', $transaction->transaction_id) }}"
                 class="btn btn-secondary">
                  <i class="fas fa-fw fa-pencil-alt"></i> Update this Transaction</a>
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-3">
                     <small class="font-weight-bold">Customer</small>
                     <div>{{ $transaction->lastname   }}
@@ -72,6 +72,10 @@
                     <small class="font-weight-bold">Transaction Date</small>
                     <div>{{ $transaction->transaction_date }}</div>
                 </div>
+            </div>
+            <div class="form-group mt-3">
+                <small class="font-weight-bold">Remarks</label>
+                <textarea name="" id="" cols="30" rows="10" class="form-control" readonly>{{ $transaction->remarks }}</textarea>
             </div>
         </div>
     </div>
@@ -142,7 +146,7 @@
             </div> --}}
         </div>
     </div>
-    
+
 
 
 <!-- Modal -->
@@ -214,7 +218,7 @@
                                     '</div>' +
                                     '</div>'
                                 );
-                                    
+
                             });
                             $("#keyword").on("keyup", function() {
                                 var value = $(this).val().toLowerCase();
@@ -226,7 +230,7 @@
 
                             $('div[id="product-container"]').click(function (e) {
                                 var productID = $(this).data('id');
-                                
+
                                 // console.log(e.target);
                                 $(this).find('.card').addClass('product-selected border border-success');
                                 $(this).find('.card-img-top').css('opacity', 1);
@@ -234,19 +238,19 @@
                                 $('#order-details').html('' +
                                     '<div class="form-group mt-5">' +
                                         '<label>Product Title</label>' +
-                                        '<div class="font-weight-bold">'+ $(this).find('#title').text() +'</div>' +
+                                        '<div class="font-weight-bold text-info">'+ $(this).find('#title').text() +'</div>' +
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
                                         '<label>Product Price</label>' +
-                                        '<div class="font-weight-bold">'+ $(this).find('.price').text() +'</div>' +
+                                        '<div class="font-weight-bold text-info">'+ $(this).find('.price').text() +'</div>' +
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
                                         '<label>Product Unit</label>' +
-                                        '<div class="font-weight-bold">'+ $(this).find('#qty').data('unit')  +
+                                        '<div class="font-weight-bold text-info">'+ $(this).find('#qty').data('unit')  +
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
                                         '<label>Product Quantity</label>' +
-                                        '<div class="font-weight-bold"><span id="remaining-qty">'+ $(this).find('#qty').data('qty') +'</span> Remaining</div>' +
+                                        '<div class="font-weight-bold text-info"><span id="remaining-qty">'+ $(this).find('#qty').data('qty') +'</span> Remaining</div>' +
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
                                         '<label>Buying Quantity</label>' +
@@ -254,7 +258,7 @@
                                             '<div class="input-group-prepend">' +
                                                 '<span class="btn btn-danger font-weight-bold" id="q-minus"><i class="fas fa-fw fa-minus"></i></span>' +
                                             '</div>' +
-                                            '<input type="number" class="form-control col-4" id="buying-qty" name="qty">' +
+                                            '<input type="number" class="form-control col-4 text-center" id="buying-qty" name="qty">' +
                                             '<div class="input-group-append">' +
                                                 ' <span class="btn btn-success font-weight-bold" id="q-add"><i class="fas fa-fw fa-plus"></i></span>' +
                                             '</div>' +
