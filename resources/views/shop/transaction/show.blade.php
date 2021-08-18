@@ -23,6 +23,9 @@
         #product-container {
             cursor: pointer;
         }
+        .search-hidden {
+            display: none;
+        }
     </style>
 @endsection
 @section('main')
@@ -224,7 +227,8 @@
                                 var value = $(this).val().toLowerCase();
                                 console.log(value);
                                 $('#products').find(".card").filter(function() {
-                                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                    $(this).toggleClass($(this).text().toLowerCase().indexOf(value) > -1);
+                                // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                                 });
                             });
 
@@ -256,17 +260,40 @@
                                         '<label>Buying Quantity</label>' +
                                         '<div class="input-group mb-2">' +
                                             '<div class="input-group-prepend">' +
-                                                '<span class="btn btn-danger font-weight-bold" id="q-minus"><i class="fas fa-fw fa-minus"></i></span>' +
+                                                '<span class="btn btn-outline-primary font-weight-bold" id="q-minus"><i class="fas fa-fw fa-minus"></i></span>' +
                                             '</div>' +
-                                            '<input type="number" class="form-control col-4 text-center" id="buying-qty" name="qty">' +
+                                            '<input type="number" class="form-control text-center" min="0" value="0" id="buying-qty" name="qty">' +
                                             '<div class="input-group-append">' +
-                                                ' <span class="btn btn-success font-weight-bold" id="q-add"><i class="fas fa-fw fa-plus"></i></span>' +
+                                                ' <span class="btn btn-outline-primary font-weight-bold" id="q-add"><i class="fas fa-fw fa-plus"></i></span>' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<button type="submit" class="btn btn-success btn-block">Add this Product</button>'
+                                    '<button type="submit" class="btn btn-primary btn-block">Add this Product</button>'
                                 );
+                                $('#q-add').click(function () {
+                                    var buyingQty = parseInt($('#buying-qty').val());
+                                    var remainingQty = parseInt($('#remaining-qty').text());
 
+                                    if (buyingQty+1 > remainingQty) {
+                                        alert('Item has insufficient quantity for the request!');
+                                        $('#buying-qty').val(remainingQty);
+                                        return false;
+                                    }
+
+                                    $('#buying-qty').val(buyingQty+1);
+
+
+                                });
+
+                                $('#q-minus').click(function () {
+                                    var buyingQty = parseInt($('#buying-qty').val());
+                                    if (buyingQty < 1) {
+                                        alert('Error! Buying quantity should not be negative!');
+                                        $('#buying-qty').val(0);
+                                        return false;
+                                    }
+                                    $('#buying-qty').val(buyingQty-1);
+                                });
                                 $('#buying-qty').on('blur', function () {
                                     // console.log($(this).val());
                                     var remainingQty = parseInt($('#remaining-qty').text());

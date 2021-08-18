@@ -25,16 +25,16 @@ Route::middleware('verifyToken')->group(function () {
         Route::get('delete/{transaction}', 'TransactionController@destroy')->name('transaction.destroy');
         Route::get('finalize/{transaction}', 'TransactionController@finalize')->name('transaction.finalize');
         Route::get('checkout/{transaction}', 'TransactionController@checkout')->name('transaction.checkout');
-    
+
         Route::post('store', 'TransactionController@store')->name('transaction.store');
         Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
     });
-    
+
     Route::prefix('order')->group(function () {
         Route::get('show/{order}', 'OrderController@show')->name('order.show');
         Route::get('add-order/{transaction_id}', 'OrderController@addOrder')->name('order.add');
         // Route::get('update/{transaction}', 'TransactionController@update')->name('transaction.update');
-    
+
         Route::get('store-order/{transactiond_id}', 'OrderController@store')->name('order.store');
         // Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
     });
@@ -46,20 +46,20 @@ Route::middleware('verifyToken')->group(function () {
         Route::get('edit/{product}', 'ProductController@edit')->name('product.edit');
         Route::get('create', 'ProductController@create')->name('product.create');
         Route::get('delete/{product}', 'ProductController@destroy')->name('product.destroy');
-        
+
         Route::post('store', 'ProductController@store')->name('product.store');
         Route::post('update/{product}', 'ProductController@update')->name('product.update');
     });
-    
+
     Route::prefix('stock')->group(function () {
         Route::get('create/{product}', 'StockController@create')->name('stock.create');
         Route::get('edit/{stock}', 'StockController@edit')->name('stock.edit');
         Route::get('delete/{stock}/{product_id}', 'StockController@destroy')->name('stock.destroy');
-    
+
         Route::post('update/{stock}', 'StockController@update')->name('stock.update');
         Route::post('store/{product_id}', 'StockController@store')->name('stock.store');
     });
-    
+
     Route::prefix('customer')->group(function () {
         Route::get('list', 'CustomerController@index')->name('customer.list');
         Route::get('show/{customer}', 'CustomerController@show')->name('customer.show');
@@ -67,11 +67,11 @@ Route::middleware('verifyToken')->group(function () {
         Route::get('update/{id}', 'CustomerController@update')->name('customer.update');
         Route::get('delete/{id}', 'CustomerController@destroy')->name('customer.destroy');
         Route::get('points/{id}', 'CustomerController@getPoints')->name('customer.points');
-    
+
         Route::post('store', 'CustomerController@store')->name('customer.store');
         Route::post('upsave/{id}', 'CustomerController@upsave')->name('customer.upsave');
     });
-    
+
     Route::prefix('reference')->group(function () {
         //product-categories
         Route::prefix('category')->group( function () {
@@ -79,27 +79,27 @@ Route::middleware('verifyToken')->group(function () {
             Route::get('create', 'CategoryController@create')->name('category.create');
             Route::get('edit/{category}', 'CategoryController@edit')->name('category.edit');
             Route::get('delete/{category}', 'CategoryController@destroy')->name('category.destroy');
-    
+
             Route::post('store', 'CategoryController@store')->name('category.store');
             Route::post('update/{category}', 'CategoryController@update')->name('category.update');
         });
-    
+
         Route::prefix('unit')->group(function () {
             Route::get('list', 'UnitController@index')->name('unit.list');
             Route::get('create', 'UnitController@create')->name('unit.create');
             Route::get('edit/{unit}', 'UnitController@edit')->name('unit.edit');
             Route::get('delete/{unit}', 'UnitController@destroy')->name('unit.destroy');
-    
+
             Route::post('store', 'UnitController@store')->name('unit.store');
             Route::post('update/{unit}', 'UnitController@update')->name('unit.update');
         });
-    
+
         Route::prefix('paymentMethod')->group(function () {
             Route::get('list', 'PaymentMethodController@index')->name('paymentMethod.list');
             Route::get('create', 'PaymentMethodController@create')->name('paymentMethod.create');
             Route::get('edit/{paymentMethod}', 'PaymentMethodController@edit')->name('paymentMethod.edit');
             Route::get('delete/{paymentMethod}', 'PaymentMethodController@destroy')->name('paymentMethod.destroy');
-    
+
             Route::post('store', 'PaymentMethodController@store')->name('paymentMethod.store');
             Route::post('update/{paymentMethod}', 'PaymentMethodController@update')->name('paymentMethod.update');
         });
@@ -109,11 +109,11 @@ Route::middleware('verifyToken')->group(function () {
             Route::get('create', 'ClaimTypeController@create')->name('claimType.create');
             Route::get('edit/{claimType}', 'ClaimTypeController@edit')->name('claimType.edit');
             Route::get('delete/{claimType}', 'ClaimTypeController@destroy')->name('claimType.destroy');
-    
+
             Route::post('store', 'ClaimTypeController@store')->name('claimType.store');
             Route::post('update/{claimType}', 'ClaimTypeController@update')->name('claimType.update');
         });
-       
+
     });
 
     Route::prefix('ajax')->group(function () {
