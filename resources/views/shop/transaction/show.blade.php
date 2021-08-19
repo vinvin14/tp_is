@@ -87,7 +87,7 @@
         <div class="card-body">
             <h5>List of Existing Orders within this Transaction</h5>
             @if($transaction->trans_status == 'pending')
-            <button id="add-product" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add Product</button>
+            <button id="add-product" class="btn btn-primary" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#exampleModal">Add Product</button>
                 {{-- <a href="{{ route('order.add', $transaction->transaction_id) }}" class="btn btn-primary">
                     <i class="fas fa-fw fa-plus"></i> Add Product</a> --}}
             @endif
@@ -206,35 +206,33 @@
                     type: 'get',
                     success: function (data) {
                         content.html('');
-                        content.append('');
                         data.forEach(function (index) {
                             content.append('' +
                                     '<div class="col-xs-12 col-md-6 col-lg-3 my-2" id="product-container" data-id="'+index.id+'">' +
                                     '<div class="card shadow-sm" style="width: 13rem;">' +
                                     '<img class="card-img-top" height="120px" src="'+(index.uploaded_img ? index.uploaded_img : '/storage/utilities/no_image.png')+'" alt="Card image cap">' +
                                     '<div class="card-body text-center">' +
-                                    '<div class="font-weight-bold text-truncate" id="title" title="'+ index.title +'">'+ index.title +'</div>' +
+                                    '<div class="font-weight-bold " id="title" title="'+ index.title +'">'+ index.title +'</div>' +
                                     '<div class="font-weight-bold text-truncate price">₱<span id="price">'+ index.price +'</span></div>' +
                                     '<span id="qty" data-qty="'+ index.qty +'" data-unit="'+ index.unit +'"></span>' +
-                                    // '<a href="#" class="btn btn-primary">Go somewhere</a>' +
                                     '</div>' +
                                     '</div>' +
                                     '</div>'
                                 );
-
                             });
                             $("#keyword").on("keyup", function() {
                                 var value = $(this).val().toLowerCase();
-                                console.log(value);
-                                $('#products').find(".card").filter(function() {
-                                    $(this).toggleClass($(this).text().toLowerCase().indexOf(value) > -1);
-                                // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                // console.log(content.find(".card").filter(-1));
+                                content.find(".card").filter(function() {
+                                    $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                                 });
                             });
 
                             $('div[id="product-container"]').click(function (e) {
                                 var productID = $(this).data('id');
 
+                                var price = $(this).find('.price').text().replace('₱', '');
+                                console.log(price);
                                 // console.log(e.target);
                                 $(this).find('.card').addClass('product-selected border border-success');
                                 $(this).find('.card-img-top').css('opacity', 1);
@@ -257,16 +255,25 @@
                                         '<div class="font-weight-bold text-info"><span id="remaining-qty">'+ $(this).find('#qty').data('qty') +'</span> Remaining</div>' +
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
+                                        '<input type="hidden" step="0.01" value="'+price+'" name="price">' +
                                         '<label>Buying Quantity</label>' +
                                         '<div class="input-group mb-2">' +
                                             '<div class="input-group-prepend">' +
                                                 '<span class="btn btn-outline-primary font-weight-bold" id="q-minus"><i class="fas fa-fw fa-minus"></i></span>' +
                                             '</div>' +
-                                            '<input type="number" class="form-control text-center" min="0" value="0" id="buying-qty" name="qty">' +
+                                            '<input type="number" class="form-control text-center" min="1" value="1" id="buying-qty" name="qty" required>' +
                                             '<div class="input-group-append">' +
                                                 ' <span class="btn btn-outline-primary font-weight-bold" id="q-add"><i class="fas fa-fw fa-plus"></i></span>' +
                                             '</div>' +
                                         '</div>' +
+                                    '</div>' +
+                                    '<div class="form-group mt-2">' +
+                                        '<label>Discount Amount</label>' +
+                                        '<input type="number" class="form-control" name="discount_amount">' +
+                                    '</div>' +
+                                    '<div class="form-group mt-2">' +
+                                        '<label>Discount Amount</label>' +
+                                        '<div class="font-weight-bold">₱<span id="total-amount">'+price+'</span></div>' +
                                     '</div>' +
                                     '<button type="submit" class="btn btn-primary btn-block">Add this Product</button>'
                                 );
@@ -274,32 +281,52 @@
                                     var buyingQty = parseInt($('#buying-qty').val());
                                     var remainingQty = parseInt($('#remaining-qty').text());
 
+                                    $('#total-amount').text((parseInt($('#buying-qty').val()) * price));
                                     if (buyingQty+1 > remainingQty) {
-                                        alert('Item has insufficient quantity for the request!');
+                                        Swal.fire({
+                                            title: 'Oops!, We have a problem!',
+                                            text: 'Item has insufficient quantity for the request!!',
+                                            icon: 'error',
+                                            confirmButtonText: 'Okay!'
+                                        });
                                         $('#buying-qty').val(remainingQty);
+                                        $('#total-amount').text((parseInt($('#buying-qty').val()) * price));
                                         return false;
                                     }
-
                                     $('#buying-qty').val(buyingQty+1);
-
 
                                 });
 
                                 $('#q-minus').click(function () {
                                     var buyingQty = parseInt($('#buying-qty').val());
-                                    if (buyingQty < 1) {
-                                        alert('Error! Buying quantity should not be negative!');
-                                        $('#buying-qty').val(0);
+
+                                    $('#total-amount').text((parseInt($('#buying-qty').val()) * price));
+                                    if (buyingQty < 2) {
+                                        Swal.fire({
+                                            title: 'Oops!, We have a problem!',
+                                            text: 'Buying quantity should have a value!',
+                                            icon: 'error',
+                                            confirmButtonText: 'Okay!'
+                                        });
+                                        $('#buying-qty').val(1);
                                         return false;
                                     }
                                     $('#buying-qty').val(buyingQty-1);
+
+
                                 });
                                 $('#buying-qty').on('blur', function () {
                                     // console.log($(this).val());
                                     var remainingQty = parseInt($('#remaining-qty').text());
                                     if ($(this).val() > remainingQty) {
-                                        alert('Item has insufficient quantity for the request!');
+                                        Swal.fire({
+                                            title: 'Oops!, We have a problem!',
+                                            text: 'Item has insufficient quantity for the request!',
+                                            icon: 'error',
+                                            confirmButtonText: 'Okay!'
+                                        });
                                         $(this).val(remainingQty);
+                                        $('#total-amount').text((parseInt($('#buying-qty').val()) * price));
                                     }
                                 });
 
@@ -319,12 +346,10 @@
         });
     </script>
 
-
-
-
     <!-- Page level plugins -->
     <script src="{{ asset('includes/sbadmin/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <!-- Page level custom scripts -->
     <script src="{{ asset('includes/sbadmin/js/demo/datatables-demo.js') }}"></script>
+    <script src="{{ asset('includes/js/swal.js') }}"></script>
 @endsection

@@ -20,6 +20,7 @@ class OrderController extends Controller
     public function addOrder($transaction_id, Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository)
     {
         $products = $productRepository->allWithPaginate(10);
+        $categories =  $categoryRepository->all();
         if ($request->get('category')) {
             $products = $productRepository->allByCategoryWithPaginate($request->get('category'), 10);
         }
@@ -27,14 +28,26 @@ class OrderController extends Controller
         return view('shop.order.create')
         ->with(compact('transaction_id'))
         ->with(compact('products'))
-        ->with('categories', $categoryRepository->all())
+        ->with(compact('categories'))
         ->with('page', 'shop');
     }
 
     public function store($transaction_id, Request $request, OrderServices  $orderServices)
     {
-        $request = $request->only('product_id', 'qty', 'discount', 'total_amount', 'total_points');
+        $request = $request->only('product_id', 'price', 'qty', 'discount_amount', 'total_amount', 'total_points');
         $request['transaction_id'] = $transaction_id;
-        dd($request);
+        $init = $orderServices->createOrder($request);
+
+        if (@$init['error'])
+        {
+            return back()
+            ->with('error', $init['error'])
+            ->withInput();
+        }
+
+        return redirect(route('transaction.show', $transaction_id))
+        ->with('success', 'Order successfully added!');
     }
+
+
 }

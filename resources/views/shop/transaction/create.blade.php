@@ -125,6 +125,7 @@
 @endsection
 @section('scripts')
     <script>
+
         $(document).ready(function () {
             $('#customer_select').click(function () {
                 $('#customer_modal').modal('show');
@@ -151,4 +152,5 @@
             });
         })
     </script>
+
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class OrderServices
 {
@@ -19,9 +20,12 @@ class OrderServices
     {
         $stockRepository = new StockRepository();
         $orderQty = $request['qty'];
+        DB::beginTransaction();
         try
         {
+
             $total_amount = $request['price'] * $request['qty'];
+            dd($orderQty);
             if (! empty($request['discount_amount']))
             {
                 $discounted_amount = $total_amount - $request['discount_amount'];
@@ -46,9 +50,13 @@ class OrderServices
             }
 
             return $order;
+
+            DB::commit();
         }
         catch (Exception $exception)
         {
+            DB::rollback();
+            dd($exception->getMessage());
             $this->error->log('CREATE_ORDER', session('user'), $exception->getMessage());
             return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
         }
