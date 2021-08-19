@@ -116,6 +116,7 @@ class ProductRepository
             ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
             ->select(
                 'products.id',
+                'stocks.id as stock_id',
                 'products.title',
                 'products.uploaded_img',
                 'products.price',
@@ -129,6 +130,7 @@ class ProductRepository
                 'products.title',
                 'products.uploaded_img',
                 'products.price',
+                'stocks.id',
                 'stocks.product_id',
                 'units.name'
                 )

@@ -34,7 +34,7 @@ class OrderController extends Controller
 
     public function store($transaction_id, Request $request, OrderServices  $orderServices)
     {
-        $request = $request->only('product_id', 'price', 'qty', 'discount_amount', 'total_amount', 'total_points');
+        $request = $request->only('product_id', 'price', 'qty', 'discount_amount', 'total_amount', 'total_points', 'stock_id');
         $request['transaction_id'] = $transaction_id;
         $init = $orderServices->createOrder($request);
 

@@ -19,13 +19,14 @@ class OrderServices
     public function createOrder($request)
     {
         $stockRepository = new StockRepository();
+        dd($request);
         $orderQty = $request['qty'];
         DB::beginTransaction();
         try
         {
 
             $total_amount = $request['price'] * $request['qty'];
-            dd($orderQty);
+
             if (! empty($request['discount_amount']))
             {
                 $discounted_amount = $total_amount - $request['discount_amount'];

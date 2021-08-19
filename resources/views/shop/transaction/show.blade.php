@@ -205,10 +205,11 @@
                     url: '/ajax/get/products/'+ $(this).val(),
                     type: 'get',
                     success: function (data) {
+                        console.log(data)
                         content.html('');
                         data.forEach(function (index) {
                             content.append('' +
-                                    '<div class="col-xs-12 col-md-6 col-lg-3 my-2" id="product-container" data-id="'+index.id+'">' +
+                                    '<div class="col-xs-12 col-md-6 col-lg-3 my-2" id="product-container" data-productid="'+index.id+'" data-stockid="'+index.stock_id+'" data-id="'+index.id+'">' +
                                     '<div class="card shadow-sm" style="width: 13rem;">' +
                                     '<img class="card-img-top" height="120px" src="'+(index.uploaded_img ? index.uploaded_img : '/storage/utilities/no_image.png')+'" alt="Card image cap">' +
                                     '<div class="card-body text-center">' +
@@ -230,9 +231,10 @@
 
                             $('div[id="product-container"]').click(function (e) {
                                 var productID = $(this).data('id');
-
+                                var stockID = $(this).data('stockid');
+                                var productID = $(this).data('productid');
                                 var price = $(this).find('.price').text().replace('₱', '');
-                                console.log(price);
+                                console.log(stockID);
                                 // console.log(e.target);
                                 $(this).find('.card').addClass('product-selected border border-success');
                                 $(this).find('.card-img-top').css('opacity', 1);
@@ -255,6 +257,8 @@
                                         '<div class="font-weight-bold text-info"><span id="remaining-qty">'+ $(this).find('#qty').data('qty') +'</span> Remaining</div>' +
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
+                                        '<input type="hidden" value="'+productID+'" name="product_id">' +
+                                        '<input type="hidden" value="'+stockID+'" name="stock_id">' +
                                         '<input type="hidden" step="0.01" value="'+price+'" name="price">' +
                                         '<label>Buying Quantity</label>' +
                                         '<div class="input-group mb-2">' +
