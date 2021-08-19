@@ -19,7 +19,6 @@ class OrderServices
     public function createOrder($request)
     {
         $stockRepository = new StockRepository();
-        dd($request);
         $orderQty = $request['qty'];
         DB::beginTransaction();
         try
@@ -47,7 +46,7 @@ class OrderServices
             {
                 $stock = $stockRepository->getAvailableStock($request['product_id']);
 
-                $orderQty = $this->distributeOrder($stock, $order->id, $orderQty);
+                $orderQty = $this->distributeOrder($stock, $order->id, intval($orderQty));
             }
 
             return $order;
@@ -66,8 +65,7 @@ class OrderServices
     public function distributeOrder($stock, $order_id, $order_qty)
     {
         $stockRepository = new StockRepository();
-        $stock_qty = $stock->qty - $order_qty;
-
+        $stock_qty = ($stock->qty - $order_qty);
         switch (true)
         {
             case $stock_qty > 0:
@@ -91,31 +89,24 @@ class OrderServices
                 $sold_qty = $order_qty;
                 break;
         }
-        try
-        {
-            OrderTracker::query()
-            ->create([
-                'order_id' => $order_id,
-                'order_qty' => $order_qty,
-                'stock_id' => $stock->id,
-                'stock_previous_qty' => $previos_qty,
-                'stock_after_qty' => $after_qty
+
+        OrderTracker::query()
+        ->create([
+            'order_id' => $order_id,
+            'order_qty' => $order_qty,
+            'stock_id' => $stock->id,
+            'stock_previous_qty' => $previos_qty,
+            'stock_after_qty' => $after_qty
+        ]);
+
+        $currentStock = $stockRepository->getStockById($stock->id);
+        $currentStock->update(
+            [
+                'qty' => $after_qty,
+                'sold_qty' => $sold_qty
             ]);
 
-            $currentStock = $stockRepository->getStockById($stock->id);
-            $currentStock->update(
-                [
-                    'qty' => $after_qty,
-                    'sold_qty' => $sold_qty
-                ]);
-
-            return $unaccommodated;
-        }
-        catch (Exception $exception)
-        {
-            $this->error->log('CREATE_ORDER', session('user'), $exception->getMessage());
-            return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
-        }
+        return $unaccommodated;
     }
 
     public function createTracker($order_id, $stock_id, $previos_qty, $after_qty)
