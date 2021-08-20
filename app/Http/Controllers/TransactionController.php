@@ -29,10 +29,12 @@ class TransactionController extends Controller
 
     public function show($id, TransactionRepository $repository, OrderRepository $orderRepository, CategoryRepository $categoryRepository)
     {
+        dd($orderRepository->getOrdersByTrans2($id));
         return view('shop.transaction.show')
             ->with('page', 'shop')
             ->with('categories', $categoryRepository->all())
-            ->with('transaction', $repository->getTransWithCus($id));
+            ->with('transaction', $repository->getTransWithCus($id))
+            ->with('orders', $orderRepository->getOrdersByTrans2($id));
     }
 
     public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository, ClaimTypeRepository $claimTypeRepository)

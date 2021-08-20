@@ -223,7 +223,6 @@
                             });
                             $("#keyword").on("keyup", function() {
                                 var value = $(this).val().toLowerCase();
-                                // console.log(content.find(".card").filter(-1));
                                 content.find(".card").filter(function() {
                                     $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                                 });
@@ -285,7 +284,7 @@
                                     var buyingQty = parseInt($('#buying-qty').val());
                                     var remainingQty = parseInt($('#remaining-qty').text());
 
-                                    $('#total-amount').text((parseInt($('#buying-qty').val()) * price));
+                                    $('#total-amount').text((buyingQty * price));
                                     if (buyingQty+1 > remainingQty) {
                                         Swal.fire({
                                             title: 'Oops!, We have a problem!',
@@ -304,7 +303,7 @@
                                 $('#q-minus').click(function () {
                                     var buyingQty = parseInt($('#buying-qty').val());
 
-                                    $('#total-amount').text((parseInt($('#buying-qty').val()) * price));
+                                    $('#total-amount').text((buyingQty * price));
                                     if (buyingQty < 2) {
                                         Swal.fire({
                                             title: 'Oops!, We have a problem!',

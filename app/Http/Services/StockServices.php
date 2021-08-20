@@ -2,9 +2,11 @@
 
 namespace App\Http\Services;
 
+use App\Models\PreOrder;
 use App\Models\SoldProduct;
 use App\Models\Stock;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class StockServices
 {
@@ -16,6 +18,7 @@ class StockServices
 
     public function create($request)
     {
+        DB::beginTransaction();
         try {
             return Stock::query()
             ->create($request);

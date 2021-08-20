@@ -49,9 +49,8 @@ class OrderServices
                 $orderQty = $this->distributeOrder($stock, $order->id, intval($orderQty));
             }
 
-            return $order;
-
             DB::commit();
+            return $order;
         }
         catch (Exception $exception)
         {
