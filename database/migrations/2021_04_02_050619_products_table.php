@@ -25,6 +25,7 @@ class ProductsTable extends Migration
 //            $table->integer('current_quantity');
             $table->integer('alert_level');
             $table->double('points')->default(0);
+            $table->integer('current_qty')->nullable();
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories');

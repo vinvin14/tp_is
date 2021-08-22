@@ -14,6 +14,7 @@ class Product extends Model
         'uploaded_img',
         'original_img_file_name',
         'category_id',
+        'current_qty',
         'price',
         'unit_id',
         'alert_level',

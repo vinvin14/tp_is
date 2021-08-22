@@ -9,13 +9,10 @@ use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\PaymentMethodRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Http\Requests\TransactionPostRequest;
-use App\Http\Services\OrderServicesOld;
 use App\Http\Services\TransactionServices;
-use App\Models\Order;
-use App\Models\PaymentMethod;
 use App\Models\PaymentType;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+
 
 class TransactionController extends Controller
 {
@@ -29,12 +26,12 @@ class TransactionController extends Controller
 
     public function show($id, TransactionRepository $repository, OrderRepository $orderRepository, CategoryRepository $categoryRepository)
     {
-        dd($orderRepository->getOrdersByTrans2($id));
+        dd($orderRepository->getOrderByTransaction($id));
         return view('shop.transaction.show')
             ->with('page', 'shop')
             ->with('categories', $categoryRepository->all())
             ->with('transaction', $repository->getTransWithCus($id))
-            ->with('orders', $orderRepository->getOrdersByTrans2($id));
+            ->with('orders', $orderRepository->getOrderByTransaction($id));
     }
 
     public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository, ClaimTypeRepository $claimTypeRepository)

@@ -97,16 +97,15 @@
             @endif
 
             <hr>
-            {{-- <div class="table-responsive">
+            <div class="table-responsive">
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
                         <th></th>
                         <th>Product</th>
                         <th>Product Category</th>
-                        <th>Unit</th>
+                        <th>Qty</th>
                         <th>Points</th>
-                        <th>Quantity</th>
                         <th>Price</th>
                         <th>Total Price</th>
                     </tr>
@@ -123,17 +122,17 @@
                                             class="fas fa-fw fa-trash text-danger" title="Delete"></i></a>
                                 </div>
                             </td>
-                            <td>{{$order->item_title}}</td>
-                            <td>{{$order->category_name}}</td>
-                            <td>{{$order->unit}}</td>
-                            <td>{{$order->points}}</td>
-                            <td>{{$order->quantity}}</td>
-                            <td>₱ {{$order->price}}</td>
-                            <td>₱ {{$order->total_order_amount}}</td>
+                            <td>{{ $order->title }}</td>
+                            <td>{{ $order->category }}</td>
+                            <td>{{ $order->qty }} {{ $order->unit }}</td>
+                            <td>{{ $order->points }}</td>
+                            <td>{{ $order->quantity }}</td>
+                            <td>₱ {{ $order->price }}</td>
+                            <td>₱ {{ $order->total_order_amount }}</td>
                         </tr>
                     @endforeach
                     </tbody>
-                    <tfooter>
+                    {{-- <tfooter>
                         <tr>
                             <th class="border-right-0"></th>
                             <th class="border-right-0"></th>
@@ -144,9 +143,9 @@
                             <th>Total Order Amount</th>
                             <th>₱</th>
                         </tr>
-                    </tfooter>
+                    </tfooter> --}}
                 </table>
-            </div> --}}
+            </div>
         </div>
     </div>
 

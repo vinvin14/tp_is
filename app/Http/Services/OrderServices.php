@@ -2,7 +2,6 @@
 
 namespace App\Http\Services;
 
-use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
@@ -16,14 +15,10 @@ class OrderServices
     {
         $this->error = new ErrorRecordServices;
     }
-    public function createOrder($request)
-    {
-        $stockRepository = new StockRepository();
-        $orderQty = $request['qty'];
-        DB::beginTransaction();
-        try
-        {
 
+    public function create($request)
+    {
+        try {
             $total_amount = $request['price'] * $request['qty'];
 
             if (! empty($request['discount_amount']))
@@ -41,10 +36,22 @@ class OrderServices
 
             $order = Order::query()
             ->create($request);
+        } catch (Exception $exception) {
+            $this->error->log('CREATE_ORDER', session('user'), $exception->getMessage());
+            return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
+        }
+    }
 
+    public function finalizeOrder($product_id, $order, $request_qty)
+    {
+        $stockRepository = new StockRepository();
+        $orderQty = $request_qty;
+        DB::beginTransaction();
+        try
+        {
             while ($orderQty != 0)
             {
-                $stock = $stockRepository->getAvailableStock($request['product_id']);
+                $stock = $stockRepository->getAvailableStock($product_id);
 
                 $orderQty = $this->distributeOrder($stock, $order->id, intval($orderQty));
             }
@@ -56,7 +63,7 @@ class OrderServices
         {
             DB::rollback();
             dd($exception->getMessage());
-            $this->error->log('CREATE_ORDER', session('user'), $exception->getMessage());
+            $this->error->log('FINALIZE_ORDER', session('user'), $exception->getMessage());
             return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
         }
     }
@@ -106,6 +113,11 @@ class OrderServices
             ]);
 
         return $unaccommodated;
+    }
+
+    public function udpateOrder($product_id)
+    {
+
     }
 
     public function createTracker($order_id, $stock_id, $previos_qty, $after_qty)

@@ -36,7 +36,7 @@ class OrderController extends Controller
     {
         $request = $request->only('product_id', 'price', 'qty', 'discount_amount', 'total_amount', 'total_points', 'stock_id');
         $request['transaction_id'] = $transaction_id;
-        $init = $orderServices->createOrder($request);
+        $init = $orderServices->create($request);
         if (@$init['error'])
         {
             return back()

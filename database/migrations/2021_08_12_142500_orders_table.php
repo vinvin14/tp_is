@@ -16,7 +16,8 @@ class OrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('transaction_id');
-            $table->unsignedBigInteger('stock_id');
+            $table->unsignedBigInteger('product_id');
+            // $table->unsignedBigInteger('stock_id');
             $table->integer('qty');
             $table->double('discount_amount')->nullable();
             $table->double('total_amount')->nullable();

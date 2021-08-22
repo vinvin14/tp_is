@@ -91,8 +91,11 @@ class TransactionServices
         }
     }
 
-    public function finalizeOrders($transaction, $productID, $orderQuantity, $orderID)
+    public function finalizeOrders($transaction, $product_id, $orderQuantity, $orderID)
     {
+        $orders = $this->transRepository->getAllOrdersByTransaction($product_id);
+        dd($orders);
+
 
         while ($orderQuantity != 0) {
             $productQuantity = $this->productRepository->getPriorityProductQuantity($productID);

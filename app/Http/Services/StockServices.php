@@ -18,12 +18,15 @@ class StockServices
 
     public function create($request)
     {
+        $productServices = new ProductServices();
         DB::beginTransaction();
         try {
-            return Stock::query()
+            $productServices->updateCurrentQty($request['product_id'], $request['qty']);
+            $stock = Stock::query()
             ->create($request);
+            DB::commit();
+            return $stock;
         } catch (Exception $exception) {
-            dd($exception->getMessage());
             $this->error->log('STOCK_ADD', session('user'), $exception->getMessage());
             return ['error' => 'We are having technical problem, Please contact your Administrator!'];
         }

@@ -43,12 +43,18 @@ class OrderRepository
         return DB::table('orders')
         ->leftJoin('stocks', 'orders.stock_id', '=', 'stocks.id')
         ->leftJoin('products', 'stocks.product_id', '=', 'products.id')
+        ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+        ->leftJoin('units', 'products.unit_id', '=', 'units.id')
         ->where('orders.transaction_id', $transaction_id)
         ->select(
             'orders.id as id',
-            'products.title as title',
+            'orders.qty',
+            'products.title as title',            
             'products.price as price',
-
+            'products.points as points',
+            'categories.name as category',
+            'units.name as units',
+            DB::raw('orders.qty * products.price as total_amount')
         )
         ->get();
     }

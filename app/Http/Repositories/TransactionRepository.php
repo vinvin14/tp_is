@@ -54,6 +54,13 @@ class TransactionRepository
             ->get();
     }
 
+    public function getAllOrdersByTransaction($transaction_id)
+    {
+        return Order::query()
+        ->where('transaction_id', $transaction_id)
+        ->get();
+    }
+
     public function getTransWithCus($id)
     {
         return DB::table('transactions')

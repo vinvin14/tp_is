@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Config\trackerReason;
+use Exception;
 
 class ProductServices
 {
@@ -87,10 +88,23 @@ class ProductServices
             return ['error' => 'We are having technical problems, Please contact your Administrator!'];
         }
     }
+    
+    public function updateCurrentQty($product_id, $qty)
+    {
+        try {
+            $product = Product::query()->findOrFail($product_id);
+            $product->update([
+                'current_qty' => ($product->current_qty + $qty)
+            ]);
+            return $product->fresh();
+        } catch (Exception $exception) {
+            $this->error->log('PROD_QTY_UPDATE', session('user'), $exception->getMessage());
+            return ['error' => 'We are having technical problems, Please contact your Administrator!'];
+        }
+    }
 
     public function delete($product)
     {
-//        dd($product);
         if ($this->productRepository->isReferenced($product->id)) {
             return ['error' => 'Product Record cannot be deleted since it has been referenced by other record!'];
         }
