@@ -114,6 +114,7 @@ class ProductRepository
         return DB::table('products')
             ->leftJoin('units', 'products.unit_id', '=', 'units.id')
             ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+            ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
             ->select(
                 'products.id',
                 'stocks.id as stock_id',
@@ -121,7 +122,8 @@ class ProductRepository
                 'products.uploaded_img',
                 'products.price',
                 'units.name as unit',
-                DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty')
+                DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty'),
+                DB::raw('sum(orders.qty) as orderQty')
             )
             ->where('products.category_id', $category)
             ->where('stocks.qty', '!=', 0)
@@ -132,7 +134,8 @@ class ProductRepository
                 'products.price',
                 'stocks.id',
                 'stocks.product_id',
-                'units.name'
+                'units.name',
+                'orders.qty'
                 )
             ->get();
     }

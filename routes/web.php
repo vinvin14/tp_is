@@ -31,12 +31,11 @@ Route::middleware('verifyToken')->group(function () {
     });
 
     Route::prefix('order')->group(function () {
-        Route::get('show/{order}', 'OrderController@show')->name('order.show');
-        Route::get('add-order/{transaction_id}', 'OrderController@addOrder')->name('order.add');
-        // Route::get('update/{transaction}', 'TransactionController@update')->name('transaction.update');
+        Route::get('edit/{order}', 'OrderController@addOrder')->name('order.edit');
+        Route::get('destroy/{order}', 'OrderController@delete')->name('order.destroy');
 
-        Route::get('store-order/{transactiond_id}', 'OrderController@store')->name('order.store');
-        // Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
+        Route::post('store/{transactiond_id}', 'OrderController@store')->name('order.store');
+        Route::post('update/{order}', 'OrderController@update')->name('order.update');
     });
 
     Route::prefix('product')->group(function () {
@@ -118,6 +117,9 @@ Route::middleware('verifyToken')->group(function () {
 
     Route::prefix('ajax')->group(function () {
         Route::get('get/products/{category}', 'AjaxController@getProductByCategory');
+        Route::get('get/order/{id}', 'AjaxController@getOrder');
+
+        Route::post('update/order/{order}', 'AjaxController@updateOrder');
     });
 });
 

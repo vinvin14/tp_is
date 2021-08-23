@@ -9,6 +9,7 @@ use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\PaymentMethodRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Http\Requests\TransactionPostRequest;
+use App\Http\Services\OrderServices;
 use App\Http\Services\TransactionServices;
 use App\Models\PaymentType;
 use App\Models\Transaction;
@@ -24,14 +25,14 @@ class TransactionController extends Controller
             ->with(compact('transactions'));
     }
 
-    public function show($id, TransactionRepository $repository, OrderRepository $orderRepository, CategoryRepository $categoryRepository)
+    public function show($id, TransactionRepository $transactionRepository, OrderRepository $orderRepository, CategoryRepository $categoryRepository)
     {
-        dd($orderRepository->getOrderByTransaction($id));
         return view('shop.transaction.show')
             ->with('page', 'shop')
             ->with('categories', $categoryRepository->all())
-            ->with('transaction', $repository->getTransWithCus($id))
-            ->with('orders', $orderRepository->getOrderByTransaction($id));
+            ->with('transaction', $transactionRepository->getTransWithCus($id))
+            ->with('orders', $orderRepository->getOrderByTransaction($id))
+            ->with('total_order_amount', $transactionRepository->getTotalOrderAmount($id));
     }
 
     public function create(CustomerRepository $customerRepository, PaymentMethodRepository $paymentMethodRepository, ClaimTypeRepository $claimTypeRepository)
@@ -75,18 +76,20 @@ class TransactionController extends Controller
             ->with('response', 'Transaction Record has been deleted!');
     }
 
-    public function checkout($transaction_id, OrderRepository $orderRepository, TransactionRepository $transactionRepository)
+    public function checkout($transaction_id, TransactionServices $transactionServices, TransactionRepository $transactionRepository)
     {
-        $transaction = $transactionRepository->getTransWithCus($transaction_id);
-        $orders = $orderRepository->getOrdersByTrans($transaction_id);
-        $orderTotalAmount = $orderRepository->getTotalOrderAmountByTransaction($transaction_id);
-        $paymentTypes = PaymentType::query()->orderBy('type_name', 'ASC')->get()->toArray();
-        return view('shop.transaction.checkout')
-            ->with(compact('transaction'))
-            ->with(compact('orders'))
-            ->with(compact('orderTotalAmount'))
-            ->with(compact('paymentTypes'))
-            ->with('page', 'shop');
+        dd($transactionRepository->getAllOrdersByTransaction($transaction_id));
+
+        // $transaction = $transactionRepository->getTransWithCus($transaction_id);
+        // $orders = $orderRepository->getOrdersByTrans($transaction_id);
+        // $orderTotalAmount = $orderRepository->getTotalOrderAmountByTransaction($transaction_id);
+        // $paymentTypes = PaymentType::query()->orderBy('type_name', 'ASC')->get()->toArray();
+        // return view('shop.transaction.checkout')
+        //     ->with(compact('transaction'))
+        //     ->with(compact('orders'))
+        //     ->with(compact('orderTotalAmount'))
+        //     ->with(compact('paymentTypes'))
+        //     ->with('page', 'shop');
 
     }
 

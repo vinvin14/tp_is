@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
@@ -18,7 +19,12 @@ class OrderServices
 
     public function create($request)
     {
+        $orderRepository = new OrderRepository();
         try {
+            if ($orderRepository->orderExists($request['transaction_id'], $request['product_id'])) {
+                return ['error' => 'Order already exist, try to update it if you want changes to apply!'];
+            }
+
             $total_amount = $request['price'] * $request['qty'];
 
             if (! empty($request['discount_amount']))
@@ -32,6 +38,10 @@ class OrderServices
 
                 $request['total_amount'] = $discounted_amount;
             }
+            else
+            {
+                $request['total_amount'] = $total_amount;
+            }
             unset($request['price']);
 
             $order = Order::query()
@@ -42,10 +52,10 @@ class OrderServices
         }
     }
 
-    public function finalizeOrder($product_id, $order, $request_qty)
+    public function finalizeOrder($product_id, $order)
     {
         $stockRepository = new StockRepository();
-        $orderQty = $request_qty;
+        $orderQty = $order->qty;
         DB::beginTransaction();
         try
         {
@@ -120,6 +130,16 @@ class OrderServices
 
     }
 
+    public function delete($order)
+    {
+        try {
+            $order->delete();
+        } catch (Exception $exception) {
+            $this->error->log('DELETE_ORDER', session('user'), $exception->getMessage());
+            return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
+        }
+    }
+
     public function createTracker($order_id, $stock_id, $previos_qty, $after_qty)
     {
         OrderTracker::query()
@@ -132,4 +152,5 @@ class OrderServices
             ]
         );
     }
+
 }

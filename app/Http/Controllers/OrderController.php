@@ -17,25 +17,11 @@ class OrderController extends Controller
         ->with('page', 'shop');
     }
 
-    public function addOrder($transaction_id, Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository)
-    {
-        $products = $productRepository->allWithPaginate(10);
-        $categories =  $categoryRepository->all();
-        if ($request->get('category')) {
-            $products = $productRepository->allByCategoryWithPaginate($request->get('category'), 10);
-        }
-
-        return view('shop.order.create')
-        ->with(compact('transaction_id'))
-        ->with(compact('products'))
-        ->with(compact('categories'))
-        ->with('page', 'shop');
-    }
-
     public function store($transaction_id, Request $request, OrderServices  $orderServices)
     {
         $request = $request->only('product_id', 'price', 'qty', 'discount_amount', 'total_amount', 'total_points', 'stock_id');
         $request['transaction_id'] = $transaction_id;
+
         $init = $orderServices->create($request);
         if (@$init['error'])
         {
@@ -48,5 +34,18 @@ class OrderController extends Controller
         ->with('success', 'Order successfully added!');
     }
 
+    public function delete(Order $order, OrderServices $orderServices)
+    {
+        $transaction_id = $order->transaction_id;
+        $init = $orderServices->delete($order);
 
+        if (@$init['error']) {
+            return back()
+            ->with('error', $init['error'])
+            ->withInput();
+        }
+
+        return redirect(route('transaction.show', $transaction_id))
+        ->with('success', 'Order has been successfully deleted!');
+    }
 }

@@ -104,13 +104,20 @@ class TransactionRepository
         return true;
     }
 
-    public function isCompleted($transID)
+    public function isCompleted($id)
     {
         $isCompleted = Transaction::query()
-            ->find($transID);
+            ->find($id);
         if($isCompleted->trans_status != 'pending') {
             return true;
         }
         return false;
+    }
+
+    public function getTotalOrderAmount($id)
+    {
+        return Order::query()
+        ->where('transaction_id', $id)
+        ->sum('total_amount');
     }
 }

@@ -12,7 +12,7 @@ class Order extends Model
     public $timestamps = false;
     protected $fillable = [
         'transaction_id',
-        'stock_id',
+        'product_id',
         'qty',
         'discount_amount',
         'total_amount',
