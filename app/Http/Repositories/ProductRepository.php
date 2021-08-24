@@ -115,15 +115,17 @@ class ProductRepository
             ->leftJoin('units', 'products.unit_id', '=', 'units.id')
             ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
             ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
+            ->leftJoin('transactions', 'orders.transaction_id', '=', 'transactions.id')
             ->select(
                 'products.id',
                 'stocks.id as stock_id',
                 'products.title',
                 'products.uploaded_img',
                 'products.price',
+                'products.points',
                 'units.name as unit',
                 DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty'),
-                DB::raw('sum(orders.qty) as orderQty')
+                DB::raw('sum(CASE WHEN transactions.trans_status != "completed" THEN orders.qty END) as orderQty')
             )
             ->where('products.category_id', $category)
             ->where('stocks.qty', '!=', 0)
@@ -132,6 +134,7 @@ class ProductRepository
                 'products.title',
                 'products.uploaded_img',
                 'products.price',
+                'products.points',
                 'stocks.id',
                 'stocks.product_id',
                 'units.name',
@@ -154,12 +157,24 @@ class ProductRepository
             'products.points',
             'products.price',
             'products.alert_level',
+            'products.initial_qty',
             'units.name as unit',
             'categories.name as category',
             DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty'),
         )
         ->where('products.id', $product_id)
-        ->groupBy('products.id', 'products.title', 'products.description', 'products.uploaded_img', 'products.points', 'products.price', 'products.alert_level', 'units.name', 'categories.name')
+        ->groupBy(
+            'products.id',
+            'products.title',
+            'products.description',
+            'products.uploaded_img',
+            'products.points',
+            'products.price',
+            'products.alert_level',
+            'products.initial_qty',
+            'units.name',
+            'categories.name'
+            )
         ->first();
     }
 
@@ -168,6 +183,13 @@ class ProductRepository
         return DB::table('products')
         ->find($product_id)
         ->price;
+    }
+
+    public function getPoints($product_id)
+    {
+        return DB::table('products')
+        ->find($product_id)
+        ->points;
     }
 
     public function getProductWithQuantityById($id)

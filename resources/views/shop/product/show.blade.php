@@ -23,7 +23,7 @@
                     <div class="h3 font-weight-bold text-muted py-2">Product Image</div>
                     @if ($product->uploaded_img == null)
                         <div class="font-weight-bold">No Image Available</div>
-                    @else    
+                    @else
                     <img src="{{ asset($product->uploaded_img) }}" class="p-2 border shadow" width="250px" height="250px" alt="">
                     @endif
                 </div>
@@ -46,15 +46,15 @@
                     <div class="row mt-4">
                         <div class="col-4">
                             <small>Alert Level Quantity</small>
-                            <div class="font-weight-bold">{{ $product->alert_level }}</div>
+                            <div class="font-weight-bold">{{ $product->alert_level }} {{ $product->unit }}</div>
                         </div>
                         <div class="col-4">
-                            <small>Product Unit</small>
-                            <div class="font-weight-bold">{{ $product->unit }}</div>
+                            <small>Initial Quantity</small>
+                            <div class="font-weight-bold">{{ $product->initial_qty }} {{ $product->unit }}</div>
                         </div>
                         <div class="col-4">
                             <small>Current Quantity</small>
-                            <div class="font-weight-bold">{{ $product->qty }}</div>
+                            <div class="font-weight-bold">{{ $product->qty }} {{ $product->unit }}</div>
                         </div>
                     </div>
                     <hr>
@@ -72,10 +72,10 @@
                                 </thead>
                                 <tbody>
                                 @forelse($stocks as $row)
-                                    <tr 
+                                    <tr
                                     @if ($row->expiration_date < \Carbon\Carbon::now())
                                         class="text-danger font-weight-bold" data-toggle="tooltip" data-placement="top" title="This stock has expired!"
-                                    @endif    
+                                    @endif
                                     >
                                         <td>
                                             @if ($row->expiration_date < \Carbon\Carbon::now())

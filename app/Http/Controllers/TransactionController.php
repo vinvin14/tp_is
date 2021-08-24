@@ -9,9 +9,7 @@ use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\PaymentMethodRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Http\Requests\TransactionPostRequest;
-use App\Http\Services\OrderServices;
 use App\Http\Services\TransactionServices;
-use App\Models\PaymentType;
 use App\Models\Transaction;
 
 
@@ -76,25 +74,12 @@ class TransactionController extends Controller
             ->with('response', 'Transaction Record has been deleted!');
     }
 
-    public function checkout($transaction_id, TransactionServices $transactionServices, TransactionRepository $transactionRepository)
+    public function checkout(Transaction $transaction, TransactionServices $transactionServices)
     {
-        dd($transactionRepository->getAllOrdersByTransaction($transaction_id));
 
-        // $transaction = $transactionRepository->getTransWithCus($transaction_id);
-        // $orders = $orderRepository->getOrdersByTrans($transaction_id);
-        // $orderTotalAmount = $orderRepository->getTotalOrderAmountByTransaction($transaction_id);
-        // $paymentTypes = PaymentType::query()->orderBy('type_name', 'ASC')->get()->toArray();
-        // return view('shop.transaction.checkout')
-        //     ->with(compact('transaction'))
-        //     ->with(compact('orders'))
-        //     ->with(compact('orderTotalAmount'))
-        //     ->with(compact('paymentTypes'))
-        //     ->with('page', 'shop');
-
-    }
-
-    public function finalize(Transaction $transaction, TransactionServices $transactionServices)
-    {
+        $init = $transactionServices->checkout($transaction);
+        return redirect(route('transaction.show', $transaction->id))
+        ->with('reponse', 'Transaction successfully placed!');
 
     }
 }

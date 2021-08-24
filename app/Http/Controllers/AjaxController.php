@@ -45,6 +45,8 @@ class AjaxController extends Controller
     {
         try {
             $price = $productRepository->getPrice($order->product_id);
+            $points = $productRepository->getPoints($order->product_id);
+
             if (! empty($request['discount_amount'])) {
                 $total_amount = ($request['qty'] * $price) - $request['discount_amount'];
             }
@@ -57,7 +59,8 @@ class AjaxController extends Controller
                 [
                     'qty' => $request['qty'],
                     'discount_amount' => $request['discount_amount'],
-                    'total_amount' => $total_amount
+                    'total_amount' => $total_amount,
+                    'total_points' => $points
                 ]
             );
             return 200;

@@ -62,6 +62,7 @@ class OrderRepository
             'orders.id as id',
             'orders.qty',
             'orders.total_amount as total_amount',
+            'orders.total_points as total_points',
             'orders.discount_amount',
             'products.title as title',
             'products.price as price',

@@ -42,10 +42,11 @@ class ProductServices
                 $request['original_img_file_name'] = $original_file_name;
                 unset($request['image']);
             }
+
             //creating product
             $product = Product::query()
                 ->create($request);
-        
+
             DB::commit();
             return $product;
         } catch (\Exception $exception) {
@@ -74,9 +75,9 @@ class ProductServices
             $product->category_id = $request['category_id'];
             $product->unit_id = $request['unit_id'];
             $product->price = $request['price'];
-            $product->points = $request['points'];  
+            $product->points = $request['points'];
             $product->alert_level = $request['alert_level'];
-         
+
             if (!$product->isDirty()) {
                 return ['error' => 'No changes were made!'];
             }
@@ -88,12 +89,13 @@ class ProductServices
             return ['error' => 'We are having technical problems, Please contact your Administrator!'];
         }
     }
-    
+
     public function updateCurrentQty($product_id, $qty)
     {
         try {
             $product = Product::query()->findOrFail($product_id);
             $product->update([
+                'initial_qty' => ($product->current_qty + $qty),
                 'current_qty' => ($product->current_qty + $qty)
             ]);
             return $product->fresh();

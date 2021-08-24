@@ -36,9 +36,11 @@
         <div class="card-body">
             <h5 class="font-weight-bold">Current Transaction</h5>
             <hr>
+            @if($transaction->trans_status != 'completed')
             <a href="{{ route('transaction.update', $transaction->transaction_id) }}"
                 class="btn btn-secondary">
                  <i class="fas fa-fw fa-pencil-alt"></i> Update this Transaction</a>
+            @endif
             <div class="row mt-3">
                 <div class="col-3">
                     <small class="font-weight-bold">Customer</small>
@@ -104,7 +106,9 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
+                        @if($transaction->trans_status == 'pending')
                         <th></th>
+                        @endif
                         <th>Product</th>
                         <th>Product Category</th>
                         <th>Qty</th>
@@ -117,7 +121,9 @@
                     <tbody>
                     @foreach($orders as $order)
                         <tr>
+                            @if($transaction->trans_status == 'pending')
                             <td>
+
                                 <div class="text-center">
                                     <a href="#" id="update-order" data-id="{{ $order->id }}" class="pr-2"><i
                                             class="fas fa-fw fa-pencil-alt" title="Update" class="btn btn-primary" data-toggle="modal" data-target="#updateOrderModal"></i></a>
@@ -125,11 +131,13 @@
                                        onclick="return confirm('Are you sure you want to delete this order?')"><i
                                             class="fas fa-fw fa-trash text-danger" title="Delete"></i></a>
                                 </div>
+
                             </td>
+                            @endif
                             <td>{{ $order->title }}</td>
                             <td>{{ $order->category }}</td>
                             <td>{{ $order->qty }} {{ $order->unit }}</td>
-                            <td>{{ $order->points }}</td>
+                            <td>{{ $order->total_points }}</td>
                             <td>₱ {{ $order->discount_amount }}</td>
                             <td>₱ {{ $order->price }}</td>
                             <td>₱ {{ $order->total_amount }}</td>
@@ -138,7 +146,9 @@
                     </tbody>
                     <tfooter>
                         <tr>
+                            @if($transaction->trans_status == 'pending')
                             <th class="border-right-0"></th>
+                            @endif
                             <th class="border-right-0"></th>
                             <th class="border-right-0"></th>
                             <th class="border-right-0"></th>

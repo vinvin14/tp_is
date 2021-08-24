@@ -44,38 +44,27 @@ class OrderServices
             }
             unset($request['price']);
 
-            $order = Order::query()
+            Order::query()
             ->create($request);
+
         } catch (Exception $exception) {
             $this->error->log('CREATE_ORDER', session('user'), $exception->getMessage());
             return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
         }
     }
 
-    public function finalizeOrder($product_id, $order)
+    public function finalizeOrder($order)
     {
         $stockRepository = new StockRepository();
         $orderQty = $order->qty;
-        DB::beginTransaction();
-        try
-        {
-            while ($orderQty != 0)
-            {
-                $stock = $stockRepository->getAvailableStock($product_id);
 
-                $orderQty = $this->distributeOrder($stock, $order->id, intval($orderQty));
-            }
-
-            DB::commit();
-            return $order;
-        }
-        catch (Exception $exception)
+        while ($orderQty != 0)
         {
-            DB::rollback();
-            dd($exception->getMessage());
-            $this->error->log('FINALIZE_ORDER', session('user'), $exception->getMessage());
-            return ['error' => 'We are experiencing technical problem, Please contact your Administrator!'];
+            $stock = $stockRepository->getAvailableStock($order->product_id);
+
+            $orderQty = $this->distributeOrder($stock, $order->id, intval($orderQty));
         }
+        return $order;
     }
 
     public function distributeOrder($stock, $order_id, $order_qty)

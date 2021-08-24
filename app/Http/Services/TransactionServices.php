@@ -13,6 +13,7 @@ use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class TransactionServices
 {
@@ -66,88 +67,43 @@ class TransactionServices
         }
     }
 
-    public function checkout($transaction, $request)
+    public function checkout($transaction)
     {
-        $orderRepository = new OrderRepository();
-
+        $transactionRepository = new TransactionRepository();
+        $orderServices = new OrderServices();
         $total_amount = [];
         $total_points = [];
-        $orders = $orderRepository->getOrdersByTrans($transaction->id);
-        foreach ($orders as $order) {
-            array_push($total_amount, $order->price);
-            array_push($total_points, $order->points);
-        }
+        DB::beginTransaction();
         try {
+            $orders = $transactionRepository->getAllOrdersByTransaction($transaction->id);
+            foreach ($orders as $order) {
+                array_push($total_amount, $order->total_amount);
+                array_push($total_points, $order->total_points);
+                $orderServices->finalizeOrder($order);
+            }
 
-            $request['total_amount'] = array_sum($total_amount);
-            $request['total_points'] = array_sum($total_points);
-            $transaction->update($request);
-
+            $transaction->update([
+                'total_points' => array_sum($total_points),
+                'total_amount' => array_sum($total_amount),
+                'trans_status' => 'completed'
+            ]);
+            DB::commit();
             return $transaction->fresh();
         } catch (\Exception $exception) {
+            DB::rollBack();
             $this->error->log('TRANSACTION_CHECKOUT', session('user'), $exception->getMessage());
             return back()
                 ->with('error', 'We are having technical issue, Please contact your Administrator to fix this!');
         }
     }
 
-    public function finalizeOrders($transaction, $product_id, $orderQuantity, $orderID)
-    {
-        $orders = $this->transRepository->getAllOrdersByTransaction($product_id);
-        dd($orders);
-
-
-        while ($orderQuantity != 0) {
-            $productQuantity = $this->productRepository->getPriorityProductQuantity($productID);
-            $newOrderQuantity = $productQuantity->quantity - $orderQuantity;
-            $orderQuantity = $this->processProductQuantity($productQuantity, $newOrderQuantity, $orderID);
-        }
-    }
-
-    public function processProductQuantity($productQuantity, $orderQuantity, $orderID)
-    {
-        $productTracker = new ProductTrackerServices();
-        $currentProductQuantity = $productQuantity->quantity - $orderQuantity;
-        switch (true) {
-            case  $currentProductQuantity > 0:
-                $prevProductQuantity = $productQuantity->quantity;
-                $afterProductQuantity = $currentProductQuantity;
-                $requestQuantity = $orderQuantity;
-                $remainder = 0;
-                break;
-            case $currentProductQuantity == 0:
-                $prevProductQuantity = $productQuantity->quantity;
-                $afterProductQuantity = 0;
-                $requestQuantity = $orderQuantity;
-                $remainder = 0;
-                break;
-            case $currentProductQuantity < 0:
-                $prevProductQuantity = $productQuantity->quantity;
-                $afterProductQuantity = 0;
-                $requestQuantity = $orderQuantity;
-                $remainder = abs($currentProductQuantity);
-                break;
-        }
-
-        $productQuantity->update(['quantity' => $afterProductQuantity]);
-        $productTracker->create(
-            $orderID,
-            $productQuantity->id,
-            $productTracker->trackerReason(4),
-            'out',
-            $prevProductQuantity,
-            $afterProductQuantity,
-            'no'
-        );
-        return $remainder;
-    }
 
     public function createTicket()
     {
         $string1 = str_shuffle('E!3R');
         $string2 = str_shuffle('KU@J');
         $ticket = $string1.'-'.$string2.'-'.Carbon::now()->toDateString();
-        
+
         $hasMatch = Transaction::query()
         ->where('ticket_number', $ticket)
         ->count();
