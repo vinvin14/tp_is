@@ -116,31 +116,66 @@ class ProductRepository
             ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
             ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
             ->leftJoin('transactions', 'orders.transaction_id', '=', 'transactions.id')
-            ->select(
-                'products.id',
-                'stocks.id as stock_id',
-                'products.title',
-                'products.uploaded_img',
-                'products.price',
-                'products.points',
-                'units.name as unit',
-                DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty'),
-                DB::raw('sum(CASE WHEN transactions.trans_status != "completed" THEN orders.qty END) as orderQty')
+            ->selectRaw('
+            products.id,
+            stocks.id as stock_id,
+            products.title,
+            products.uploaded_img,
+            products.price,
+            products.points,
+            units.name as unit,
+            sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) - IF(sum(CASE WHEN transactions.trans_status != "completed" THEN orders.qty END) IS NULL, 0, sum(CASE WHEN transactions.trans_status != "completed" THEN orders.qty END)) as remainingQty
+            '
             )
             ->where('products.category_id', $category)
             ->where('stocks.qty', '!=', 0)
             ->groupBy(
                 'products.id',
-                'products.title',
-                'products.uploaded_img',
-                'products.price',
-                'products.points',
-                'stocks.id',
-                'stocks.product_id',
-                'units.name',
-                'orders.qty'
+                // 'stocks.id',
+                // 'products.title',
+                // 'products.uploaded_img',
+                // 'products.price',
+                // 'products.points',
+                // 'stocks.id',
+                // 'stocks.product_id',
+                // 'units.name',
+                // 'orders.qty'
                 )
+            ->having('remainingQty', '!=', 0)
             ->get();
+
+
+        // return DB::table('products')
+        //     ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+        //     ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+        //     ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
+        //     ->leftJoin('transactions', 'orders.transaction_id', '=', 'transactions.id')
+        //     ->select(
+        //         'products.id',
+        //         'stocks.id as stock_id',
+        //         'products.title',
+        //         'products.uploaded_img',
+        //         'products.price',
+        //         'products.points',
+        //         'units.name as unit',
+        //         DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty'),
+        //         DB::raw('sum(CASE WHEN transactions.trans_status != "completed" THEN orders.qty END) as orderQty'),
+        //     )
+        //     ->where('products.category_id', $category)
+        //     ->where('stocks.qty', '!=', 0)
+        //     ->groupBy(
+        //         'products.id',
+        //         'products.title',
+        //         'products.uploaded_img',
+        //         'products.price',
+        //         'products.points',
+        //         'stocks.id',
+        //         'stocks.product_id',
+        //         'units.name',
+        //         'orders.qty'
+        //         )
+        //     ->having(DB::raw('(qty - orderQty)'), '!=', 0)
+        //     ->get();
     }
 
     public function getProductWithStocks($product_id)

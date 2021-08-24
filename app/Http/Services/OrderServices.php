@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\OrderRepository;
+use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
@@ -20,6 +21,8 @@ class OrderServices
     public function create($request)
     {
         $orderRepository = new OrderRepository();
+        // $productRepository = new ProductRepository();
+        // $product = $productRepository->getProduct($request['product_id']);
         try {
             if ($orderRepository->orderExists($request['transaction_id'], $request['product_id'])) {
                 return ['error' => 'Order already exist, try to update it if you want changes to apply!'];

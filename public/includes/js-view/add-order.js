@@ -17,7 +17,7 @@ function addOrder()
                                     '<div class="card-body text-center">' +
                                     '<div class="font-weight-bold " id="title" title="'+ index.title +'">'+ index.title +'</div>' +
                                     '<div class="font-weight-bold text-truncate price">₱<span id="price">'+ index.price +'</span></div>' +
-                                    '<span id="qty" data-qty="'+ (index.qty - index.orderQty) +'" data-unit="'+ index.unit +'"></span>' +
+                                    '<span id="qty" data-qty="'+ index.remainingQty +'" data-unit="'+ index.unit +'"></span>' +
                                     '</div>' +
                                     '</div>' +
                                     '</div>'

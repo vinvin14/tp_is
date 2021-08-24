@@ -14,8 +14,9 @@ class AjaxController extends Controller
 {
     public function getProductByCategory($category, ProductRepository $productRepository)
     {
-        $products = $productRepository->allByCategory($category);
+        //recount
 
+        $products = $productRepository->allByCategory($category);
         if (empty($products->toArray())) {
             return response()->json('No Record(s) Found!', 404);
         }
