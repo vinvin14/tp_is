@@ -75,7 +75,9 @@ class TransactionServices
         $total_points = [];
         DB::beginTransaction();
         try {
+
             $orders = $transactionRepository->getAllOrdersByTransaction($transaction->id);
+
             foreach ($orders as $order) {
                 array_push($total_amount, $order->total_amount);
                 array_push($total_points, $order->total_points);
@@ -90,6 +92,7 @@ class TransactionServices
             DB::commit();
             return $transaction->fresh();
         } catch (\Exception $exception) {
+
             DB::rollBack();
             $this->error->log('TRANSACTION_CHECKOUT', session('user'), $exception->getMessage());
             return back()

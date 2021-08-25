@@ -73,7 +73,9 @@ class OrderServices
     public function distributeOrder($stock, $order_id, $order_qty)
     {
         $stockRepository = new StockRepository();
+
         $stock_qty = ($stock->qty - $order_qty);
+
         switch (true)
         {
             case $stock_qty > 0:
@@ -90,11 +92,12 @@ class OrderServices
                 $sold_qty = $stock->qty;
                 break;
 
-            case $stock == 0:
+            case $stock_qty == 0:
                 $after_qty = 0;
                 $previos_qty = $stock->qty;
                 $unaccommodated = 0;
                 $sold_qty = $order_qty;
+
                 break;
         }
 
