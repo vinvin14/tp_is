@@ -7,6 +7,7 @@ function updateOrder()
             url: '/ajax/get/order/'+id,
             type: 'get',
             success:function (data) {
+
                 $('#updateOrderModal #update-title').text(data.title);
                 $('#updateOrderModal #update-qty').val(data.qty);
                 $('#updateOrderModal #update-discount').val(data.discount_amount);
@@ -28,9 +29,9 @@ function updateOrder()
                                     'success',
                                   )
 
-                                setTimeout(function() {
-                                        location.reload();
-                                }, 1000);
+                                // setTimeout(function() {
+                                //         location.reload();
+                                // }, 1000);
                             }
                         },
                         error: function () {

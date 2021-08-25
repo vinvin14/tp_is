@@ -43,29 +43,23 @@ class AjaxController extends Controller
 
     public function updateOrder(Order $order, Request $request, ProductRepository $productRepository)
     {
-//         try {
-//             $price = $productRepository->getPrice($order->product_id);
-//             $points = $productRepository->getPoints($order->product_id);
+        return $request;
+        try {
+            $price = $productRepository->getPrice($order->product_id);
+            $points = $productRepository->getPoints($order->product_id);
 
-//             if (! empty($request['discount_amount'])) {
-//                 $total_amount = ($request['qty'] * $price) - $request['discount_amount'];
-//             }
-//             else
-//             {
-//                 $total_amount = ($request['qty'] * $price);
-//             }
+            if (! empty($request['discount_amount'])) {
+                $total_amount = ($request['qty'] * $price) - $request['discount_amount'];
+            }
+            else
+            {
+                $total_amount = ($request['qty'] * $price);
+            }
 
-//             $order->update(
-//                 [
-//                     'qty' => $request['qty'],
-//                     'discount_amount' => $request['discount_amount'],
-//                     'total_amount' => $total_amount,
-//  ,                  'total_points' => $points
-//                 ]
-//             );
-//             return 200;
-//         } catch (Exception $exception) {
-//             return 404;
-//         }
+            $order->update(['qty' => $request['qty'], 'discount_amount' => $request['discount_amount'], 'total_amount' => $total_amount, 'total_points' => $points]);
+            return 200;
+        } catch (Exception $exception) {
+            return 404;
+        }
     }
 }
