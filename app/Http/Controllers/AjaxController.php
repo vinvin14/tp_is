@@ -41,12 +41,21 @@ class AjaxController extends Controller
         return response()->json($order, 200);
     }
 
+    // public function getProductRemaining(ProductRepository $productRepository)
+    // {
+    //     $product = $productRepository->getProductRemainingQty(1);
+    //     return $product->remainingQty;
+    // }
+
     public function updateOrder(Order $order, Request $request, ProductRepository $productRepository)
     {
-        return $request;
         try {
             $price = $productRepository->getPrice($order->product_id);
             $points = $productRepository->getPoints($order->product_id);
+            $product = $productRepository->getProductRemainingQty($order->product_id);
+            if ($product->remainingQty < $request['qty']) {
+                return [404, 'Insufficient Item quantity, '.$product->remainingQty.' quantity remaining!'];
+            }
 
             if (! empty($request['discount_amount'])) {
                 $total_amount = ($request['qty'] * $price) - $request['discount_amount'];
@@ -57,9 +66,9 @@ class AjaxController extends Controller
             }
 
             $order->update(['qty' => $request['qty'], 'discount_amount' => $request['discount_amount'], 'total_amount' => $total_amount, 'total_points' => $points]);
-            return 200;
+            return  [200, 'Success!'];
         } catch (Exception $exception) {
-            return 404;
+            return [404, 'Technical Problem!'];
         }
     }
 }

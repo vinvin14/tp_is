@@ -109,6 +109,43 @@ class ProductRepository
             ->paginate($page);
     }
 
+    public function getProductRemainingQty($product_id)
+    {
+        $orders = DB::table('orders')
+        ->leftJoin('transactions', 'orders.transaction_id', '=', 'transactions.id')
+        ->select(
+            'orders.id',
+            'orders.product_id',
+            'orders.qty'
+        )
+        ->where('transactions.trans_status', '!=', 'completed');
+
+        return DB::table('products')
+            ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+            ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+            ->leftJoinSub($orders, 'orders', function ($join) {
+                $join->on('products.id', '=', 'orders.product_id');
+            })
+            ->select(
+                // 'stocks.qty',
+                // 'products.id',
+                // 'stocks.id as stock_id',
+                // 'products.title',
+                // 'products.uploaded_img',
+                // 'products.price',
+                // 'products.points',
+                // 'units.name as unit',
+                DB::raw('(sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) - IF(orders.qty IS NULL, 0, orders.qty)) as remainingQty'),
+            )
+            ->where('products.id', $product_id)
+            // ->where('stocks.qty', '!=', 0)
+            ->groupBy(
+                'products.id',
+                )
+            ->having('remainingQty', '!=', 0)
+            ->first();
+    }
+
     public function allByCategory($category)
     {
         $orders = DB::table('orders')

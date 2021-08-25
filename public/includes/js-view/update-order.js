@@ -22,23 +22,31 @@ function updateOrder()
                         },
                         success:function (data) {
                             console.log(data);
-                            if (data) {
+                            if (data[0] === 200) {
                                 Swal.fire(
                                     'Success!',
                                     'Order has been updated!',
                                     'success',
                                   )
 
-                                // setTimeout(function() {
-                                //         location.reload();
-                                // }, 1000);
+                                setTimeout(function() {
+                                        location.reload();
+                                }, 1000);
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...!',
+                                    text: data[1],
+                                  })
                             }
                         },
-                        error: function () {
+                        error: function (data) {
+                            console.log(data);
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...!',
-                                text: 'Something went wrong!',
+                                text: data.responseJSON,
                               })
                         }
                     });

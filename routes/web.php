@@ -118,7 +118,7 @@ Route::middleware('verifyToken')->group(function () {
     Route::prefix('ajax')->group(function () {
         Route::get('get/products/{category}', 'AjaxController@getProductByCategory');
         Route::get('get/order/{id}', 'AjaxController@getOrder');
-
+        Route::get('get/test', 'AjaxController@getProductRemaining');
         Route::post('update/order/{order}', 'AjaxController@updateOrder');
     });
 });
