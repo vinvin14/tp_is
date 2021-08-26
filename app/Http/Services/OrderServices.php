@@ -3,13 +3,11 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\OrderRepository;
-use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
 use App\Models\SoldProduct;
 use Exception;
-use Illuminate\Support\Facades\DB;
 
 class OrderServices
 {
@@ -128,11 +126,6 @@ class OrderServices
             ]);
 
         return $unaccommodated;
-    }
-
-    public function udpateOrder($product_id)
-    {
-
     }
 
     public function delete($order)
