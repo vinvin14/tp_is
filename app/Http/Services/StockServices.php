@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\StockRepository;
 use App\Models\PreOrder;
 use App\Models\SoldProduct;
 use App\Models\Stock;
@@ -18,10 +19,11 @@ class StockServices
 
     public function create($request)
     {
-        $productServices = new ProductServices();
+        // $productServices = new ProductServices();
         DB::beginTransaction();
         try {
-            $productServices->updateCurrentQty($request['product_id'], $request['qty']);
+            // $productServices->updateCurrentQty($request['product_id'], $request['qty']);
+            $request['beginning_balance'] = $request['qty'];
             $stock = Stock::query()
             ->create($request);
             DB::commit();
@@ -34,7 +36,14 @@ class StockServices
 
     public function update($stock, $request)
     {
+        $stockRepository = new StockRepository();
+
+        if ($stockRepository->isStockReferenced($stock->id))
+        {
+            return ['error' => 'Stock quantity cannot be update since other quantity has been sold!'];
+        }
         try {
+            $request['beginning_balance'] = $request['qty'];
             $stock->update($request);
         } catch (Exception $exception) {
             $this->error->log('STOCK_ADD', session('user'), $exception->getMessage());

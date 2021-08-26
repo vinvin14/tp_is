@@ -7,6 +7,7 @@ use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
+use App\Models\SoldProduct;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -65,12 +66,12 @@ class OrderServices
         {
             $stock = $stockRepository->getAvailableStock($order->product_id);
 
-            $orderQty = $this->distributeOrder($stock, $order->id, intval($orderQty));
+            $orderQty = $this->distributeOrder($stock, $order, intval($orderQty));
         }
         return $order;
     }
 
-    public function distributeOrder($stock, $order_id, $order_qty)
+    public function distributeOrder($stock, $order, $order_qty)
     {
         $stockRepository = new StockRepository();
 
@@ -103,11 +104,20 @@ class OrderServices
 
         OrderTracker::query()
         ->create([
-            'order_id' => $order_id,
+            'order_id' => $order->id,
             'order_qty' => $order_qty,
             'stock_id' => $stock->id,
             'stock_previous_qty' => $previos_qty,
             'stock_after_qty' => $after_qty
+        ]);
+
+        SoldProduct::query()
+        ->create([
+            'transaction_id' => $order->transaction_id,
+            'stock_id' => $stock->id,
+            'qty' => $order_qty,
+            'discounted_amount' => $order->discount_amount,
+            'final_amount' => $order->total_amount
         ]);
 
         $currentStock = $stockRepository->getStockById($stock->id);

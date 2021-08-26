@@ -17,6 +17,7 @@ class StocksTable extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
+            $table->integer('beginning_balance')->nullable();
             $table->integer('qty');
             $table->integer('sold_qty')->nullable();
             $table->date('expiration_date');

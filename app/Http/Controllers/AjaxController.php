@@ -53,8 +53,11 @@ class AjaxController extends Controller
             $price = $productRepository->getPrice($order->product_id);
             $points = $productRepository->getPoints($order->product_id);
             $product = $productRepository->getProductRemainingQty($order->product_id);
-            if ($product->remainingQty < $request['qty']) {
-                return [404, 'Insufficient Item quantity, '.$product->remainingQty.' quantity remaining!'];
+
+            if (! empty($product)) {
+                if ($product->remainingQty < $request['qty']) {
+                    return [404, 'Insufficient Item quantity, '.$product->remainingQty.' quantity remaining!'];
+                }
             }
 
             if (! empty($request['discount_amount'])) {
@@ -68,6 +71,7 @@ class AjaxController extends Controller
             $order->update(['qty' => $request['qty'], 'discount_amount' => $request['discount_amount'], 'total_amount' => $total_amount, 'total_points' => $points]);
             return  [200, 'Success!'];
         } catch (Exception $exception) {
+            return [404, $exception->getMessage()];
             return [404, 'Technical Problem!'];
         }
     }

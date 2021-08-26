@@ -11,7 +11,9 @@ class Stock extends Model
     public $timestamps = false;
     protected $fillable = [
         'product_id',
+        'beginning_balance',
         'qty',
+        'sold_qty',
         'expiration_date',
         'received_date'
     ];

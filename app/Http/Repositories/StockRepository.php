@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\SoldProduct;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 
@@ -37,6 +38,19 @@ class StockRepository
         ->where('product_id', $product_id)
         ->orderBy('expiration_date', 'ASC')
         ->first();
+    }
+
+    public function isStockReferenced($stock_id)
+    {
+        $isReferenced = SoldProduct::query()
+        ->where('stock_id', $stock_id)
+        ->first();
+
+        if (! empty($isReferenced))
+        {
+            return true;
+        }
+        return false;
     }
 
 
