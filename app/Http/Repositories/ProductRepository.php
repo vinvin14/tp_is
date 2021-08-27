@@ -205,7 +205,7 @@ class ProductRepository
             'products.points',
             'products.price',
             'products.alert_level',
-            'products.initial_qty',
+            // 'products.initial_qty',
             'units.name as unit',
             'categories.name as category',
             DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) as qty'),
@@ -219,7 +219,7 @@ class ProductRepository
             'products.points',
             'products.price',
             'products.alert_level',
-            'products.initial_qty',
+            // 'products.initial_qty',
             'units.name',
             'categories.name'
             )

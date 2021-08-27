@@ -63,7 +63,7 @@ class OrderServices
         while ($orderQty != 0)
         {
             $stock = $stockRepository->getAvailableStock($order->product_id);
-
+            dd($stock);
             $orderQty = $this->distributeOrder($stock, $order, intval($orderQty));
         }
         return $order;

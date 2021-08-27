@@ -94,10 +94,10 @@ class ProductServices
     {
         try {
             $product = Product::query()->findOrFail($product_id);
-            $product->update([
-                'initial_qty' => ($product->current_qty + $qty),
-                'current_qty' => ($product->current_qty + $qty)
-            ]);
+            // $product->update([
+            //     'initial_qty' => ($product->current_qty + $qty),
+            //     'current_qty' => ($product->current_qty + $qty)
+            // ]);
             return $product->fresh();
         } catch (Exception $exception) {
             $this->error->log('PROD_QTY_UPDATE', session('user'), $exception->getMessage());

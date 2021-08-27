@@ -48,13 +48,13 @@
                             <small>Alert Level Quantity</small>
                             <div class="font-weight-bold">{{ $product->alert_level }} {{ $product->unit }}</div>
                         </div>
-                        <div class="col-4">
+                        {{-- <div class="col-4">
                             <small>Initial Quantity</small>
                             <div class="font-weight-bold">{{ $product->initial_qty }} {{ $product->unit }}</div>
-                        </div>
+                        </div> --}}
                         <div class="col-4">
                             <small>Current Quantity</small>
-                            <div class="font-weight-bold">{{ $product->qty }} {{ $product->unit }}</div>
+                            <div class="font-weight-bold">{{ $product_remaining_qty }} {{ $product->unit }}</div>
                         </div>
                     </div>
                     <hr>
