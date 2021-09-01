@@ -332,4 +332,39 @@ class ProductRepository
         }
         return false;
     }
+
+    public function getTopSelling()
+    {
+       return DB::table('products')
+        ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
+        ->leftJoin('sold_products', 'orders.id', '=', 'sold_products.order_id')
+        ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+        ->select(
+            'orders.id',
+            'products.title',
+            'units.name as unit',
+            'units.plural_name as unit_plural_name',
+            DB::raw('SUM(sold_products.qty) as totalSale')
+        )
+        ->groupBy('orders.id')
+        // ->where('sold_products.order_id', '=', 'orders.id')
+        ->orderBy('totalSale', 'DESC')
+        ->get();
+    }
+
+    public function getTotalSale()
+    {
+        $month = Carbon::now()->month;
+
+        return DB::table('products')
+        ->leftJoin('orders', 'products.id', '=', 'orders.product_id')
+        ->leftJoin('sold_products', 'orders.id', '=', 'sold_products.order_id')
+        ->select(
+            DB::raw('SUM(sold_products.qty) as totalItems'),
+            DB::raw('SUM(sold_products.final_amount) as totalAmount')
+        )
+        ->where('sold_products.qty', '!=', 0)
+        ->whereMonth('sold_products.created_at', $month)
+        ->first();
+    }
 }

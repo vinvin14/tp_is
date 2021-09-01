@@ -25,7 +25,7 @@ class CustomerRepository
     public function allSortByCreated()
     {
         return Customer::query()
-            ->orderBy('created_at', 'ASC')            
+            ->orderBy('created_at', 'DESC')            
             ->get();
     }
 

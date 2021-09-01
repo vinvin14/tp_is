@@ -16,6 +16,7 @@ class UnitLibraryTable extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
+            $table->string('plural_name', 50);
         });
     }
 

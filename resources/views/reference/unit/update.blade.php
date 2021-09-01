@@ -20,6 +20,10 @@
                         <label for="name">Unit Name</label>
                         <input type="text" name="name" class="form-control" value="{{ $unit->name }}" placeholder="Unit Name here" required>
                     </div>
+                    <div class="form-group">
+                        <label for="">Plural Name</label>
+                        <input type="text" name="plural_name" value="{{$unit->plural_name}}" class="form-control">
+                    </div>
                     <button type="submit" class="btn btn-success float-right"><i class="fas fa-fw fa-save"></i>Save Changes</button>
                 </form>
             </div>

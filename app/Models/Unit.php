@@ -11,10 +11,16 @@ class Unit extends Model
     public $timestamps = false;
     protected $fillable = [
         'name',
+        'plural_name'
     ];
 
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = ucfirst($value);
+    }
+
+    public function setPluralNameAttribute($value)
+    {
+        $this->attributes['plural_name'] = ucfirst($value);
     }
 }

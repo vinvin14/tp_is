@@ -26,7 +26,8 @@ class UnitServices
     public function create($request)
     {
         $validator = Validator::make($request, [
-            'name' => 'required|unique:units'
+            'name' => 'required|unique:units',
+            'plural_name' => 'required|unique:units'
         ]);
         if ($validator->fails()) {
             return ['error' => 'Unit has been added previously!'];
@@ -45,13 +46,13 @@ class UnitServices
     {
         try {
             $unit->name = $request['name'];
-
+            $unit->plural_name = $request['plural_name'];
             if (!$unit->isDirty()) {
                 return ['error' => 'No changes were made!'];
             }
             if ($request['name'] != $unit->name) {
                 $validator = Validator::make($request, [
-                    'name' => 'required|unique:units'
+                    'name' => 'required|unique:units',
                 ]);
                 if ($validator->fails()) {
                     return ['error' => 'Unit has been added previously!'];
@@ -60,7 +61,6 @@ class UnitServices
             $unit->save();
             return $unit->fresh();
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
             $this->error->log('UNIT_UPDATE', session('user'), $exception->getMessage());
             return ['error' => 'We are having technical issue, Please contact your Administrator!'];
         }

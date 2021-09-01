@@ -68,9 +68,9 @@ class OrderServices
         {
             $order_left = $stock->qty - $order_left;
             $current_qty = $order_left;
-            $sold_qty = $order_left;
+            $sold_qty = $order->qty;
 
-            if ($order_left < 0)
+            if ($order_left <= 0)
             {
                 $current_qty = 0;
                 $order_left = abs($order_left);

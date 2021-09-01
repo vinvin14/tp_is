@@ -15,7 +15,7 @@ function addOrder()
                                     '<div class="card shadow-sm" style="width: 13rem;">' +
                                     '<img class="card-img-top" height="120px" src="'+(index.uploaded_img ? index.uploaded_img : '/storage/utilities/no_image.png')+'" alt="Card image cap">' +
                                     '<div class="card-body text-center">' +
-                                    '<div class="font-weight-bold " id="title" title="'+ index.title +'">'+ index.title +'</div>' +
+                                    '<div class="font-weight-bold text-truncate" id="title" title="'+ index.title +'">'+ index.title +'</div>' +
                                     '<div class="font-weight-bold text-truncate price">₱<span id="price">'+ index.price +'</span></div>' +
                                     '<span id="qty" data-qty="'+ index.remainingQty +'" data-unit="'+ index.unit +'"></span>' +
                                     '</div>' +

@@ -20,7 +20,8 @@ class SoldProductsTable extends Migration
             $table->unsignedBigInteger('stock_id');
             $table->integer('qty');
             $table->double('discounted_amount')->nullable();
-            $table->double('final_amount')->nullable();;
+            $table->double('final_amount')->nullable();
+            $table->timestamps();
 
             $table->foreign('transaction_id')->on('transactions')->references('id');
             $table->foreign('stock_id')->on('stocks')->references('id');

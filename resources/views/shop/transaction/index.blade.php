@@ -33,7 +33,7 @@
                             <td>{{$transaction->firstname.' '.$transaction->middlename.' '.$transaction->lastname}}</td>
                             <td>{{$transaction->ticket_number}}</td>
                             <td>{{$transaction->transaction_date}}</td>
-                            <td>₱{{$transaction->total_amount}}</td>
+                            <td>₱{{number_format($transaction->total_amount)}}</td>
                             <td>{{$transaction->total_points}}</td>
                             <td>{{$transaction->trans_status}}</td>
                             <td>

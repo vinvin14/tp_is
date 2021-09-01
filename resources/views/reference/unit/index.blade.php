@@ -21,6 +21,7 @@
                     <thead>
                     <tr>
                         <th>Unit Name</th>
+                        <th>Plural Name</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -28,6 +29,7 @@
                     @foreach($units as $unit)
                         <tr>
                             <td>{{$unit->name}}</td>
+                            <td>{{$unit->plural_name}}</td>
                             <td>
                                 <div class="text-center">
                                     <a href="{{route('unit.edit', $unit->id)}}" class="pr-2"><i class="fas fa-fw fa-pencil-alt" title="Edit"></i></a>

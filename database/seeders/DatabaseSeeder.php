@@ -29,13 +29,16 @@ class DatabaseSeeder extends Seeder
 
         $units = [
             [
-                'name' => 'piece'
+                'name' => 'piece',
+                'plural_name' => 'pieces'
             ],
             [
-                'name' => 'box'
+                'name' => 'box',
+                'plural_name' => 'boxes'
             ],
             [
-                'name' => 'bottle'
+                'name' => 'bottle',
+                'plural_name' => 'bottles'
             ],
         ];
         foreach ($units as $unit) {

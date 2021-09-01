@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\ProductRepository;
 use App\Http\Traits\AuthTrait;
 use Illuminate\Http\Request;
 
@@ -31,10 +32,14 @@ class MainController extends Controller
 
     public function dashboard()
     {
+        $productRepository = new ProductRepository();
+        
         switch (session('account_role')) {
             case 'admin' :
                 return view('dashboard')
-                    ->with('page', 'dashboard');
+                    ->with('page', 'dashboard')
+                    ->with('top_selling_products', $productRepository->getTopSelling())
+                    ->with('total_sale', $productRepository->getTotalSale());
                 break;
 
             case 'client' :

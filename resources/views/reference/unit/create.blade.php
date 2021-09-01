@@ -20,6 +20,10 @@
                         <label for="name">Unit Name</label>
                         <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Unit Name here" required>
                     </div>
+                    <div class="form-group">
+                        <label for="">Plural Name</label>
+                        <input type="text" name="plural_name" value="{{ old('name')}}" class="form-control" placeholder="Plural Name here" required>
+                    </div>
                     <button type="submit" class="btn btn-success mt-3 float-right"><i class="fas fa-fw fa-plus"></i>Add New Unit</button>
                 </form>
             </div>
