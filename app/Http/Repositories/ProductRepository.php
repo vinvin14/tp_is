@@ -347,7 +347,7 @@ class ProductRepository
             DB::raw('SUM(sold_products.qty) as totalSale')
         )
         ->groupBy('orders.id')
-        // ->where('sold_products.order_id', '=', 'orders.id')
+        ->where('sold_products.qty', '!=', null)
         ->orderBy('totalSale', 'DESC')
         ->get();
     }
