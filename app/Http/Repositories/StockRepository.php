@@ -40,6 +40,21 @@ class StockRepository
         ->first();
     }
 
+    public function getAvailableStock2($qty)
+    {
+        DB::statement('SET @order ='.$qty);
+        $first = DB::table('stocks')
+        ->selectRaw(
+            '*, @order := IF(@order > 0 AND qty > @order, 0, @order - CAST(qty AS SIGNED)) as order_left'
+        );
+
+        return DB::table(DB::raw('('.$first->toSql().') as stock2'))
+        ->select('*')
+        ->where('stock2.order_left', '>=', 0)
+        ->get();
+
+    }
+
     public function isStockReferenced($stock_id)
     {
         $isReferenced = SoldProduct::query()

@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-3">
                     <small class="font-weight-bold">Total Points</small>
-                    <div>{{ $transaction->total_amount   }}</div>
+                    <div>{{ $transaction->total_points   }}</div>
                 </div>
                 <div class="col-3">
                     <small class="font-weight-bold">Transaction Status</small>

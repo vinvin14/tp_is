@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Repositories\StockRepository;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -147,8 +148,9 @@ Route::get('test', function () {
     }
 });
 
-Route::get('product', function () {
-    return view('admin.shop.product');
+Route::get('test2/{qty}', function ($qty) {
+    $stockRepository = new StockRepository();
+    return $stockRepository->getAvailableStock2($qty);
 });
 Route::get('hash/{string}', function ($string) {
     return \Illuminate\Support\Facades\Hash::make($string);

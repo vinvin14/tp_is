@@ -7,6 +7,7 @@ use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
 use App\Models\SoldProduct;
+use App\Models\Stock;
 use Exception;
 
 class OrderServices
@@ -58,74 +59,38 @@ class OrderServices
     public function finalizeOrder($order)
     {
         $stockRepository = new StockRepository();
-        $orderQty = $order->qty;
 
-        while ($orderQty != 0)
+        $available_stock = $stockRepository->getAvailableStock2($order->qty);
+
+        $order_left =$order->qty;
+    
+        foreach ($available_stock as $stock)
         {
-            $stock = $stockRepository->getAvailableStock($order->product_id);
-            dd($stock);
-            $orderQty = $this->distributeOrder($stock, $order, intval($orderQty));
-        }
-        return $order;
-    }
+            $order_left = $stock->qty - $order_left;
+            $current_qty = $order_left;
+            $sold_qty = $order_left;
 
-    public function distributeOrder($stock, $order, $order_qty)
-    {
-        $stockRepository = new StockRepository();
-
-        $stock_qty = ($stock->qty - $order_qty);
-
-        switch (true)
-        {
-            case $stock_qty > 0:
-                $after_qty = $stock_qty;
-                $previos_qty = $stock->qty;
-                $unaccommodated = 0;
-                $sold_qty = $order_qty;
-                break;
-
-            case $stock_qty < 0:
-                $after_qty = 0;
-                $previos_qty = $stock->qty;
-                $unaccommodated = abs($stock_qty);
+            if ($order_left < 0)
+            {
+                $current_qty = 0;
+                $order_left = abs($order_left);
                 $sold_qty = $stock->qty;
-                break;
+            }
 
-            case $stock_qty == 0:
-                $after_qty = 0;
-                $previos_qty = $stock->qty;
-                $unaccommodated = 0;
-                $sold_qty = $order_qty;
+            Stock::query()
+            ->where('id', $stock->id)
+            ->update(['qty' => $current_qty]);
 
-                break;
-        }
-
-        OrderTracker::query()
-        ->create([
-            'order_id' => $order->id,
-            'order_qty' => $order_qty,
-            'stock_id' => $stock->id,
-            'stock_previous_qty' => $previos_qty,
-            'stock_after_qty' => $after_qty
-        ]);
-
-        SoldProduct::query()
-        ->create([
-            'transaction_id' => $order->transaction_id,
-            'stock_id' => $stock->id,
-            'qty' => $order_qty,
-            'discounted_amount' => $order->discount_amount,
-            'final_amount' => $order->total_amount
-        ]);
-
-        $currentStock = $stockRepository->getStockById($stock->id);
-        $currentStock->update(
-            [
-                'qty' => $after_qty,
-                'sold_qty' => $sold_qty
+            SoldProduct::query()
+            ->create([
+                'transaction_id' => $order->transaction_id,
+                'order_id' => $order->id,
+                'stock_id' => $stock->id,
+                'qty' => $sold_qty,
+                'discounted_amount' => $order->discount_amount,
+                'final_amount' => $order->total_amount
             ]);
-
-        return $unaccommodated;
+        }
     }
 
     public function delete($order)

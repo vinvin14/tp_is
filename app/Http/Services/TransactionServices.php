@@ -83,7 +83,7 @@ class TransactionServices
                 array_push($total_points, $order->total_points);
                 $orderServices->finalizeOrder($order);
             }
-
+            
             $transaction->update([
                 'total_points' => array_sum($total_points),
                 'total_amount' => array_sum($total_amount),

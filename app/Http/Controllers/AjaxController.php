@@ -52,7 +52,7 @@ class AjaxController extends Controller
         try {
             $price = $productRepository->getPrice($order->product_id);
             $points = $productRepository->getPoints($order->product_id);
-            $product = $productRepository->getProductRemainingQty($order->product_id);
+            $product = $productRepository->getProductRemainingForUpdate($order->product_id, $order->transaction_id);
 
             if (! empty($product)) {
                 if ($product->remainingQty < $request['qty']) {

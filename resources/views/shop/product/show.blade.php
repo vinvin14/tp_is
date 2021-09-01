@@ -66,6 +66,7 @@
                                 <tr>
                                     <th>Received Date</th>
                                     <th>Expiration Date</th>
+                                    <th>Beginning Balance</th>
                                     <th>Quantity</th>
                                     <th>Actions</th>
                                 </tr>
@@ -88,6 +89,12 @@
                                             <i class="fas fa-exclamation-triangle"></i>
                                             @endif
                                             {{ $row->expiration_date }}
+                                        </td>
+                                        <td>
+                                            @if ($row->expiration_date < \Carbon\Carbon::now())
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            @endif
+                                            {{ $row->beginning_balance }}
                                         </td>
                                         <td>
                                             @if ($row->expiration_date < \Carbon\Carbon::now())

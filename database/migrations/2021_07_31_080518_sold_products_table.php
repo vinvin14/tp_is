@@ -16,6 +16,7 @@ class SoldProductsTable extends Migration
         Schema::create('sold_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('transaction_id');
+            $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('stock_id');
             $table->integer('qty');
             $table->double('discounted_amount')->nullable();

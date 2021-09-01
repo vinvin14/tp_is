@@ -27,7 +27,7 @@ class ProductController extends Controller
     {
         // $product = $productRepository->getProductWithStocks($id);
         $product = $productRepository->getProduct($id);
-        $product_remaining_qty = $productRepository->getProductRemainingQty($id)->remainingQty;
+        @$product_remaining_qty = $productRepository->getProductRemainingQty($id)->remainingQty;
         $stocks = $stockRepository->getStocksByProduct($id);
         return view('shop.product.show')
             ->with(compact('product'))

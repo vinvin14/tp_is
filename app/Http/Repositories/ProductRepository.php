@@ -18,6 +18,8 @@ use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+use function PHPSTORM_META\map;
+
 class ProductRepository
 {
     public function all()
@@ -127,18 +129,38 @@ class ProductRepository
                 $join->on('products.id', '=', 'orders.product_id');
             })
             ->select(
-                // 'stocks.qty',
-                // 'products.id',
-                // 'stocks.id as stock_id',
-                // 'products.title',
-                // 'products.uploaded_img',
-                // 'products.price',
-                // 'products.points',
-                // 'units.name as unit',
                 DB::raw('(sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) - IF(orders.qty IS NULL, 0, orders.qty)) as remainingQty'),
             )
             ->where('products.id', $product_id)
-            // ->where('stocks.qty', '!=', 0)
+            ->groupBy(
+                'products.id',
+                )
+            ->having('remainingQty', '!=', 0)
+            ->first();
+    }
+
+    public function getProductRemainingForUpdate($product_id, $transaction_id)
+    {
+        $orders = DB::table('orders')
+        ->leftJoin('transactions', 'orders.transaction_id', '=', 'transactions.id')
+        ->select(
+            'orders.id',
+            'orders.product_id',
+            'orders.qty'
+        )
+        ->where('transactions.trans_status', '!=', 'completed')
+        ->where('transactions.id', '!=', $transaction_id);
+
+        return DB::table('products')
+            ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+            ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+            ->leftJoinSub($orders, 'orders', function ($join) {
+                $join->on('products.id', '=', 'orders.product_id');
+            })
+            ->select(
+                DB::raw('(sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) - IF(orders.qty IS NULL, 0, orders.qty)) as remainingQty'),
+            )
+            ->where('products.id', $product_id)
             ->groupBy(
                 'products.id',
                 )
@@ -254,24 +276,19 @@ class ProductRepository
             ->first();
     }
 
-    public function find($id)
-    {
-        return DB::table('products')
-            ->leftJoin('product_category', 'products.product_category', '=', 'product_category.id')
-            ->leftJoin('units', 'products.unit', '=', 'units.id')
-            ->select(
-                'products.*',
-                'product_category.id as product_category_id',
-                'product_category.category_name as category_name',
-                'units.id as unit_id',
-                'units.unit_name as unit'
-            )
-            ->where('products.id', $id)
-            ->first();
-    }
-
     public function getProduct($id)
     {
+        return DB::table('products')
+        ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+        ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+        ->select(
+            'products.*',
+            'categories.name as category',
+            'units.name as unit'
+        )
+        ->where('products.id', $id)
+        ->first();
+
         return Product::query()
             ->find($id);
     }

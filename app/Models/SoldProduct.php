@@ -13,6 +13,7 @@ class SoldProduct extends Model
     protected $fillable = [
         'transaction_id',
         'stock_id',
+        'order_id',
         'qty',
         'discounted_amount',
         'final_amount'
