@@ -2,6 +2,7 @@ function addOrder()
 {
     $('#product-category').on('input', function () {
                 var content = $('#products');
+                content.html('<img src="/storage/loading-image/4.gif">');
                 $.ajax({
                     url: '/ajax/get/products/'+ $(this).val(),
                     type: 'get',
@@ -9,7 +10,7 @@ function addOrder()
                         console.log(data)
                         content.html('');
                         data.forEach(function (index) {
-                            console.log(data)
+
                             content.append('' +
                                     '<div class="col-xs-12 col-md-6 col-lg-3 my-2" id="product-container" data-productid="'+index.id+'" data-points="'+index.points+'" data-stockid="'+index.stock_id+'" data-id="'+index.id+'">' +
                                     '<div class="card shadow-sm" style="width: 13rem;">' +
@@ -76,7 +77,7 @@ function addOrder()
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
                                         '<label>Discount Amount</label>' +
-                                        '<input type="number" class="form-control" name="discount_amount">' +
+                                        '<input type="number" step="0.01" class="form-control" name="discount_amount">' +
                                     '</div>' +
                                     '<div class="form-group mt-2">' +
                                         '<label>Total Amount</label>' +

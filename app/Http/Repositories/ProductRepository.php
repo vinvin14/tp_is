@@ -248,6 +248,14 @@ class ProductRepository
         ->first();
     }
 
+    public function getProductStocksQty($product_id)
+    {
+        return Stock::query()
+        ->where('product_id', $product_id)
+        ->sum('qty');
+    }
+
+
     public function getPrice($product_id)
     {
         return DB::table('products')

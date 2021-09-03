@@ -97,8 +97,10 @@
             @if($transaction->trans_status == 'pending')
                 {{-- <a href="{{ route('transaction.checkout', $transaction->transaction_id) }}" class="btn btn-danger shadow-sm ml-3">
                     <i class="fas fa-fw fa-money-bill"></i> Proceed to Checkout</a> --}}
+                    @if (!empty ($orders->toArray()))
                     <a href="#" id="checkout" class="btn btn-danger shadow-sm ml-3">
                         <i class="fas fa-fw fa-money-bill"></i> Proceed to Checkout</a>
+                    @endif
             @endif
 
             <hr>
@@ -240,6 +242,18 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="checkoutLoadingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <img src="/storage/loading-image/3.gif" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 @endsection
 @section('scripts')
     {{-- jquery --}}
@@ -249,6 +263,7 @@
             updateOrder();
 
             $('#checkout').click(function () {
+
                 Swal.fire({
                     title: 'Are you sure you want to Proceed to Checkout?',
                     text: "Please review all orders since You won't be able to revert this!",
@@ -259,7 +274,8 @@
                     confirmButtonText: 'Yes, Proceed!'
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        console.log($('#transaction-id').val());
+                        $('#checkoutLoadingModal').modal('show');
+                        // console.log($('#transaction-id').val());
                         window.location.href = '/transaction/checkout/'+$('#transaction-id').val();
                     }
                     })

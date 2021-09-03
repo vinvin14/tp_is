@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Services\NotificationServices;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 
@@ -24,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $notification = new NotificationServices();
         Paginator::useBootstrap();
+
+        view()->share('notifications', $notification->getNotifications());
     }
 }

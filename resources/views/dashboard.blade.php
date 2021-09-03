@@ -10,7 +10,7 @@
             <div class="card-body" style="max-height: 300px; overflow-y: auto">
                 @forelse ($top_selling_products as $product)
                     <div class="list-group mb-1">
-                        <button class="list-group-item list-group-item-action">
+                        <a href="{{route('product.show', $product->id)}}" class="list-group-item list-group-item-action">
                             <div class="row">
                                 <div class="col-6">
                                     <div class="font-weight-bold">{{$product->title}}</div>
@@ -18,11 +18,11 @@
                                 <div class="col-6">
                                     <div class="font-weight-bold">{{$product->totalSale}} @if($product->totalSale > 1) {{$product->unit_plural_name}} @else {{$product->unit}} @endif</div>
                                 </div>
-                            </div>   
-                        </button>      
-                    </div>   
+                            </div>
+                        </a>
+                    </div>
                 @empty
-                    <div class="font-weight-bold">No Record(s) Found</div>    
+                    <div class="font-weight-bold">No Record(s) Found</div>
                 @endforelse
             </div>
         </div>

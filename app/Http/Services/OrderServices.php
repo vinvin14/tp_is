@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\OrderRepository;
+use App\Http\Repositories\ProductRepository;
 use App\Http\Repositories\StockRepository;
 use App\Models\Order;
 use App\Models\OrderTracker;
@@ -59,11 +60,13 @@ class OrderServices
     public function finalizeOrder($order)
     {
         $stockRepository = new StockRepository();
+        $notification = new NotificationServices();
 
         $available_stock = $stockRepository->getAvailableStock2($order->qty);
+        $notification->createProductExpiry($order->product_id);
 
         $order_left =$order->qty;
-    
+
         foreach ($available_stock as $stock)
         {
             $order_left = $stock->qty - $order_left;
@@ -76,6 +79,7 @@ class OrderServices
                 $order_left = abs($order_left);
                 $sold_qty = $stock->qty;
             }
+
 
             Stock::query()
             ->where('id', $stock->id)
