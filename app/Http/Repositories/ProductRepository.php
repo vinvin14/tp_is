@@ -354,7 +354,7 @@ class ProductRepository
             'units.plural_name as unit_plural_name',
             DB::raw('SUM(sold_products.qty) as totalSale')
         )
-        ->groupBy('orders.id')
+        ->groupBy('products.id')
         ->where('sold_products.qty', '!=', null)
         ->orderBy('totalSale', 'DESC')
         ->get();
