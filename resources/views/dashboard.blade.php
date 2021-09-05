@@ -9,7 +9,7 @@
             </div>
             <div class="card-body">
                 @if (!empty ($notifications))
-                   <div class="font-weight-bold">{{count($notifications)}} notification(s) that requires your attention</div>
+                   <a href="#" class="font-weight-bold">{{count($notifications)}} notification(s) that requires your attention</a>
                 @endif
             </div>
         </div>

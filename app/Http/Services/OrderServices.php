@@ -63,7 +63,6 @@ class OrderServices
         $notification = new NotificationServices();
 
         $available_stock = $stockRepository->getAvailableStock2($order->qty);
-        $notification->createProductExpiry($order->product_id);
 
         $order_left =$order->qty;
 
@@ -94,6 +93,8 @@ class OrderServices
                 'discounted_amount' => $order->discount_amount,
                 'final_amount' => $order->total_amount
             ]);
+            //this shoud be last so that the stock qty will be updated before creating a notification
+            $notification->createProductDepletion($order->product_id);
         }
     }
 

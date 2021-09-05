@@ -18,7 +18,7 @@
                                         <h1 class="h4 text-gray-900 mb-4">TATAK<b class="text-danger">PINAS!</b></h1>
                                     </div>
                                     @include('interface.system-messages')
-                                    <form class="user" action="{{route('login_attempt')}}" method="POST">
+                                    <form class="user" id="login" action="{{route('login_attempt')}}" method="POST">
                                         @csrf
                                         <div class="form-group">
                                             <input type="text" name="username" value="{{ (old('username'))  }}" class="form-control form-control-user"
@@ -60,4 +60,33 @@
 
     </div>
 
+
+
+<div id="loading" style="position:absolute;top:0px;height:100%; width:100%; background-color:black !important;z-index:999;overflow:hidden; display:none">
+    <div class="container text-center" style="margin-top: 25vh">
+        {{-- <h5 style="margin-top: 20vh;position: absolute;left:40vw">System is Initializing, Please wait. . . . . . </h5> --}}
+        <img src="/storage/loading_images/5.gif" alt="" width="450px">
+    </div>
+</div>
+    <!-- Modal -->
+{{-- <div class="modal fade" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <h5>System is Initializing, Please wait. . . . . . </h5>
+            <img src="/storage/loading_images/1.gif" alt="" width="450px">
+        </div>
+      </div>
+    </div>
+  </div> --}}
+@endsection
+@section('scripts')
+<script>
+    $(document).ready(function () {
+        $('#login').submit(function (event) {
+            $('#loading').show();
+            // event.preventDefault();
+        });
+    });
+</script>
 @endsection

@@ -375,4 +375,18 @@ class ProductRepository
         ->whereMonth('sold_products.created_at', $month)
         ->first();
     }
+
+    public function getNearExpiryProduct()
+    {
+        return DB::table('products')
+        ->leftJoin('stocks', 'products.id', '=', 'stocks.id')
+        ->select(
+            'products.id as product_id',
+            'products.title as product_title',
+            'stocks.id as stocks_id',
+            'stocks.qty as stocks_qty'
+        )
+        ->whereDate('stocks.expiration_date', '<=', Carbon::now()->addDays(3))
+        ->get();
+    }
 }

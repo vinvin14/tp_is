@@ -31,7 +31,6 @@ class TransactionServices
             return Transaction::query()
                 ->create($request);
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
             $this->error->log('TRANSACTION_ADD', session('user'), $exception->getMessage());
             return back()
                 ->withInput()
@@ -42,9 +41,10 @@ class TransactionServices
     public function update($transaction, $request)
     {
         try {
-            return $transaction
-                ->update($request)
-                ->fresh();
+             $transaction->update($request);
+             $transaction->fresh();
+
+             return $transaction;
         } catch (\Exception $exception) {
             $this->error->log('TRANSACTION_UPDATE', session('user'), $exception->getMessage());
             return back()

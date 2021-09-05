@@ -29,7 +29,7 @@ Route::middleware('verifyToken')->group(function () {
         Route::get('checkout/{transaction}', 'TransactionController@checkout')->name('transaction.checkout');
 
         Route::post('store', 'TransactionController@store')->name('transaction.store');
-        Route::post('upsave', 'TransactionController@upsave')->name('transaction.upsave');
+        Route::post('upsave/{transaction}', 'TransactionController@upsave')->name('transaction.upsave');
     });
 
     Route::prefix('order')->group(function () {
@@ -151,7 +151,7 @@ Route::get('test', function () {
 
 Route::get('test/products', function () {
     $product = new ProductRepository();
-    return $product->getTopSelling();
+    return $product->getNearExpiryProduct();
 });
 Route::get('test2/{qty}', function ($qty) {
 

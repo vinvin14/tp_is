@@ -11,6 +11,7 @@ use App\Http\Repositories\TransactionRepository;
 use App\Http\Requests\TransactionPostRequest;
 use App\Http\Services\TransactionServices;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
 
 
 class TransactionController extends Controller
@@ -54,15 +55,23 @@ class TransactionController extends Controller
             ->with('response', 'Transaction successfully created!');
     }
 
-    public function update(Transaction $transaction)
+    public function update($transaction,TransactionRepository $transactionRepository, ClaimTypeRepository $claimTypeRepository, PaymentMethodRepository $paymentMethodRepository)
     {
         return view('shop.transaction.update')
-            ->with(compact('transaction'));
+            ->with('claimTypes', $claimTypeRepository->all())
+            ->with('paymentMethods', $paymentMethodRepository->all())
+            ->with('transaction', $transactionRepository->getTransWithCus($transaction))
+            ->with('page', 'shop');
     }
 
-    public function upsave(TransactionPostRequest $request, Transaction $transaction, TransactionServices $transactionServices)
+    public function upsave(Transaction $transaction, Request $request, TransactionServices $transactionServices)
     {
-        $transaction = $transactionServices->update($transaction, $request->post());
+        $init = $transactionServices->update($transaction, $request->only('transaction_date', 'payment_method_id', 'claim_type', 'remarks'));
+        if (@$init['error']) {
+            return back()
+            ->with('error', $init['error']);
+        }
+
         return redirect(route('transaction.show', $transaction->id))
             ->with('response', 'Transaction record has been successfully updated!');
     }

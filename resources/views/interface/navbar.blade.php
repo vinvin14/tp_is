@@ -49,14 +49,12 @@
 
                 @foreach ($notifications as $notification)
                 <a class="dropdown-item d-flex align-items-center" href="{{$notification->link}}">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-primary">
-                            <i class="fas fa-file-alt text-white"></i>
-                        </div>
+                    <div class="mr-2">
+                        <i class="fas fa-exclamation-circle text-danger"></i>
                     </div>
                     <div>
                         <div class="small text-gray-500">{{$notification->created_at}}</div>
-                        <span class="font-weight-bold">{{$notification->details}}</span>
+                        <span class="">{{$notification->details}}</span>
                     </div>
                 </a>
                 @endforeach

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Repositories\ProductRepository;
+use App\Http\Services\NotificationServices;
 use App\Http\Traits\AuthTrait;
 use Illuminate\Http\Request;
 
@@ -27,6 +28,10 @@ class MainController extends Controller
         session(['user' => $response->username]);
         session(['token' => $response->remember_token]);
         session(['account_role' => $response->role]);
+
+        $notificationServices = new NotificationServices();
+        $notificationServices->createProductExpiration();
+
         return redirect(route('dashboard'));
     }
 

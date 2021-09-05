@@ -20,6 +20,7 @@ class NotificationTable extends Migration
             $table->string('reference_title');
             $table->unsignedBigInteger('reference_id');
             $table->string('link')->nullable();
+            $table->enum('status', ['active', 'inactive', 'done'])->default('active');
             $table->timestamps();
         });
     }

@@ -22,7 +22,7 @@
                 </div>
                 <div class="form-group">
                     <label for="qty">Quantity</label>
-                    <input type="number" name="qty" id="qty" class="form-control">
+                    <input type="number" name="qty" id="qty" class="form-control" required>
                 </div>
                 <button class="btn btn-success btn-block">Add Stock</button>
             </form>
