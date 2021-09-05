@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Services\NotificationServices;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         $notification = new NotificationServices();
         Paginator::useBootstrap();
 
-        view()->share('notifications', $notification->getNotifications());
+        if (Schema::hasTable('notifications')) {
+            view()->share('notifications', $notification->getNotifications());
+        }
     }
 }
