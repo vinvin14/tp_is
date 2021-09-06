@@ -8,7 +8,7 @@
 
 namespace App\Http\Services;
 
-
+use App\Http\Repositories\CustomerRepository;
 use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Models\Transaction;
@@ -71,6 +71,8 @@ class TransactionServices
     {
         $transactionRepository = new TransactionRepository();
         $orderServices = new OrderServices();
+        $customerRepository = new CustomerRepository();
+        $customer = $customerRepository->find($transaction->customer);
         $total_amount = [];
         $total_points = [];
         DB::beginTransaction();
@@ -89,6 +91,8 @@ class TransactionServices
                 'total_amount' => array_sum($total_amount),
                 'trans_status' => 'completed'
             ]);
+            //update customer total points
+            $customer->update(['total_points' => ($customer->total_points + array_sum($total_points))]);
             DB::commit();
             return $transaction->fresh();
         } catch (\Exception $exception) {

@@ -11,7 +11,7 @@
         <h5 class="border-bottom">Customers</h5>
         <p class="font-italic">Here are all customers that have or had transaction(s) with us!</p>
     </div>
-    <a href="{{route('customer.create')}}" class="btn btn-primary my-3"><i class="fas fa-fw fa-user-plus"></i> Add
+    <a href="{{route('customer.create')}}" class="btn btn-primary my-3 shadow-sm"><i class="fas fa-fw fa-user-plus"></i> Add
         Customer</a>
     <div class="card shadow mb-4">
         <div class="card-header py-3">

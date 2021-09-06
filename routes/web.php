@@ -65,6 +65,7 @@ Route::middleware('verifyToken')->group(function () {
         Route::get('list', 'CustomerController@index')->name('customer.list');
         Route::get('show/{customer}', 'CustomerController@show')->name('customer.show');
         Route::get('create', 'CustomerController@create')->name('customer.create');
+        Route::get('create-transaction/{customer}', 'CustomerController@create_transaction')->name('customer.transaction.create');
         Route::get('update/{id}', 'CustomerController@update')->name('customer.update');
         Route::get('delete/{id}', 'CustomerController@destroy')->name('customer.destroy');
         Route::get('points/{id}', 'CustomerController@getPoints')->name('customer.points');

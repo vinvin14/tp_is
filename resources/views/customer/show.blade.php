@@ -55,8 +55,37 @@
             <i class="fas fa-fw fa-tasks"></i>List of Transactions
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <a href="{{route('customer.transaction.create', $customer->id)}}" class="btn btn-primary my-2"><i class="fas fa-fw fa-plus"></i> Create New Transaction</a>
+            <div class="table-responsive mt-2">
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Order Ticket</th>
+                        <th>Transaction Date</th>
+                        <th>Total Amount</th>
+                        <th>Transaction Status</th>
+                        <th>Claim Type</th>
+                        <th>Payment Type</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($transactions as $transaction)
+                        <tr>
+                            <td>{{$transaction->ticket_number}}</td>
+                            <td>{{$transaction->transaction_date}}</td>
+                            <td>{{$transaction->total_amount}}</td>
+                            <td>{{$transaction->trans_status}}</td>
+                            <td>{{$transaction->claim_type}}</td>
+                            <td>{{$transaction->payment_method}}</td>
+                            <td><a href="{{route('transaction.show', $transaction->id)}}"><i class="fas fa-fw fa-eye" title="View"></i></a></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+
+                {{-- <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
                         <th>Order Ticket</th>
@@ -70,28 +99,27 @@
                     </thead>
                     <tbody>
                     @foreach($transactions as $transaction)
-                        <td>{{$transaction->order_ticket}}</td>
+                    <tr>
+                        <td>{{$transaction->ticket_number}}</td>
                         <td>{{$transaction->transaction_date}}</td>
                         <td>{{$transaction->total_amount}}</td>
                         <td>{{$transaction->trans_status}}</td>
                         <td>{{$transaction->claim_type}}</td>
-                        <td>{{$transaction->payment_type}}</td>
+                        <td>{{$transaction->payment_method}}</td>
                         <td><a href="{{route('transaction.show', $transaction->id)}}"><i class="fas fa-fw fa-eye" title="View"></i></a></td>
+                    </tr>
                     @endforeach
                     </tbody>
-                </table>
+                </table> --}}
             </div>
         </div>
     </div>
 @endsection
 @section('scripts')
     <!-- Page level plugins -->
-
     <script src="{{ asset('includes/sbadmin/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
     <!-- Page level custom scripts -->
-    <script src="{{ asset('includes/sbadmin/vendor/jquery/jquery.slim.min.js') }}"></script>
     <script src="{{ asset('includes/sbadmin/js/demo/datatables-demo.js') }}"></script>
 
 @endsection

@@ -46,9 +46,11 @@ class TransactionRepository
     {
         return DB::table('transactions')
             ->leftJoin('payment_method', 'transactions.payment_method_id', '=', 'payment_method.id')
+            ->leftJoin('claim_type', 'transactions.claim_type', '=', 'claim_type.id')
             ->select(
                 'transactions.*',
-                'payment_method.name as paymentMethod'
+                'payment_method.name as payment_method',
+                'claim_type.name as claim_type'
             )
             ->where('customer', $customer)
             ->get();

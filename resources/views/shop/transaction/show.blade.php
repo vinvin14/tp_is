@@ -44,8 +44,10 @@
             <div class="row mt-3">
                 <div class="col-3">
                     <small class="font-weight-bold">Customer</small>
-                    <div>{{ $transaction->lastname   }}
-                        {{ $transaction->firstname }} {{ $transaction->middlename }}</div>
+                    <div class="text-decoration-none">
+                        <a href="{{route('customer.show', $transaction->customer)}}">{{ $transaction->lastname   }}
+                            {{ $transaction->firstname }} {{ $transaction->middlename }}</a>
+                    </div>
                 </div>
                 <input type="hidden" id="transaction-id" value="{{ $transaction->id }}">
                 <div class="col-3">

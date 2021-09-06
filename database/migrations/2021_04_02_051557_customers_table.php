@@ -20,8 +20,8 @@ class CustomersTable extends Migration
             $table->string('lastname', 50);
             $table->date('date_of_birth')->nullable();
             $table->string('address', 100)->nullable();
-            $table->double('total_points')->nullable();
-            $table->double('total_purchase_amount')->nullable();
+            $table->double('total_points')->nullable()->default(0);
+            $table->double('total_purchase_amount')->nullable()->default(0);
             $table->unsignedBigInteger('last_purchase')->nullable();
             $table->enum('customer_type', ['guest', 'member', 'regular']);
             $table->timestamps();

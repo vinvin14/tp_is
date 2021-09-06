@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\ClaimTypeRepository;
 use App\Http\Repositories\CustomerRepository;
+use App\Http\Repositories\PaymentMethodRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Http\Requests\CustomerPostRequest;
 use App\Http\Services\CustomerServices;
@@ -20,6 +22,7 @@ class CustomerController extends Controller
     public function show(Customer $customer, TransactionRepository $transactionRepository)
     {
         $transactions = $transactionRepository->getTransByCus($customer->id);
+
         return view('customer.show')
                     ->with(compact('customer'))
                     ->with(compact('transactions'))
@@ -30,6 +33,19 @@ class CustomerController extends Controller
         return view('customer.create')
             ->with('page', 'customer');
     }
+
+    public function create_transaction(Customer $customer, PaymentMethodRepository $paymentMethodRepository, ClaimTypeRepository $claimTypeRepository)
+    {
+        $claimTypes = $claimTypeRepository->all();
+        $paymentMethods = $paymentMethodRepository->all();
+
+        return view('customer.create-transaction')
+        ->with(compact('customer'))
+        ->with(compact('claimTypes'))
+        ->with(compact('paymentMethods'))
+        ->with('page', 'customer');
+    }
+
     public function store(CustomerPostRequest $request, CustomerServices $customerServices)
     {
         $customer = $customerServices->create($request->post());
