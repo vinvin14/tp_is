@@ -55,6 +55,7 @@ class NotificationServices
     {
         $productRepository = new ProductRepository();
         $productsNearExpiry = $productRepository->getNearExpiryProduct();
+        // dd($productsNearExpiry);
 
         if (! empty($productsNearExpiry->toArray())) {
             foreach ($productsNearExpiry as $expiry) {
@@ -80,11 +81,54 @@ class NotificationServices
         }
     }
 
-    public function getNotifications()
+    public function createProductExpired()
     {
-        return Notification::query()
-        // ->where('status', 'active')
-        ->orderBy('created_at', 'DESC')
-        ->get();
+        $productRepository = new ProductRepository();
+        $productExpired = $productRepository->getExpiredProduct();
+        
+        // dd($productsNearExpiry);
+
+        if (! empty($productExpired->toArray())) {
+            foreach ($productExpired as $expiry) {
+                // dd($productExpired);
+                if ( ! Notification::query()
+                ->where([
+                    'reference_id' => $expiry->product_id,
+                    'status' => 'active',
+                    'type' => 'expired'
+                ])
+                ->first()) 
+                {
+                    Notification::query()
+                    ->create([
+                        'details' => $expiry->product_title.' has quantity of '.$expiry->stocks_qty.' and has expired!',
+                        'type' => 'expired',
+                        'reference_title' => 'products',
+                        'reference_id' => $expiry->product_id,
+                        'link' => route('product.show', $expiry->product_id)
+                    ]);
+                }                        
+            }
+        }
+    }
+
+    public function tagAsDone($notification)
+    {
+        try {
+            $notification->update(['status' => 'done']);
+        } catch (Exception $exception) {
+            $this->error->log('NOTIFICATION_TAG_AS_DONE', session('user'), $exception->getMessage());
+            return ['error' => 'We are encountering technical problem, Please contact your Administrator!'];
+        }
+    }
+
+    public function delete($notification)
+    {
+        try {
+            $notification->delete();
+        } catch (Exception $exception) {
+            $this->error->log('NOTIFICATION_DELETE', session('user'), $exception->getMessage());
+            return ['error' => 'We are encountering technical problem, Please contact your Administrator!'];
+        }
     }
 }

@@ -40,7 +40,7 @@
                             <td><textarea name="" id="" class="form-control" cols="30" rows="1"
                                           readonly>{{$customer->address}}</textarea></td>
                             <td>{{$customer->customer_type}}</td>
-                            <td>{{$customer->current_points}}</td>
+                            <td>{{$customer->total_points}}</td>
                             <td><a href="{{route('customer.show', $customer->id)}}"><i class="fas fa-fw fa-eye" title="View"></i></a></td>
                         </tr>
                     @endforeach

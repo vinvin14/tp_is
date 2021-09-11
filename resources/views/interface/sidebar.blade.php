@@ -18,6 +18,12 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
+    <li class="nav-item @if($page=='notifications') active @endif">
+        <a class="nav-link" href="{{route('notifications')}}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Notifications</span></a>   
+    </li>
+    
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -55,7 +61,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Utilities:</h6>
                 <a class="collapse-item font-weight-bold" href="{{ route('product.list') }}"><i class="fas fa-fw fa-shopping-bag"></i>  Products</a>
-                <a class="collapse-item font-weight-bold" href="cards.html">Promo</a>
+                {{-- <a class="collapse-item font-weight-bold" href="cards.html">Promo</a> --}}
                 <a class="collapse-item font-weight-bold" href="{{ route('transaction.list') }}"><i class="fas fa-fw fa-handshake"></i> Transactions</a>
             </div>
         </div>

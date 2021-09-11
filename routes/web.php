@@ -19,6 +19,13 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 Route::middleware('verifyToken')->group(function () {
+    Route::prefix('notification')->group(function () {
+        Route::get('list', 'NotificationCenterController@index')->name('notifications');
+        Route::get('tagdone/{notification}', 'NotificationCenterController@done')->name('notification.tagAsDone');
+        Route::get('destroy/{notification}', 'NotificationCenterController@delete')->name('notification.destroy');
+    });
+
+
     Route::prefix('transaction')->group(function () {
         Route::get('list', 'TransactionController@index')->name('transaction.list');
         Route::get('show/{id}', 'TransactionController@show')->name('transaction.show');

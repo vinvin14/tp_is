@@ -8,8 +8,10 @@
                 <i class="fas fa-bell"></i> Notifications
             </div>
             <div class="card-body">
-                @if (!empty ($notifications))
-                   <a href="#" class="font-weight-bold">{{count($notifications)}} notification(s) that requires your attention</a>
+                @if (!empty ($notifications->toArray()))
+                   <a href="{{route('notifications')}}" class="font-weight-bold">{{count($notifications)}} notification(s) that requires your attention</a>
+                @else
+                    No Notification(s) yet   
                 @endif
             </div>
         </div>

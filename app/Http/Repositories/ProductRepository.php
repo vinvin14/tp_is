@@ -387,6 +387,22 @@ class ProductRepository
             'stocks.qty as stocks_qty'
         )
         ->whereDate('stocks.expiration_date', '<=', Carbon::now()->addDays(3))
+        // ->orWhereDate('stocks.expiration_date', '=', Carbon::now())
+        ->get();
+    }
+
+    public function getExpiredProduct()
+    {
+        return DB::table('products')
+        ->leftJoin('stocks', 'products.id', '=', 'stocks.id')
+        ->select(
+            'products.id as product_id',
+            'products.title as product_title',
+            'stocks.id as stocks_id',
+            'stocks.qty as stocks_qty'
+        )
+        // ->whereDate('stocks.expiration_date', '<=', Carbon::now()->addDays(3))
+        ->whereDate('stocks.expiration_date', '>=', Carbon::now())
         ->get();
     }
 }

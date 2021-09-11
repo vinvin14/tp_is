@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\NotificationRepository;
 use App\Http\Repositories\ProductRepository;
 use App\Http\Services\NotificationServices;
 use App\Http\Traits\AuthTrait;
@@ -11,7 +12,7 @@ class MainController extends Controller
 {
     use AuthTrait;
 
-    public function login(Request $request)
+    public function login(Request $request, NotificationServices $notificationServices)
     {
         list($is_auth, $response) = $this->isAuthorized($request->input('username'), $request->input('password'));
         if (!$is_auth) {
@@ -29,8 +30,8 @@ class MainController extends Controller
         session(['token' => $response->remember_token]);
         session(['account_role' => $response->role]);
 
-        $notificationServices = new NotificationServices();
         $notificationServices->createProductExpiration();
+        $notificationServices->createProductExpired();
 
         return redirect(route('dashboard'));
     }
