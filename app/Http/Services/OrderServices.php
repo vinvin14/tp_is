@@ -63,6 +63,7 @@ class OrderServices
         $notification = new NotificationServices();
 
         $available_stock = $stockRepository->getAvailableStock2($order->qty);
+        
 
         $order_left =$order->qty;
 

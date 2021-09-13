@@ -79,7 +79,7 @@ class TransactionServices
         try {
 
             $orders = $transactionRepository->getAllOrdersByTransaction($transaction->id);
-
+            // dd($orders);
             foreach ($orders as $order) {
                 array_push($total_amount, $order->total_amount);
                 array_push($total_points, $order->total_points);
