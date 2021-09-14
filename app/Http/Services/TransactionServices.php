@@ -9,7 +9,6 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\CustomerRepository;
-use App\Http\Repositories\OrderRepository;
 use App\Http\Repositories\TransactionRepository;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
@@ -80,12 +79,14 @@ class TransactionServices
 
             $orders = $transactionRepository->getAllOrdersByTransaction($transaction->id);
             // dd($orders);
+            $testArray2 = [];
             foreach ($orders as $order) {
                 array_push($total_amount, $order->total_amount);
                 array_push($total_points, $order->total_points);
-                $orderServices->finalizeOrder($order);
+                // $orderServices->finalizeOrder($order);
+                array_push($testArray2, $orderServices->finalizeOrder($order));
             }
-            
+            // dd($testArray2);
             $transaction->update([
                 'total_points' => array_sum($total_points),
                 'total_amount' => array_sum($total_amount),
@@ -96,7 +97,7 @@ class TransactionServices
             DB::commit();
             return $transaction->fresh();
         } catch (\Exception $exception) {
-
+            // dd($exception->getMessage());
             DB::rollBack();
             $this->error->log('TRANSACTION_CHECKOUT', session('user'), $exception->getMessage());
             return back()

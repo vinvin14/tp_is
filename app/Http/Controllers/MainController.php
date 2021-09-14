@@ -39,7 +39,7 @@ class MainController extends Controller
     public function dashboard()
     {
         $productRepository = new ProductRepository();
-        
+
         switch (session('account_role')) {
             case 'admin' :
                 return view('dashboard')

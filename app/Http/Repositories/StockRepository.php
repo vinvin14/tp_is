@@ -40,17 +40,19 @@ class StockRepository
         ->first();
     }
 
-    public function getAvailableStock2($qty)
+    public function getAvailableStock2($qty, $product_id)
     {
         DB::statement('SET @order ='.$qty);
         $first = DB::table('stocks')
         ->selectRaw(
             '*, @order := IF(@order > 0 AND qty > @order, 0, @order - CAST(qty AS SIGNED)) as order_left'
-        );
+        )
+        ->whereRaw('product_id = '.$product_id);
 
         return DB::table(DB::raw('('.$first->toSql().') as stock2'))
         ->select('*')
-        ->where('stock2.order_left', '>=', 0)
+        // ->where('stock2.order_left', '>=', 0)
+        ->whereRaw('stock2.order_left >= 0')
         ->get();
 
     }

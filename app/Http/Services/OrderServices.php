@@ -62,10 +62,10 @@ class OrderServices
         $stockRepository = new StockRepository();
         $notification = new NotificationServices();
 
-        $available_stock = $stockRepository->getAvailableStock2($order->qty);
-        
+        $available_stock = $stockRepository->getAvailableStock2($order->qty, $order->product_id);
+        // dd($available_stock);
 
-        $order_left =$order->qty;
+        $order_left = $order->qty;
 
         foreach ($available_stock as $stock)
         {
@@ -80,6 +80,15 @@ class OrderServices
                 $sold_qty = $stock->qty;
             }
 
+            $testArray = [];
+            array_push($testArray, [
+                'transaction_id' => $order->transaction_id,
+                'order_id' => $order->id,
+                'stock_id' => $stock->id,
+                'qty' => $sold_qty,
+                'discounted_amount' => $order->discount_amount,
+                'final_amount' => $order->total_amount
+            ]);
 
             Stock::query()
             ->where('id', $stock->id)
@@ -97,6 +106,7 @@ class OrderServices
             //this shoud be last so that the stock qty will be updated before creating a notification
             $notification->createProductDepletion($order->product_id);
         }
+        // return $testArray;
     }
 
     public function delete($order)
