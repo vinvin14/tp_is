@@ -15,13 +15,14 @@ class OrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('transaction_id');
+            $table->unsignedBigInteger('transaction_id')->nullable();
             $table->unsignedBigInteger('product_id');
             // $table->unsignedBigInteger('stock_id');
             $table->integer('qty');
             $table->double('discount_amount')->nullable();
             $table->double('total_amount')->nullable();
             $table->integer('total_points')->nullable();
+            $table->integer('isWalkIn')->nullable()->default(0);
         });
     }
 

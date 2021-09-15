@@ -45,7 +45,7 @@ class NotificationServices
                     'details' => 'Product '.$product->title.' has quantity of '.$stocks.' and it reached its alert level quantity!'
                 ]);
             }
-            
+
         }
 
 
@@ -59,14 +59,14 @@ class NotificationServices
 
         if (! empty($productsNearExpiry->toArray())) {
             foreach ($productsNearExpiry as $expiry) {
-    
+
                 if ( ! Notification::query()
                 ->where([
                     'reference_id' => $expiry->product_id,
                     'status' => 'active',
                     'type' => 'expiration'
                 ])
-                ->first()) 
+                ->first())
                 {
                     Notification::query()
                     ->create([
@@ -76,7 +76,7 @@ class NotificationServices
                         'reference_id' => $expiry->product_id,
                         'link' => route('product.show', $expiry->product_id)
                     ]);
-                }                        
+                }
             }
         }
     }
@@ -85,7 +85,7 @@ class NotificationServices
     {
         $productRepository = new ProductRepository();
         $productExpired = $productRepository->getExpiredProduct();
-        
+
         // dd($productsNearExpiry);
 
         if (! empty($productExpired->toArray())) {
@@ -97,7 +97,7 @@ class NotificationServices
                     'status' => 'active',
                     'type' => 'expired'
                 ])
-                ->first()) 
+                ->first())
                 {
                     Notification::query()
                     ->create([
@@ -107,7 +107,7 @@ class NotificationServices
                         'reference_id' => $expiry->product_id,
                         'link' => route('product.show', $expiry->product_id)
                     ]);
-                }                        
+                }
             }
         }
     }
