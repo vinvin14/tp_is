@@ -39,6 +39,15 @@ Route::middleware('verifyToken')->group(function () {
         Route::post('upsave/{transaction}', 'TransactionController@upsave')->name('transaction.upsave');
     });
 
+    Route::prefix('walkintransaction')->group(function () {
+        Route::get('list', 'WalkInTransactionController@index')->name('walkinTransaction.index');
+        Route::get('create', 'WalkInTransactionController@create')->name('walkinTransaction.create');
+        Route::get('edit', 'WalkInTransactionController@edit')->name('walkinTransaction.edit');
+
+        Route::post('update', 'WalkInTransactionController@update')->name('walkinTransaction.update');
+    });
+
+    
     Route::prefix('order')->group(function () {
         Route::get('edit/{order}', 'OrderController@addOrder')->name('order.edit');
         Route::get('destroy/{order}', 'OrderController@delete')->name('order.destroy');

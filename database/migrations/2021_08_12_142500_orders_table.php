@@ -22,7 +22,6 @@ class OrdersTable extends Migration
             $table->double('discount_amount')->nullable();
             $table->double('total_amount')->nullable();
             $table->integer('total_points')->nullable();
-            $table->integer('isWalkIn')->nullable()->default(0);
         });
     }
 

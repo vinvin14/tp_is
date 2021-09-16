@@ -15,8 +15,8 @@ class TransactionTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer');
-            $table->string('ticket_number')->unique();
+            $table->unsignedBigInteger('customer')->nullable();
+            $table->string('ticket_number')->unique()->nullable();
             $table->date('transaction_date');
             $table->double('total_amount')->nullable();
             $table->string('total_points')->nullable();
@@ -24,6 +24,7 @@ class TransactionTable extends Migration
             $table->unsignedBigInteger('claim_type')->nullable();
             $table->unsignedBigInteger('payment_method_id')->nullable();
             $table->string('remarks')->nullable();
+            $table->integer('isWalkin')->default(0);
             $table->timestamps();
 
 
