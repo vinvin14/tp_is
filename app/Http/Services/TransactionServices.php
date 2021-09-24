@@ -79,12 +79,12 @@ class TransactionServices
 
             $orders = $transactionRepository->getAllOrdersByTransaction($transaction->id);
             // dd($orders);
-            $testArray2 = [];
+            // $testArray2 = [];
             foreach ($orders as $order) {
                 array_push($total_amount, $order->total_amount);
                 array_push($total_points, $order->total_points);
-                // $orderServices->finalizeOrder($order);
-                array_push($testArray2, $orderServices->finalizeOrder($order));
+                $orderServices->finalizeOrder($order);
+                // array_push($testArray2, $orderServices->finalizeOrder($order));
             }
             // dd($testArray2);
             $transaction->update([

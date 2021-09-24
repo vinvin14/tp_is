@@ -18,7 +18,7 @@
                         </button>
                     </div>
                 @endif
-                <form action="{{ route('transaction.store') }}" method="post">
+                <form action="{{ route('walkinTransaction.store') }}" method="post">
                     <div class="row">
                         <div class="col-6">
                             <label for="">Transaction Date</label>

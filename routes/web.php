@@ -19,6 +19,14 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 Route::middleware('verifyToken')->group(function () {
+
+    Route::prefix('settings')->group(function () {
+        Route::get('home', 'SettingController@home')->name('setting.home');
+        Route::get('changepassword', 'SettingController@changePassword')->name('setting.changepassword');
+
+        Route::post('savePassword/{user}', 'SettingController@savePassword')->name('setting.savePassword');
+    });
+
     Route::prefix('notification')->group(function () {
         Route::get('list', 'NotificationCenterController@index')->name('notifications');
         Route::get('tagdone/{notification}', 'NotificationCenterController@done')->name('notification.tagAsDone');
@@ -40,20 +48,31 @@ Route::middleware('verifyToken')->group(function () {
     });
 
     Route::prefix('walkintransaction')->group(function () {
-        Route::get('list', 'WalkInTransactionController@index')->name('walkinTransaction.index');
+        Route::get('list', 'WalkInTransactionController@index')->name('walkinTransaction.list');
         Route::get('create', 'WalkInTransactionController@create')->name('walkinTransaction.create');
+        Route::get('show/{id}', 'WalkInTransactionController@show')->name('walkinTransaction.show');
         Route::get('edit', 'WalkInTransactionController@edit')->name('walkinTransaction.edit');
+        Route::get('destroy/{transaction}', 'WalkInTransactionController@destroy')->name('walkinTransaction.destroy');
+        Route::get('checkout/{transaction}', 'WalkInTransactionController@checkout')->name('walkinTransaction.checkout');
 
         Route::post('update', 'WalkInTransactionController@update')->name('walkinTransaction.update');
+        Route::post('store', 'WalkInTransactionController@store')->name('walkinTransaction.store');
+
     });
 
-    
     Route::prefix('order')->group(function () {
         Route::get('edit/{order}', 'OrderController@addOrder')->name('order.edit');
         Route::get('destroy/{order}', 'OrderController@delete')->name('order.destroy');
+        Route::get('walkin/destroy/{order}', 'OrderController@walkinDestroy')->name('walkin.order.destroy');
 
-        Route::post('store/{transactiond_id}', 'OrderController@store')->name('order.store');
+        Route::post('store/{transaction_id}', 'OrderController@store')->name('order.store');
+        Route::post('walkin/store/{transaction_id}', 'OrderController@walkinStore')->name('walkin.order.store');
         Route::post('update/{order}', 'OrderController@update')->name('order.update');
+    });
+
+    Route::prefix('sales')->group(function () {
+        Route::get('home', 'SalesController@index')->name('sales.home');
+        Route::post('generate', 'SalesController@generate')->name('sales.generate');
     });
 
     Route::prefix('product')->group(function () {

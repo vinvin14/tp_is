@@ -26,6 +26,7 @@ class TransactionRepository
                 'customers.middlename',
                 'customers.lastname'
             )
+            ->where('isWalkin', 0)
 //            ->groupBy(
 //                'transactions.id',
 //                'transactions.customer',
@@ -52,7 +53,13 @@ class TransactionRepository
                 'payment_method.name as payment_method',
                 'claim_type.name as claim_type'
             )
-            ->where('customer', $customer)
+            ->where(
+                [
+                    'customer' => $customer,
+                    'isWalkin' => 0
+                ]
+            )
+
             ->get();
     }
 
@@ -82,11 +89,25 @@ class TransactionRepository
             ->first();
     }
 
+    public function getTransactionWithJoin($id)
+    {
+        return DB::table('transactions')
+        ->leftJoin('payment_method', 'transactions.payment_method_id', '=', 'payment_method.id')
+        ->leftJoin('claim_type', 'transactions.claim_type', '=', 'claim_type.id')
+        ->select(
+            'transactions.*',
+            'payment_method.name as payment_method_name',
+            'claim_type.name as claim_type_name'
+            )
+        ->where('transactions.id', $id)
+        ->first();
+    }
+
     public function create($request)
     {
         return Transaction::query()
             ->create($request);
-    }
+    } 
 
     public function update($transaction, $request)
     {

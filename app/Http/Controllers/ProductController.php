@@ -25,7 +25,6 @@ class ProductController extends Controller
 
     public function show($id, ProductRepository $productRepository, StockRepository $stockRepository)
     {
-        // $product = $productRepository->getProductWithStocks($id);
         $product = $productRepository->getProduct($id);
         @$product_remaining_qty = $productRepository->getProductRemainingQty($id)->remainingQty;
         $stocks = $stockRepository->getStocksByProduct($id);

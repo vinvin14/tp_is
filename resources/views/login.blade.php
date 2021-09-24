@@ -1,5 +1,6 @@
 @extends('layouts/app-sbadmin')
 @section('body_class','bg-gradient-primary')
+@section('title', 'TATAK PINAS')
 
 @section('content')
     <div class="container">

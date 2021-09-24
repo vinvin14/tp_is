@@ -14,6 +14,7 @@ use App\Models\Order;
 use App\Models\ProductOld;
 use App\Models\Product;
 use App\Models\ProductTracker;
+use App\Models\SoldProduct;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -175,10 +176,13 @@ class ProductRepository
         ->select(
             'orders.id',
             'orders.product_id',
-            'orders.qty'
+            // 'orders.qty',
+            DB::raw('SUM(orders.qty) as ordersQty')
         )
+        ->groupBy('orders.product_id')
         ->where('transactions.trans_status', '!=', 'completed');
-
+        
+        // dd($orders);
         return DB::table('products')
             ->leftJoin('units', 'products.unit_id', '=', 'units.id')
             ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
@@ -194,23 +198,16 @@ class ProductRepository
                 'products.price',
                 'products.points',
                 'units.name as unit',
-                DB::raw('(sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) - IF(orders.qty IS NULL, 0, orders.qty)) as remainingQty'),
+                'orders.ordersQty',
+                DB::raw('sum(CASE WHEN stocks.expiration_date > '.Carbon::now()->toDateString().' THEN stocks.qty END) - IF(orders.ordersQty IS NULL, 0, orders.ordersQty) as remainingQty')
             )
             ->where('products.category_id', $category)
-            // ->where('stocks.qty', '!=', 0)
             ->groupBy(
                 'products.id',
-                // // 'products.title',
-                // // 'products.uploaded_img',
-                // // 'products.price',
-                // // 'products.points',
-                // // 'stocks.id',
-                // // 'stocks.product_id',
-                // // 'units.name',
-                // 'orders.qty'
                 )
-            ->having('remainingQty', '!=', 0)
+            ->having('remainingQty', '!=', 0)    
             ->get();
+
     }
 
     public function getProductWithStocks($product_id)
@@ -348,7 +345,8 @@ class ProductRepository
         ->leftJoin('sold_products', 'orders.id', '=', 'sold_products.order_id')
         ->leftJoin('units', 'products.unit_id', '=', 'units.id')
         ->select(
-            'orders.id',
+            'products.id as id',
+            'orders.id as order_id',
             'products.title',
             'units.name as unit',
             'units.plural_name as unit_plural_name',
@@ -379,7 +377,7 @@ class ProductRepository
     public function getNearExpiryProduct()
     {
         return DB::table('products')
-        ->leftJoin('stocks', 'products.id', '=', 'stocks.id')
+        ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
         ->select(
             'products.id as product_id',
             'products.title as product_title',
@@ -394,15 +392,49 @@ class ProductRepository
     public function getExpiredProduct()
     {
         return DB::table('products')
-        ->leftJoin('stocks', 'products.id', '=', 'stocks.id')
+        ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
         ->select(
             'products.id as product_id',
             'products.title as product_title',
             'stocks.id as stocks_id',
-            'stocks.qty as stocks_qty'
+            'stocks.qty as stocks_qty',
+            'stocks.expiration_date'
         )
-        // ->whereDate('stocks.expiration_date', '<=', Carbon::now()->addDays(3))
-        ->whereDate('stocks.expiration_date', '>=', Carbon::now())
+        ->whereDate('stocks.expiration_date', '<', Carbon::now())
+        ->groupBy('products.id')
         ->get();
+    }
+
+    public function getSoldProducts($from, $to)
+    {
+    
+        return DB::table('sold_products')
+        ->leftJoin('orders', 'sold_products.order_id', '=', 'orders.id')
+        ->leftJoin('products', 'orders.product_id', '=', 'products.id')
+        ->leftJoin('transactions', 'sold_products.transaction_id', '=', 'transactions.id')
+        ->leftJoin('units', 'products.unit_id', '=', 'units.id')
+        ->select(
+            'products.title',
+            'products.price',
+            'units.name as unit',
+            'transactions.transaction_date',
+            DB::raw('sum(sold_products.qty) as totalSold'),
+            DB::raw('sum(sold_products.final_amount) as totalFinalAmount')
+        )
+        ->whereBetween('transactions.transaction_date', [$from, $to])
+        ->groupBy('products.id')
+        ->get();
+    }
+
+    public function getTotalSaleByDate($from, $to)
+    {
+        return DB::table('sold_products')
+        ->leftJoin('transactions', 'sold_products.transaction_id', '=', 'transactions.id')
+        ->select(
+            DB::raw('sum(sold_products.qty) as totalQty'),
+            DB::raw('sum(final_amount) as finalAmount')
+        )
+        ->whereBetween('transactions.transaction_date', [$from, $to])
+        ->first();
     }
 }

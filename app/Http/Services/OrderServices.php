@@ -81,14 +81,14 @@ class OrderServices
             }
 
             $testArray = [];
-            array_push($testArray, [
-                'transaction_id' => $order->transaction_id,
-                'order_id' => $order->id,
-                'stock_id' => $stock->id,
-                'qty' => $sold_qty,
-                'discounted_amount' => $order->discount_amount,
-                'final_amount' => $order->total_amount
-            ]);
+            // array_push($testArray, [
+            //     'transaction_id' => $order->transaction_id,
+            //     'order_id' => $order->id,
+            //     'stock_id' => $stock->id,
+            //     'qty' => $sold_qty,
+            //     'discounted_amount' => $order->discount_amount,
+            //     'final_amount' => $order->total_amount
+            // ]);
 
             Stock::query()
             ->where('id', $stock->id)

@@ -33,7 +33,7 @@ class NotificationServices
             {
                 Notification::query()
                 ->create([
-                    'details' => 'Product '.$product->title.' has quantity of '.$stocks.' and it reached its alert level quantity!',
+                    'details' => $product->title.' has quantity of '.$stocks.' and it reached its alert level quantity!',
                     'type' => 'depletion',
                     'reference_title' => 'products',
                     'reference_id' => $product->id,
@@ -42,7 +42,7 @@ class NotificationServices
             }
             else {
                 $notification->update([
-                    'details' => 'Product '.$product->title.' has quantity of '.$stocks.' and it reached its alert level quantity!'
+                    'details' => $product->title.' has quantity of '.$stocks.' and it reached its alert level quantity!'
                 ]);
             }
 
@@ -86,7 +86,6 @@ class NotificationServices
         $productRepository = new ProductRepository();
         $productExpired = $productRepository->getExpiredProduct();
 
-        // dd($productsNearExpiry);
 
         if (! empty($productExpired->toArray())) {
             foreach ($productExpired as $expiry) {

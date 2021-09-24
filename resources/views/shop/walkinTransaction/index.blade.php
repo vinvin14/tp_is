@@ -1,5 +1,5 @@
 @extends('interface.main')
-@section('title','Transaction List')
+@section('title','Walk-in Transaction List')
 @section('styles')
     <!-- Custom styles for this page -->
     <link href="{{ asset('includes/sbadmin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -7,7 +7,7 @@
 @section('main')
     <h5 class="border-bottom">Walk-in Transactions</h5>
     <p class="font-italic">Here are all existing transactions!</p>
-    <a href="{{route('transaction.create')}}" class="btn btn-primary my-3 shadow-sm"><i class="fas fa-fw fa-plus"></i> Add
+    <a href="{{route('walkinTransaction.create')}}" class="btn btn-primary my-3 shadow-sm"><i class="fas fa-fw fa-plus"></i> Add
         New Walk-in Transaction</a>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -19,8 +19,7 @@
                     <thead>
                     <tr>
                         <th>Transaction Date</th>
-                        <th>Total Amount</th>
-                        <th>Total Points</th>
+                        <th>Total Amount</th>   
                         <th>Status</th>
                         <th></th>
                     </tr>
@@ -30,7 +29,7 @@
                         <tr>
                             <td>{{$transaction->transaction_date}}</td>
                             <td>₱{{number_format($transaction->total_amount)}}</td>
-                            <td>{{$transaction->total_points}}</td>
+                            
                             <td>{{$transaction->trans_status}}</td>
                             <td>
                                 <div class="text-center">

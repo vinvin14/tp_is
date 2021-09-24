@@ -32,7 +32,7 @@ class VerifyToken
         
         if (! $authUser) {
             return redirect(route('login'))
-            ->with('error', 'Warning! Invalid account credentials, your account might be logged in another device!');
+            ->with('error', 'Invalid Credentials, your account might be logged in another device or you session has been expired!');
         }
 
         return $next($request);

@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-4">
                         <label for="customer_type" class="font-weight-bold">Customer Type</label>
-                        <select name="customer_type" id="customer_type" class="form-control">
+                        <select name="customer_type" id="customer_type" class="form-control" required>
                             <option value="">-</option>
                             <option value="guest">Guest</option>
                             <option value="member">Member</option>

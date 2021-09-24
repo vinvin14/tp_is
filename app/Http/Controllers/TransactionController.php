@@ -52,7 +52,7 @@ class TransactionController extends Controller
         $request['ticket_number'] = $transactionServices->createTicket();
         $new_transaction = $transactionServices->create($request);
         return redirect(route('transaction.show', $new_transaction->id))
-            ->with('response', 'Transaction successfully created!');
+            ->with('success', 'Transaction successfully created!');
     }
 
     public function update($transaction,TransactionRepository $transactionRepository, ClaimTypeRepository $claimTypeRepository, PaymentMethodRepository $paymentMethodRepository)
@@ -73,22 +73,21 @@ class TransactionController extends Controller
         }
 
         return redirect(route('transaction.show', $transaction->id))
-            ->with('response', 'Transaction record has been successfully updated!');
+            ->with('success', 'Transaction record has been successfully updated!');
     }
 
     public function destroy(Transaction $transaction, TransactionServices $transactionServices)
     {
         $transactionServices->delete($transaction);
         return redirect(route('transaction.index'))
-            ->with('response', 'Transaction Record has been deleted!');
+            ->with('success', 'Transaction Record has been deleted!');
     }
 
     public function checkout(Transaction $transaction, TransactionServices $transactionServices)
     {
-
         $init = $transactionServices->checkout($transaction);
         return redirect(route('transaction.show', $transaction->id))
-        ->with('reponse', 'Transaction successfully placed!');
+        ->with('success', 'Transaction successfully placed!');
 
     }
 }

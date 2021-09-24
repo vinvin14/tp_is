@@ -19,6 +19,7 @@ class Transaction extends Model
         'claim_type',
         'payment_method_id',
         'remarks',
+        'isWalkin',
         'created_at',
         'updated_at',
     ];

@@ -32,6 +32,23 @@ class OrderController extends Controller
         ->with('success', 'Order successfully added!');
     }
 
+    public function walkinStore($transaction_id, Request $request, OrderServices  $orderServices)
+    {
+        $request = $request->only('product_id', 'price', 'qty', 'discount_amount', 'total_amount', 'total_points', 'stock_id');
+        $request['transaction_id'] = $transaction_id;
+
+        $init = $orderServices->create($request);
+        if (@$init['error'])
+        {
+            return back()
+            ->with('error', $init['error'])
+            ->withInput();
+        }
+
+        return redirect(route('walkinTransaction.show', $transaction_id))
+        ->with('success', 'Order successfully added!');
+    }
+
     public function delete(Order $order, OrderServices $orderServices)
     {
         $transaction_id = $order->transaction_id;
@@ -44,6 +61,21 @@ class OrderController extends Controller
         }
 
         return redirect(route('transaction.show', $transaction_id))
+        ->with('success', 'Order has been successfully deleted!');
+    }
+
+    public function walkinDestroy(Order $order, OrderServices $orderServices)
+    {
+        $transaction_id = $order->transaction_id;
+        $init = $orderServices->delete($order);
+
+        if (@$init['error']) {
+            return back()
+            ->with('error', $init['error'])
+            ->withInput();
+        }
+
+        return redirect(route('walkinTransaction.show', $transaction_id))
         ->with('success', 'Order has been successfully deleted!');
     }
 }

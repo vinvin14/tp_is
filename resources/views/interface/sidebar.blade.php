@@ -13,12 +13,12 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item @if($page=='dashboard') active @endif">
+    <li class="nav-item @if(@$page=='dashboard') active @endif">
         <a class="nav-link" href="{{route('dashboard')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-    <li class="nav-item @if($page=='notifications') active @endif">
+    <li class="nav-item @if(@$page=='notifications') active @endif">
         <a class="nav-link" href="{{route('notifications')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Notifications</span></a>   
@@ -34,7 +34,7 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item @if($page=='customer') active @endif">
+    <li class="nav-item @if(@$page=='customer') active @endif">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-users"></i>
@@ -50,7 +50,7 @@
     </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item @if($page=='shop') active @endif">
+    <li class="nav-item @if(@$page=='shop') active @endif">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
            aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-shopping-cart"></i>
@@ -63,12 +63,14 @@
                 <a class="collapse-item font-weight-bold" href="{{ route('product.list') }}"><i class="fas fa-fw fa-shopping-bag"></i>  Products</a>
                 {{-- <a class="collapse-item font-weight-bold" href="cards.html">Promo</a> --}}
                 <a class="collapse-item font-weight-bold" href="{{ route('transaction.list') }}"><i class="fas fa-fw fa-handshake"></i> Transactions</a>
+                <a class="collapse-item font-weight-bold" href="{{ route('walkinTransaction.list') }}"><i class="fas fa-walking"></i> Walk-in</a>
+                <a class="collapse-item font-weight-bold" href="{{ route('sales.home') }}"><i class="fas fa-poll"></i> Sales</a>
             </div>
         </div>
     </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item @if($page=='reference') active @endif">
+    <li class="nav-item @if(@$page=='reference') active @endif">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReference"
            aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-book"></i>
